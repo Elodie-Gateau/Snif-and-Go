@@ -6,6 +6,7 @@
 }
 
 .profile__dog-delete-icon,
+.profile__dog-edit-icon,
 .profile__trail-delete-icon,
 .profile__trail-icon {
     @include icon(var(--accent), $size-22);

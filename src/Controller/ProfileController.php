@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Dog;
 use App\Entity\Walk;
 use App\Entity\Trail;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,13 +22,16 @@ final class ProfileController extends AbstractController
         }
         $trails = $user->getTrails();
         $dogs = $user->getDogs();
-
+        $now = new DateTime('now');
         $walkRegistrations = [];
         foreach ($dogs as $dog) {
 
             $wrs = $dog->getWalkRegistration();
             foreach ($wrs as $wr) {
-                $walkRegistrations[] = $wr;
+                $walk = $wr->getWalk();
+                if ($walk->getDate()->getTimestamp() < $now->getTimestamp()) {
+                    $walkRegistrations[] = $wr;
+                }
             }
         }
         return $this->render('profile/index.html.twig', [

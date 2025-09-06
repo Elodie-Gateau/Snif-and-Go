@@ -95,22 +95,37 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: space-around;
         }
         &-wrapper:nth-child(1) {
             width: 30%;
         }
         &-wrapper:nth-child(2) {
             width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: $size-16;
+
+            .profile__walks-content:nth-child(1) {
+                color: var(--title);
+                font-weight: 600;
+            }
         }
 
         &-link {
             font-weight: 600;
             text-decoration: underline;
-            width: 100%;
+        }
+    }
+
+    &__dog {
+        &-card {
+            @include card(100%, column, space-around, $size-10);
+            padding: $size-10;
         }
 
-        &-content {
-            width: 100%;
+        &-wrapper {
+            @include actions-wrapper;
         }
     }
 }

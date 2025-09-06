@@ -33,6 +33,7 @@
 }
 
 .trail__button-delete,
-.profile__trail-button-delete {
+.profile__trail-button-delete,
+.profile__dog-button-delete {
     @include delete-button(var(--background-button));
 }
