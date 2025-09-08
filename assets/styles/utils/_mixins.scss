@@ -84,7 +84,7 @@
 
 @mixin card($width, $direction, $justify, $gap) {
     width: $width;
-    background: var(--background);
+    background: var(--background-tertiary);
     display: flex;
     flex-direction: $direction;
     justify-content: $justify;

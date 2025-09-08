@@ -124,6 +124,10 @@
     background-color: var(--background-secondary);
     padding: $size-30 $size-10;
     border-radius: $size-10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $size-30;
 
     &-search {
         width: 100%;

@@ -41,7 +41,10 @@
 				{% endif %}
 			</ul>
 		</nav>
-		{# Emplacement du toggle Eco #}
+		<div id="themeToggle" class="site-header__toggle">
+			{{ ux_icon('bi:toggle-on', { class: 'theme-toggle__icon-on hidden', id: 'iconOn' }) }}
+			{{ ux_icon('bi:toggle-off', { class: 'theme-toggle__icon-off', id: 'iconOff' }) }}
+		</div>
 	</div>
 
 

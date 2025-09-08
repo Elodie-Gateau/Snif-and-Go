@@ -2,7 +2,6 @@
 @use "utils/mixins";
 @use "utils/fonts";
 @use "utils/breakpoints";
-@use "utils/helpers";
 
 @use "themes/default";
 @use "themes/eco";
@@ -31,3 +30,4 @@
 @use "pages/trail";
 @use "pages/profile";
 @use "pages/admin";
+@use "utils/helpers";

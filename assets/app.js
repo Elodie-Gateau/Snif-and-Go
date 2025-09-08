@@ -5,6 +5,7 @@ import "./styles/app.css";
 import "./js/trail-search.js";
 import "./js/burger.js";
 import "./js/flatpickr.js";
+import "./js/theme.js";
 
 function init() {
     // ne bind que si le formulaire est présent

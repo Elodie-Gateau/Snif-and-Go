@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Trail index
+{% block title %}Itinéraires
 {% endblock %}
 
 {% block body %}
 <section class="trails">
+	<h1 class="trails__title">Itinéraires</h1>
+	<a class="trails-button" href="{{ path('app_trail_new') }}">Ajouter un itinéraire</a>
 	<div class="trails-search">
 
 		{{ form_start(form, {method: 'get',action: path('app_home'),attr: { class: 'trails-form', 'data-turbo': 'false' }}) }}
@@ -15,7 +17,7 @@
 			<div class="trails-search-item">
 				<button class="trails-search--button">Rechercher</button>
 
-				<button class="trails-search--link" type="button" id="toggle-advanced" aria-expanded="false" aria-controls="trail-advanced">
+				<button class="trails-search--link " type="button" id="toggle-advanced" aria-expanded="false" aria-controls="trail-advanced">
 					Afficher plus de critères
 				</button>
 			</div>
