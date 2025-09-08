@@ -28,7 +28,8 @@
 			{% if trail.difficulty %}
 				<div class="trail__desc-item">
 					<p class="trail__desc-title">Difficulté</p>
-					<p class="trail__desc-content">{{ trail.difficulty }}</p>
+					{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+					<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
 				</div>
 			{% endif %}
 			{% if trail.score %}
@@ -40,7 +41,8 @@
 
 			<div class="trail__desc-item">
 				<p class="trail__desc-title">Point d'eau</p>
-				<p class="trail__desc-content">{{ trail.waterPoint ? trail.waterPoint : "Inconnu" }}</p>
+				{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
+				<p class="trail__desc-content">{{ waterPointLabels[trail.waterPoint] ?? "Inconnu" }}</p>
 			</div>
 
 			<div class="trail__desc-item">

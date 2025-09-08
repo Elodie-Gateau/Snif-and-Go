@@ -71,7 +71,7 @@
 							{{ux_icon('streamline-plump:dog-1-remix', {class: 'home-user__dog-photo-male'})}}
 						{% endif %}
 						<p class="home-user__dog-name">{{ dog.name }}</p>
-						{% if dogNextWalks and dogNextWalks[dog.id] %}
+						{% if dogNextWalks|length > 0 and dogNextWalks[dog.id] %}
 							<div class="home-user__dog-infos">
 								<p class="home-user__dog-subtitle">{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}
 									Prochaine balade
@@ -192,6 +192,7 @@
 				<div class="home-user__trail-search--results">
 
 					{% for trail in foundTrails %}
+					{% if trail.status == "Active" %}
 						<div class="home-user__trail-card">
 							{% if trail.photos|length > 0 %}
 								<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
@@ -247,6 +248,7 @@
 
 
 						</div>
+						{% endif %}
 					{% endfor %}
 
 				{% else %}

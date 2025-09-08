@@ -3,14 +3,18 @@ const inputModeSelectManuel = document.getElementById("trail_inputMode_1");
 const gpxSection = document.querySelector("[data-section='gpx']");
 const manualSection = document.querySelector("[data-section='manual']");
 
-console.log("toggleSections init");
+if (inputModeSelectGpx || inputModeSelectManuel) {
+    console.log("toggleSections init");
 
-inputModeSelectGpx.addEventListener("click", () => {
-    gpxSection.classList.remove("hidden");
-    manualSection.classList.add("hidden");
-});
+    inputModeSelectGpx.addEventListener("click", () => {
+        gpxSection.classList.remove("hidden");
+        manualSection.classList.add("hidden");
+    });
 
-inputModeSelectManuel.addEventListener("click", () => {
-    gpxSection.classList.add("hidden");
-    manualSection.classList.remove("hidden");
-});
+    inputModeSelectManuel.addEventListener("click", () => {
+        gpxSection.classList.add("hidden");
+        manualSection.classList.remove("hidden");
+    });
+} else {
+    console.log("Aucun input trouvé mais newTrail.js bien chargé");
+}

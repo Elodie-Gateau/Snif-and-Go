@@ -24,7 +24,9 @@ class WalkRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('walk')
             ->andWhere('walk.date >= :now')
+            ->andWhere('walk.status = :status')
             ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('status', 'upcoming')
             ->orderBy('walk.date', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()

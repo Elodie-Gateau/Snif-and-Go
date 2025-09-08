@@ -6,7 +6,10 @@ use App\Entity\Trail;
 use App\Entity\Photo;
 use App\Form\TrailType;
 use App\Repository\TrailRepository;
+use App\Repository\DogRepository;
+use App\Repository\WalkRegistrationRepository;
 use App\Repository\WalkRepository;
+use App\Form\TrailSearchType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +20,7 @@ use App\Service\GeocodingService;
 use App\Service\DistanceService;
 use App\Service\GpxService;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use Symfony\Component\Validator\Constraints\File as FileConstraint;
 use Symfony\Component\Validator\Constraints\All;
@@ -24,13 +28,68 @@ use Symfony\Component\Validator\Constraints\All;
 
 
 #[Route('/trail')]
+#[IsGranted('ROLE_USER')]
 final class TrailController extends AbstractController
+
 {
     #[Route(name: 'app_trail_index', methods: ['GET'])]
-    public function index(TrailRepository $trailRepository): Response
-    {
+    public function index(
+        WalkRepository $walkRepository,
+        DogRepository $dogRepository,
+        WalkRegistrationRepository $walkRegistrationRepository,
+        Request $request,
+        TrailRepository $trailRepository
+    ): Response {
+
+        $nextWalks = $walkRepository->findNext(4);
+
+        $currentUser = $this->getUser();
+
+        if ($currentUser) {
+            $dogs = $dogRepository->findByUser($currentUser);
+            if ($dogs && count($dogs) > 0) {
+                foreach ($dogs as $dog) {
+                    $wr = $walkRegistrationRepository->findNextWalkByDog($dog, $currentUser);
+                    if ($wr) {
+                        $dogNextWalks[$dog->getId()] = $wr;
+                    } else {
+                        $dogNextWalks = [];
+                    }
+                }
+            } else {
+                $dogs = [];
+                $dogNextWalks = [];
+            }
+        } else {
+            $dogs = [];
+            $dogNextWalks = [];
+        }
+
+
+        $searchForm = $this->createForm(TrailSearchType::class);
+        $searchForm->handleRequest($request);
+
+        $criteria = $searchForm->getData() ?? [];
+
+        $foundTrails = [];
+        if (
+            !empty($criteria['search']) || !empty($criteria['difficulty'])
+            || !empty($criteria['minDistance']) || !empty($criteria['maxDistance'])
+            || !empty($criteria['minDuration']) || !empty($criteria['maxDuration'])
+            || !empty($criteria['minScore']) || !empty($criteria['maxScore'])
+        ) {
+            $foundTrails = $trailRepository->search($criteria);
+        } else {
+            $foundTrails = $trailRepository->findAllLimit(8);
+        }
+
+
         return $this->render('trail/index.html.twig', [
-            'trails' => $trailRepository->findAll(),
+            'nextWalks'   => $nextWalks,
+            'dogs'        => $dogs,
+            'dogNextWalks' => $dogNextWalks,
+            'form'        => $searchForm->createView(),
+            'foundTrails' => $foundTrails,
         ]);
     }
     #[Route('/new', name: 'app_trail_new', methods: ['GET', 'POST'])]

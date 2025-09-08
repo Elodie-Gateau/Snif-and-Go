@@ -1,9 +1,9 @@
-// import "./bootstrap.js";
+import "./bootstrap.js";
 import { initCityAutocomplete } from "./js/cities.js";
 import "./js/newTrail.js";
 import "./styles/app.css";
 import "./js/trail-search.js";
-
+import "./js/burger.js";
 import "./js/flatpickr.js";
 
 function init() {

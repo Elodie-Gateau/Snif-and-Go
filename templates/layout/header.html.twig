@@ -12,7 +12,8 @@
 	</div>
 
 	<div class="site-header__container">
-		<nav class="site-header__nav">
+		{{ ux_icon('pajamas:hamburger', {class:'site-header__burger'}) }}
+		<nav class="site-header__nav hidden">
 			<ul class="site-header__menu">
 				<li class="site-header__item">
 					<a class="site-header__link" href="{{ path('app_home') }}">Accueil</a>

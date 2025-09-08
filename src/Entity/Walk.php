@@ -44,6 +44,7 @@ class Walk
     {
         $this->walk_registration = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->status = "upcoming";
     }
 
     public function getId(): ?int

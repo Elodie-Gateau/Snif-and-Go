@@ -71,29 +71,27 @@
 								{% endif %}
 							</div>
 
-							<p class="profile__dog-content">{{ dog.name }}</p>
+							<p class="profile__dog-content"><strong>{{ dog.name }}</strong></p>
 							<p class="profile__dog-content">{% if dog.birthDate and dog.age >= 1 %}
 								{{ dog.age }}
 									an{{ dog.age > 1 ? "s" : "" }}
-									{# </p> #}
+								
 							{% endif %}
 							{% if dog.birthDate and dog.age == 0 and dog.ageM >= 1 %}
-								{# <p class="profile__dog-content"> #}
+								
 								{{ dog.ageM }}
 									mois
-									{# </p> #}
+							
 							{% endif %}
 
 							{% if dog.birthDate and dog.age > 0 and dog.ageM > 0 %}
-								{# <p class="profile__dog-content"> #}
+							
 								{{ dog.ageM - (dog.age * 12) }}
 									mois
-									{# </p> #}
+							
 							{% endif %}
 							{% if dog.dogBreed %}
-								{% for breed in dog.dogBreed %}
-									<p class="profile__dog-content">{{ dog.dogBreed|join('') }}</p>
-								{% endfor %}
+							<p class="profile__dog-content">{{ dog.dogBreed.nameFr }}</p>
 							{% endif %}
 							{% if dog.identityNumber %}
 								<p class="profile__dog-content">{{ dog.identityNumber }}</p>

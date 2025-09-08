@@ -63,7 +63,9 @@ class DogType extends AbstractType
                 'class' => DogBreed::class,
                 'choice_label' => 'name_fr',
                 'placeholder' => 'Saisir une race',
-                'autocomplete' => true
+                'autocomplete' => true,
+                'label' => 'Race du chien :',
+                'label_attr' => ['class' => 'add-dog__form-label'],
             ])
 
             ->add(

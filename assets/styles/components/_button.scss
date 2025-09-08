@@ -16,7 +16,9 @@
 .next-walks__button,
 .add-walk__form-submit,
 .profile__button,
-.profile__trail-button {
+.profile__trail-button,
+.trails-search--button,
+.trails-button {
     @include button(
         var(--background-button),
         var(--background-button-hover),

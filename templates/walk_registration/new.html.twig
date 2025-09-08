@@ -27,7 +27,8 @@
 			</div>
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Difficulté</p>
-				<p class="walk-register__desc-content">{{ walk.trail.difficulty }}</p>
+				<p class="walk-register__desc-content">{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+                        {{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
 			</div>
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Point d'eau</p>

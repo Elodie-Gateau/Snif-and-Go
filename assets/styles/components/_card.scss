@@ -3,19 +3,21 @@
 
 .home-user {
     &__walk--card {
-        @include card(100%, row, flex-start, 0);
+        @include card(100%, row, space-between, 0);
         padding: $size-10;
 
         .home-user__walk-wrapper {
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
             gap: $size-10;
         }
 
         .home-user__walk-accent {
             color: $color-accent;
             font-weight: 600;
+            text-align: center;
         }
     }
 
@@ -121,11 +123,48 @@
     &__dog {
         &-card {
             @include card(100%, column, space-around, $size-10);
-            padding: $size-10;
+            padding: $size-20;
         }
 
         &-wrapper {
             @include actions-wrapper;
         }
+    }
+}
+
+.trails {
+    &-card {
+        @include card(100%, column, flex-start, $size-30);
+
+        align-items: center;
+        padding: $size-20 $size-10;
+    }
+
+    &-photo {
+        @include card-photo;
+    }
+
+    &-description {
+        @include card-desc(80%, column, $size-10);
+
+        align-items: flex-start;
+    }
+
+    &-item {
+        @include card-item($size-10);
+    }
+
+    &-icon {
+        color: var(--accent);
+        width: $size-22;
+    }
+
+    &-content {
+        display: flex;
+    }
+
+    &-score {
+        color: rgb(255, 213, 0);
+        width: $size-20;
     }
 }

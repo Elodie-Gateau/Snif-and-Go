@@ -1,45 +1,196 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}Espace administrateur
+{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
+<section class="admin">
+	<h1 class="admin__title">Espace administrateur</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Password</th>
-                <th>Name</th>
-                <th>Firstname</th>
-                <th>Title</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.title }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{# NAVIGATION PANEL ADMIN #}
+	<div class="admin__nav">
+		<ul class="admin__list">
+			<li class="admin__list-item">
+				<a href="{{ path('admin_user_index', {'section': 'users'}) }}" class="admin__list-link">{{ ux_icon('mynaui:users-solid', {class: 'admin__nav-icon'}) }}
+					Utilisateurs</a>
+			</li>
+			<li class="admin__list-item">
+				<a href="{{ path('admin_user_index', {'section': 'dogs'}) }}" class="admin__list-link">{{ ux_icon('mdi:paw', {class: 'admin__nav-icon'}) }}
+					Chiens</a>
+			</li>
+			<li class="admin__list-item">
+				<a href="{{ path('admin_user_index', {'section': 'trails'}) }}" class="admin__list-link">{{ ux_icon('streamline:arrow-roadmap', {class: 'admin__nav-icon'}) }}
+					Itinéraires</a>
+			</li>
+			<li class="admin__list-item">
+				<a href="{{ path('admin_user_index', {'section': 'walks'}) }}" class="admin__list-link">{{ ux_icon('fa7-solid:dog', {class: 'admin__nav-icon'}) }}
+					Balades</a>
+			</li>
+		</ul>
+	</div>
 
-    <a href="{{ path('app_user_new') }}">Create new</a>
+{# GESTION DES USERS #}
+{% if app.request.query.get('section') == 'users' or app.request.query.get('section') is null %}
+	<div class="admin__users">
+		<h2 class="admin__users-title">Utilisateurs</h2>
+		<table class="admin__users-table">
+			<thead>
+				<tr>
+					<th>Civilité</th>
+					<th>Prénom</th>
+					<th>Nom</th>
+					<th>Email</th>
+					<th>Rôle</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for user in users %}
+					<tr>
+						<td>{{ user.title }}</td>
+						<td>{{ user.firstname }}</td>
+						<td>{{ user.name }}</td>
+						<td>{{ user.email }}</td>
+						<td>{% set roles = user.roles ?? [] %}
+							{{ 'ROLE_ADMIN' in roles ? 'Admin' : 'User' }}</td>
+						<td>
+							<a class="admin__users-edit-icon" href="{{ path('admin_user_edit', {'id': user.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__users-edit-icon' }) }}</a>
+							<a class="admin__users-delete-icon" href="{{ path('admin_user_delete', {'id': user.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-delete-icon' }) }}</a>
+							{# <a class="admin__users-ban-icon" href="{{ path('admin_user_ban', {'id': user.id}) }}">{{ ux_icon('fa:ban',{ class: 'admin__users-ban-icon' }) }}</a> #}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+    </div>
+
+{# GESTION DES DOGS #}
+{% elseif app.request.query.get('section') == 'dogs' %}
+	<div class="admin__dogs">
+		<h2 class="admin__dogs-title">Chiens</h2>
+		<table class="admin__dogs-table">
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Race</th>
+					<th>Age</th>
+					<th>Numéro d'identification</th>
+					<th>Sexe</th>
+					<th>Statut</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for dog in dogs %}
+					<tr>
+						<td>{{ dog.name }}</td>
+						<td>{{ dog.dogBreed.nameFr }}</td>
+						<td>
+							{% if dog.birthDate and dog.age >= 1 %}
+								{{ dog.age }} an{{ dog.age > 1 ? "s" : "" }}
+							{% endif %}
+							{% if dog.birthDate and dog.age == 0 and dog.ageM >= 1 %}
+								{{ dog.ageM }} mois
+							{% endif %}
+							{% if dog.birthDate and dog.age > 0 and dog.ageM > 0 %}
+								{{ dog.ageM - (dog.age * 12) }}	mois
+							{% endif %}
+						</td>
+						<td>{{ dog.identityNumber }}</td>
+						<td>
+                        {% set sexDogLabels = {'female': 'Femelle', 'male': 'Male'} %}
+                        {{ sexDogLabels[dog.sex] ?? 'Non renseigné' }}</td>
+						<td>{{ dog.status }}</td>
+						<td>
+							<a class="admin__dogs-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__dogs-edit-icon' }) }}</a>
+							<a class="admin__dogs-delete-icon" href="{{ path('app_dog_delete', {'id': dog.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__dogs-delete-icon' }) }}</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+    </div>
+
+{# GESTION DES TRAILS #}
+{% elseif app.request.query.get('section') == 'trails' %}
+	<div class="admin__trails">
+		<h2 class="admin__trails-title">Itinéraires</h2>
+		<table class="admin__trails-table">
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Distance</th>
+					<th>Durée</th>
+					<th>Difficulté</th>
+					<th>Point d'eau</th>
+					<th>Score</th>
+					<th>Créateur</th>
+					<th>Ville de départ</th>
+					<th>Ville d'arrivée</th>
+					<th>Fichier GPX</th>
+					<th>Statut</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for trail in trails %}
+					<tr>
+						<td>{{ trail.name }}</td>
+						<td>{{ trail.distance|round }} km{{ trail.distance > 1 ? "s" : "" }}</td>
+						<td>{% import 'macros/duration.html.twig' as dur %}
+								{{ dur.minutes(trail.duration) }}</td>
+						<td>{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+                        {{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</td>
+                        <td>{{ trail.waterPoint }}</td>
+                        <td>{{ trail.score }}</td>
+						<td>{{ trail.user.firstname ~' ' ~ trail.user.name}}</td>
+						<td>{{ trail.startCity }}</td>
+						<td>{{ trail.endCity }}</td>
+						<td><a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
+			            {{ trail.gpxFile }}</a></td>
+                        <td>{{ trail.status }}</td>
+						<td>
+							<a class="admin__trails-edit-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__trails-edit-icon' }) }}</a>
+							<a class="admin__trails-delete-icon" href="{{ path('app_trail_delete', {'id': trail.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-delete-icon' }) }}</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+    </div>
+
+{# GESTION DES WALKS #}
+{% elseif app.request.query.get('section') == 'walks' %}
+    <div class="admin__walks">
+        <h2 class="admin__walks-title">Balades</h2>
+        <table class="admin__walks-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Nombre maximum de chiens</th>
+                    <th>Statut</th>
+                    <th>Itinéraire</th>
+                    <th>Nombre de chiens inscrits</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for walk in walks %}
+                <tr>
+                    <td>{{ walk.date|format_datetime('full', 'short', locale: 'fr') }}</td>       
+                    <td>{{ walk.maxDogs }}</td>
+                    <td>{% set statusLabels = {'upcoming' : 'à venir'} %}
+                    {{ statusLabels[walk.status] ?? 'passé' }}</td>
+                    <td>{{ walk.trail.name }}</td>
+                    <td>{{ walk.walkRegistration|length }}</td>
+                    <td>
+						<a class="admin__walks-edit-icon" href="{{ path('app_walk_edit', {'id': walk.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__walks-edit-icon' }) }}</a>
+						<a class="admin__walks-delete-icon" href="{{ path('app_walk_delete', {'id': walk.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__walks-delete-icon' }) }}</a>
+					</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+</section>
 {% endblock %}

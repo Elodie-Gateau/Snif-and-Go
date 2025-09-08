@@ -11,8 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/walk')]
+#[IsGranted('ROLE_USER')]
 final class WalkController extends AbstractController
 {
     #[Route(name: 'app_walk_index', methods: ['GET'])]
@@ -43,7 +45,7 @@ final class WalkController extends AbstractController
             $entityManager->persist($walk);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_walk_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('walk/new.html.twig', [

@@ -14,9 +14,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\WalkRepository;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route('/walk/registration')]
+#[IsGranted('ROLE_USER')]
 final class WalkRegistrationController extends AbstractController
 {
     #[Route(name: 'app_walk_registration_index', methods: ['GET'])]
