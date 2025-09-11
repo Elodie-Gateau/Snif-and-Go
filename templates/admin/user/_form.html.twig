@@ -1,4 +1,58 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{% if form_errors(form) %}
+  <div class="form__global-errors">
+    {{ form_errors(form) }}
+  </div>
+{% endif %}
+    <div class="user__edit">
+
+		{{ form_label(form.email) }}
+		{{ form_widget(form.email) }}
+		{% if form_errors(form.email) %}
+			<div class="user__form-error">
+				{{ form_errors(form.email)}}
+			</div>
+		{% endif %}
+	</div>
+    <div class="user__edit">
+
+		{{ form_label(form.name) }}
+		{{ form_widget(form.name) }}
+		{% if form_errors(form.name) %}
+			<div class="user__form-error">
+				{{ form_errors(form.name)}}
+			</div>
+		{% endif %}
+	</div>
+    <div class="user__edit">
+
+		{{ form_label(form.firstname) }}
+		{{ form_widget(form.firstname) }}
+		{% if form_errors(form.firstname) %}
+			<div class="user__form-error">
+				{{ form_errors(form.firstname)}}
+			</div>
+		{% endif %}
+	</div>
+    <div class="user__edit">
+
+		{{ form_label(form.title) }}
+		{{ form_widget(form.title) }}
+		{% if form_errors(form.title) %}
+			<div class="user__form-error">
+				{{ form_errors(form.title)}}
+			</div>
+		{% endif %}
+	</div>
+    <div class="user__edit">
+
+		{{ form_label(form.password) }}
+		{{ form_widget(form.password) }}
+		{% if form_errors(form.password) %}
+			<div class="user__form-error">
+				{{ form_errors(form.password)}}
+			</div>
+		{% endif %}
+	</div>
+    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}

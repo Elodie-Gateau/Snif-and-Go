@@ -57,7 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Choice(choices: ['M.', 'Mme'])]
+    #[Assert\Choice(choices: ['M', 'Mme'])]
     private ?string $title = null;
 
     /**

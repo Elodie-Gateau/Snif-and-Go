@@ -21,7 +21,7 @@ class UserType extends AbstractType
             ->add('firstname', TextType::class)
             ->add('title', ChoiceType::class, [
                 'choices' => [
-                    'Monsieur' => 'M.',
+                    'Monsieur' => 'M',
                     'Madame'   => 'Mme',
                 ],
                 'placeholder' => 'Choisir…',
