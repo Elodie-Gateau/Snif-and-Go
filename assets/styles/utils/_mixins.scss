@@ -1,4 +1,5 @@
 @use "../utils/variables" as *;
+@use "../utils/breakpoints" as *;
 
 // Mixin button
 @mixin button(
@@ -68,11 +69,12 @@
     cursor: pointer;
 }
 
-@mixin form-label($color) {
+@mixin form-label($color, $width) {
     display: block;
     margin-bottom: $size-6;
     margin-top: $size-10;
     color: $color;
+    width: $width;
 }
 
 @mixin form-error($color-error, $margin-top: $size-4) {
@@ -96,7 +98,8 @@
 
 @mixin card-photo {
     width: 100%;
-    max-height: 50%;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
     border-radius: $size-10;
     color: var(--title-secondary);
 }
@@ -124,6 +127,7 @@
     background: var(--background);
     border-radius: $size-10;
     box-shadow: 0 5px 8px $color-gray-175;
+    align-self: center;
 }
 
 // Mixin Dog photos
@@ -131,7 +135,6 @@
 @mixin photo {
     width: 100%;
     height: 100%;
-    --avatar-size: $size-56;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     padding: $size-8;
@@ -157,6 +160,9 @@
     flex-direction: column;
     align-items: center;
     gap: $gap;
+    @media (min-width: $md) {
+        padding: $size-30;
+    }
 }
 
 @mixin infos-desc {
@@ -166,6 +172,10 @@
     flex-direction: column;
     gap: $size-30;
     border-radius: $size-10;
+
+    @media (min-width: $md) {
+        padding: $size-30;
+    }
 }
 
 @mixin infos-item {

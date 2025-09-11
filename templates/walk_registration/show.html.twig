@@ -1,26 +1,82 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}WalkRegistration{% endblock %}
+{% block title %}Inscription de {{ wr.dog.name }}{% endblock %}
 
 {% block body %}
-    <h1>WalkRegistration</h1>
+	<section class="walk-register">
+		<h1 class="walk-register__title">Inscription de {{wr.dog.name }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ walk_registration.id }}</td>
-            </tr>
-            <tr>
-                <th>Date_registration</th>
-                <td>{{ walk_registration.dateRegistration ? walk_registration.dateRegistration|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+		<div class="walk-register__desc">
+			<h2 class="walk-register__subtitle">Balade du
+				{{ wr.walk.date|format_datetime('full', 'short', locale: 'fr')  }}</h2>
 
-    <a href="{{ path('app_walk_registration_index') }}">back to list</a>
+			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Itinéraire</p>
+				<p class="walk-register__desc-content">{{ wr.walk.trail.name }}</p>
+			</div>
+			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Distance</p>
+				<p class="walk-register__desc-content">{{ wr.walk.trail.distance }}
+					km{{ wr.walk.trail.distance > 1 ? "s" : "" }}</p>
+			</div>
+			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Durée</p>
+				<p class="walk-register__desc-content">{% import 'macros/duration.html.twig' as dur %}
+					{{ dur.minutes(wr.walk.trail.duration) }}</p>
+			</div>
+			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Difficulté</p>
+				<p class="walk-register__desc-content">{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+                        {{ difficultyLabels[wr.walk.trail.difficulty] ?? 'Non défini' }}</p>
+			</div>
+			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Point d'eau</p>	{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
+				<p class="trail__desc-content">{{ waterPointLabels[wr.walk.trail.waterPoint] ?? "Inconnu" }}</p>
+			</div>
+			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Point de départ</p>
+				<div class="walk-register__desc-wrapper">
+					<p class="walk-register__desc-content">{{ wr.walk.trail.startAddress }}</p>
+					<p class="walk-register__desc-content">{{ wr.walk.trail.startCode }}</p>
+					<p class="walk-register__desc-content">{{ wr.walk.trail.startCity }}</p>
+				</div>
+			</div>
+			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Point d'arrivée</p>
+				<div class="walk-register__desc-wrapper">
+					<p class="walk-register__desc-content">{{ wr.walk.trail.endAddress }}</p>
+					<p class="walk-register__desc-content">{{ wr.walk.trail.endCode }}</p>
+					<p class="walk-register__desc-content">{{ wr.walk.trail.endCity }}</p>
+				</div>
+			</div>
 
-    <a href="{{ path('app_walk_registration_edit', {'id': walk_registration.id}) }}">edit</a>
+			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Nombre de chien maximum</p>
+				<p class="walk-register__desc-content">{{ wr.walk.maxDogs }}</p>
+			</div>
+			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Les chiens inscrits</p>
+				<div class="walk-register__desc-wrapper">
+					{% if validRegisters|length > 0 %}
+						{% for register in validRegisters %}
+							<div class="walk-register__desc-container">
+								{% set dogPhotoClass = ['walk-register__dog-photo', register.dog.sex] | join(' ') %}
+									{% if register.dog.photo %}
+									<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ register.dog.photo)}}">
+								{% else %}
+									{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+								{% endif %}
+								<p class="walk-register__desc-content">{{ register.dog.name }}</p>
+							</div>
+						{% endfor %}
 
-    {{ include('walk_registration/_delete_form.html.twig') }}
+					{% else %}
+						<p class="walk-register__desc-content">Aucun chien n'est encore inscrit à cette balade</p>
+					{% endif %}
+				</div>
+			</div>
+
+    <a class="walk-register__button" href="{{ path('app_walk_registration_cancelled', {id:wr.id}) }}">Annuler l'inscription de {{ wr.dog.name }}</a>
+    	<a class="walk-register__back" href="{{ path('app_home') }}">Retour</a>
+    </section>
 {% endblock %}

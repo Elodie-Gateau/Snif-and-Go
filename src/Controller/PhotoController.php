@@ -47,7 +47,7 @@ final class PhotoController extends AbstractController
             }
             $entityManager->persist($photo);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Votre photo est téléchargée !');
             return $this->redirectToRoute('app_photo_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -73,7 +73,7 @@ final class PhotoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Vos modifications sont enregistrées !');
             return $this->redirectToRoute('app_photo_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -89,6 +89,7 @@ final class PhotoController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $photo->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($photo);
             $entityManager->flush();
+            $this->addFlash('warning', 'Votre photo a été supprimé');
         }
 
         return $this->redirectToRoute('app_photo_index', [], Response::HTTP_SEE_OTHER);

@@ -38,7 +38,7 @@ final class HomeController extends AbstractController
                     if ($wr) {
                         $dogNextWalks[$dog->getId()] = $wr;
                     } else {
-                        $dogNextWalks = [];
+                        $dogNextWalks[$dog->getId()] = null;
                     }
                 }
             } else {

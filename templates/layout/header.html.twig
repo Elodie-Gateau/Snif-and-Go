@@ -1,49 +1,54 @@
 <header class="site-header">
-
 	<div class="site-header__brand">
-		<a class="site-header__logo" href="{{ path('app_home') }}">
-			<img class="site-header__logo-img" src="{{ asset('images/logos/logoRVB-inline.png') }}" alt="Logo de Snif & Go">
-		</a>
+		<div class="site-header__logo">
+			<a class="site-header__logo" href="{{ path('app_home') }}">
+				<img class="site-header__logo-img-inline" src="{{ asset('images/logos/logoRVB-inline.png') }}" alt="Logo de Snif & Go">
+				<img class="site-header__logo-img-block" src="{{ asset('images/logos/logoRVB.png') }}" alt="Logo de Snif & Go">
+			</a>
+		</div>
+		<div class="site-header__wrapper">
+			<p class="site-header__tagline">Plus on est de chiens,</p>
+			<p class="site-header__tagline-end">plus on rit !</p>
+		</div>
 
-		<p class="site-header__tagline">Plus on est de chiens,
-			<br>
-			<span class="site-header__tagline-end">plus on rit !</span>
-		</p>
 	</div>
-
 	<div class="site-header__container">
 		{{ ux_icon('pajamas:hamburger', {class:'site-header__burger'}) }}
 		<nav class="site-header__nav hidden">
 			<ul class="site-header__menu">
 				<li class="site-header__item">
-					<a class="site-header__link" href="{{ path('app_home') }}">Accueil</a>
+					<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_home' ? 'selected' }}" href="{{ path('app_home') }}">Accueil</a>
 				</li>
 				{% if is_granted('ROLE_USER') %}
 					<li class="site-header__item">
-						<a class="site-header__link" href="{{ path('app_profile', {'id': app.user.id}) }}">Mon profil</a>
+						<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_profile' ? 'selected' }}" href="{{ path('app_profile', {'id': app.user.id}) }}">Mon profil</a>
 					</li>
 					{% if is_granted('ROLE_ADMIN') %}
 						<li class="site-header__item">
-							<a class="site-header__link" href="{{ path('admin_user_index') }}">Espace Administrateur</a>
+							<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_user_index' ? 'selected' }}" href="{{ path('admin_user_index') }}">Espace Administrateur</a>
 						</li>
 					{% endif %}
 					<li class="site-header__item">
-						<a class="site-header__link" href="{{ path('app_logout') }}">Deconnexion</a>
+						<a class="site-header__link" href="{{ path('app_logout') }}">Déconnexion</a>
 					</li>
 
 				{% else %}
 					<li class="site-header__item">
-						<a class="site-header__link" href="{{ path('app_login') }}">Se connecter</a>
+						<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_login' ? 'selected' }}" href="{{ path('app_login') }}">Se connecter</a>
 					</li>
 					<li class="site-header__item">
-						<a class="site-header__link" href="{{ path('app_register') }}">S'inscrire</a>
+						<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_register' ? 'selected' }}" href="{{ path('app_register') }}">S'inscrire</a>
 					</li>
 				{% endif %}
 			</ul>
 		</nav>
-		<div id="themeToggle" class="site-header__toggle">
-			{{ ux_icon('bi:toggle-on', { class: 'theme-toggle__icon-on hidden', id: 'iconOn' }) }}
-			{{ ux_icon('bi:toggle-off', { class: 'theme-toggle__icon-off', id: 'iconOff' }) }}
+		<div id="themeToggle" class="site-header__item">
+			{{ ux_icon('mynaui:sun-solid', { class: 'theme-toggle__content-icon', id: 'sun' })  }}
+			{{ ux_icon('mynaui:moon-solid', { class: 'theme-toggle__content-icon hidden', id: 'moon' })  }}
+			<div id="themeToggle" class="site-header__toggle">
+				{{ ux_icon('bi:toggle-on', { class: 'theme-toggle__icon-on hidden', id: 'iconOn' }) }}
+				{{ ux_icon('bi:toggle-off', { class: 'theme-toggle__icon-off', id: 'iconOff' }) }}
+			</div>
 		</div>
 	</div>
 

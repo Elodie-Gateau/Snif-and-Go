@@ -120,6 +120,14 @@
         align-items: center;
     }
 
+    &__dog-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        gap: $size-20;
+    }
+
     &__dog-wrapper {
         display: flex;
         width: 100%;
@@ -130,6 +138,13 @@
 
     &__dog-name {
         font-weight: 800;
+    }
+
+    &__dog-item {
+        display: flex;
+        width: 65%;
+        justify-content: space-between;
+        align-self: flex-end;
     }
 
     &__dog-infos {
@@ -238,6 +253,100 @@
         &__intro-container,
         &__intro-photo {
             order: 0;
+        }
+    }
+
+    .home-user {
+        &__intro {
+            width: 50%;
+
+            .home-user__intro-wrapper {
+                width: 40%;
+                padding: $size-26 $size-16;
+            }
+        }
+
+        &__walk {
+            padding: $size-30 $size-20;
+        }
+
+        &__walk-container {
+            padding: $size-20 0;
+        }
+
+        &__walk-wrapper:nth-child(1) {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+            justify-content: space-evenly;
+        }
+
+        &__dog {
+            &-wrapper {
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+                padding: $size-10;
+            }
+
+            &-container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            &-item {
+                display: flex;
+                width: 65%;
+                justify-content: space-between;
+                align-self: flex-end;
+            }
+        }
+        &__trail {
+            padding: $size-40 $size-20;
+
+            &-wrapper {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: $size-30 0;
+            }
+
+            &-search-bar {
+                flex-direction: row;
+                gap: $size-20;
+            }
+
+            &-search-item {
+                width: 50%;
+            }
+
+            &-search--advanced {
+                width: 70%;
+                display: flex;
+                flex-direction: column;
+                padding: $size-20;
+            }
+
+            &-search--results {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: $size-20;
+                align-items: center;
+            }
+
+            &-result-info {
+                text-align: center;
+            }
+
+            &-link {
+                font-weight: 600;
+                color: var(--accent);
+                cursor: pointer;
+                text-align: center;
+            }
         }
     }
 }

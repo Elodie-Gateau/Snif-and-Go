@@ -9,10 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Il y a un autre compte avec cette adresse email.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -21,12 +22,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: 'Email obligatoire.')]
+    #[Assert\Email(mode: 'html5', message: 'Email invalide.')]
+    #[Assert\Length(max: 180)]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\Choice(
+        choices: ['ROLE_USER', 'ROLE_ADMIN'],
+        multiple: true
+    )]
     private array $roles = [];
 
     /**
@@ -36,12 +45,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Regex(pattern: '/^[\p{L}\s\'\-]+$/u')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Regex(pattern: '/^[\p{L}\s\'\-]+$/u')]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Choice(choices: ['M.', 'Mme'])]
     private ?string $title = null;
 
     /**

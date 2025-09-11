@@ -2,34 +2,50 @@
 @use "../utils/mixins" as *;
 @use "../utils/breakpoints" as *;
 
-@media (min-width: $md) {
-    .home-user__dog-photo-female,
-    .home-user__dog-photo-male {
-        --avatar-size: $size-72;
-    }
-}
-@media (min-width: $lg) {
-    .home-user__dog-photo-female,
-    .home-user__dog-photo-male {
-        --avatar-size: $size-88;
-    }
-}
-
-// .profile__walks-photo-female,
 .profile__walks-photo,
 .profile__dog-photo,
-.home-user__dog-photo-female,
-.home-user__dog-photo-male,
+.home-user__dog-photo,
 .walk-register__dog-photo {
     @include photo;
 }
-// .profile__walks-photo-female,
-.home-user__dog-photo-female,
+
 .female {
     @include photoFemale;
 }
-// .profile__walks-photo-male,
-.home-user__dog-photo-male,
+
 .male {
     @include photoMale;
+}
+
+@media (min-width: $md) {
+    .profile__walks-photo,
+    .profile__dog-photo,
+    .home-user__dog-photo,
+    .walk-register__dog-photo {
+        @include photo;
+    }
+
+    .female {
+        @include photoFemale;
+    }
+
+    .male {
+        @include photoMale;
+    }
+}
+@media (min-width: $lg) {
+    .profile__walks-photo,
+    .profile__dog-photo,
+    .home-user__dog-photo,
+    .walk-register__dog-photo {
+        @include photo;
+    }
+
+    .female {
+        @include photoFemale;
+    }
+
+    .male {
+        @include photoMale;
+    }
 }

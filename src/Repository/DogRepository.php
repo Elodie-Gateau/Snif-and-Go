@@ -21,25 +21,32 @@ class DogRepository extends ServiceEntityRepository
 
     public function findAvailableForWalk(User $user, Walk $walk): array
     {
-        return $this->createQueryBuilder('dog')
-            ->andWhere('dog.user = :user')
-            ->andWhere('dog NOT IN (
-            SELECT registeredDog
-            FROM App\Entity\WalkRegistration wr
-            JOIN wr.dog registeredDog
-            WHERE wr.walk = :walk
-        )')
-            ->setParameter('user', $user)
-            ->setParameter('walk', $walk)
-            ->orderBy('dog.name', 'ASC')
-            ->getQuery()
-            ->getResult();
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT d.id
+                FROM dog d
+                WHERE d.user_id = :user_id
+                AND d.status  = 'Active'
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM walk_registration wr
+                    WHERE wr.dog_id = d.id
+                    AND wr.walk_id = :walk_id
+                    AND wr.status  = 'Active')";
+
+        $resultSet = $conn->executeQuery($sql, [
+            'user_id' => $user->getId(),
+            'walk_id' => $walk->getId(),
+        ]);
+        $dogsId = $resultSet->fetchAllAssociative();
+        return $dogsId;
     }
 
     public function findByUser($user): array
     {
         return $this->createQueryBuilder('dog')
             ->andWhere('dog.user = :user')
+            ->andWhere('dog.status = :statut')
+            ->setParameter('statut', 'Active')
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult()

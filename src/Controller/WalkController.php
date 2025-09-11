@@ -21,7 +21,7 @@ final class WalkController extends AbstractController
     public function index(WalkRepository $walkRepository): Response
     {
         return $this->render('walk/index.html.twig', [
-            'walks' => $walkRepository->findAll(),
+            'nextWalks' => $walkRepository->findAllNext(),
         ]);
     }
 
@@ -44,7 +44,7 @@ final class WalkController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($walk);
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Votre balade est planifiée');
             return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -71,7 +71,7 @@ final class WalkController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Vos modifications sont enregistrées !');
             return $this->redirectToRoute('app_walk_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -82,12 +82,23 @@ final class WalkController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/inactive', name: 'app_walk_inactive', methods: ['POST'])]
+    public function inactive(Walk $walk, EntityManagerInterface $entityManager): Response
+    {
+        $walk->setStatus("Inactive");
+        $entityManager->flush();
+
+        $this->addFlash('warning', 'Votre balade a été annulée');
+        return $this->redirectToRoute('app_home');
+    }
+
     #[Route('/{id}', name: 'app_walk_delete', methods: ['POST'])]
     public function delete(Request $request, Walk $walk, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $walk->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($walk);
             $entityManager->flush();
+            $this->addFlash('warning', 'La balade a été supprimé');
         }
 
         return $this->redirectToRoute('app_walk_index', [], Response::HTTP_SEE_OTHER);

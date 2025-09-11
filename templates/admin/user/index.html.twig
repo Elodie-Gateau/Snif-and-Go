@@ -167,7 +167,6 @@
                 <tr>
                     <th>Date</th>
                     <th>Nombre maximum de chiens</th>
-                    <th>Statut</th>
                     <th>Itinéraire</th>
                     <th>Nombre de chiens inscrits</th>
                     <th>Actions</th>
@@ -178,8 +177,6 @@
                 <tr>
                     <td>{{ walk.date|format_datetime('full', 'short', locale: 'fr') }}</td>       
                     <td>{{ walk.maxDogs }}</td>
-                    <td>{% set statusLabels = {'upcoming' : 'à venir'} %}
-                    {{ statusLabels[walk.status] ?? 'passé' }}</td>
                     <td>{{ walk.trail.name }}</td>
                     <td>{{ walk.walkRegistration|length }}</td>
                     <td>

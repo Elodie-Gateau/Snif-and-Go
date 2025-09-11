@@ -6,8 +6,12 @@ use App\Repository\DogBreedRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: DogBreedRepository::class)]
+#[UniqueEntity(fields: ['name_fr'], message: "Il existe déjà un nom de race similaire.")]
 class DogBreed
 {
     #[ORM\Id]
@@ -16,12 +20,24 @@ class DogBreed
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 100)]
+    #[Assert\Regex(
+        pattern: '/^[\p{L}0-9\s\'\-]+$/u'
+    )]
     private ?string $name_fr = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 100)]
+    #[Assert\Regex(
+        pattern: '/^[\p{L}0-9\s\'\-]+$/u'
+    )]
     private ?string $name_en = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Choice(choices: ['large', 'medium', 'small'])]
     private ?string $size = null;
 
     /**

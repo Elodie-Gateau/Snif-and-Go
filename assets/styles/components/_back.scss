@@ -4,6 +4,7 @@
 .add-dog__back,
 .add-trail__back,
 .trail__back,
-.add-walk__back {
+.add-walk__back,
+.edit-dog__back {
     @include back;
 }

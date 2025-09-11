@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Dog;
 use App\Entity\User;
+use App\Entity\Walk;
 
 use App\Entity\WalkRegistration;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -25,15 +26,37 @@ class WalkRegistrationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('wr')
             ->join('wr.walk', 'w')
             ->join('wr.dog', 'd')
+            ->join('w.trail', 't')
             ->andWhere('wr.dog = :dog')
             ->andWhere('d.user = :user')
             ->andWhere('w.date >= :now')
+            ->andWhere('w.status = :wstatus')
+            ->andWhere('wr.status = :wrstatus')
+            ->andWhere('t.status = :tstatus')
             ->setParameter('dog', $dog)
             ->setParameter('user', $user)
             ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('wstatus', 'Active')
+            ->setParameter('wrstatus', 'Active')
+            ->setParameter('tstatus', 'Active')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+    public function findValidRegisters(Walk $walk): ?array
+    {
+        return $this->createQueryBuilder('wr')
+            ->join('wr.walk', 'w')
+            ->join('wr.dog', 'd')
+            ->andWhere('wr.walk = :walk')
+            ->andWhere('wr.status = :wrstatus')
+            ->andWhere('d.status = :dstatus')
+            ->setParameter('walk', $walk)
+            ->setParameter('wrstatus', 'Active')
+            ->setParameter('dstatus', 'Active')
+            ->orderBy('wr.date_registration', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }
 //    /**

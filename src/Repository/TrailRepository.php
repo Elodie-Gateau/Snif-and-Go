@@ -20,7 +20,9 @@ class TrailRepository extends ServiceEntityRepository
 
     public function search(array $criteria): array
     {
-        $queryBuilder = $this->createQueryBuilder('trail');
+        $queryBuilder = $this->createQueryBuilder('trail')
+            ->andWhere('trail.status = :statut')
+            ->setParameter('statut', 'Active');
 
         if (!empty($criteria['search'])) {
             $term = '%' . strtolower(str_replace(['-', ' ', '_', '.'], '', trim($criteria['search']))) . '%';
@@ -82,6 +84,8 @@ class TrailRepository extends ServiceEntityRepository
     public function findAllLimit(int $limit): array
     {
         return $this->createQueryBuilder('trail')
+            ->andWhere('trail.status = :statut')
+            ->setParameter('statut', 'Active')
             ->orderBy('trail.id', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()

@@ -1,39 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Walk index{% endblock %}
+{% block title %}Walk index
+{% endblock %}
 
 {% block body %}
-    <h1>Walk index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Date</th>
-                <th>Max_dogs</th>
-                <th>Status</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for walk in walks %}
-            <tr>
-                <td>{{ walk.id }}</td>
-                <td>{{ walk.date ? walk.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ walk.maxDogs }}</td>
-                <td>{{ walk.status }}</td>
-                <td>
-                    <a href="{{ path('app_walk_show', {'id': walk.id}) }}">show</a>
-                    <a href="{{ path('app_walk_edit', {'id': walk.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_walk_new') }}">Create new</a>
-{% endblock %}
+	<section class="walks">
+		<h2 class="walks__title">Les prochaines balades disponibles</h2>
+		<div class="walks__container">
+			{% if nextWalks|length > 0 %}
+				{% for walk in nextWalks %}
+					{% set availableSeats = walk.maxDogs - walk.walkRegistration|length %}
+					{% if availableSeats > 0 %}
+						<div class="walks__card">
+							<div class="walks__wrapper">
+								<p class="walks__accent">{{ walk.date|format_datetime('medium', 'short', locale: 'fr') }}</p>
+								<a href="{{ path('app_trail_show', {id:walk.trail.id})}}" class="walks__link">
+									<strong>{{ walk.trail.name }}</strong>
+								</a>
+							</p>
+							<p class="walks__content">{{ walk.trail.startCity }}</p>
+						</div>
+						<div class="walks__wrapper">
+							<a class="walks__button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">S'inscrire</a>
+							<p class="walks__accent">{{ availableSeats }}
+								place{{ availableSeats > 1 ? "s" : "" }}
+								restante{{ availableSeats > 1 ? "s" : "" }}</p>
+						</div>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	{% else %}
+		<p>Aucune balade prévue</p>
+	{% endif %}
+</section>{% endblock %}

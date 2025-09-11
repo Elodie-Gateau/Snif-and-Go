@@ -28,7 +28,7 @@ final class DistanceService
 
         return [
             'distance_m' => (int) round($route['distance'] ?? 0),
-            'duration_s' => (int) round($route['duration'] ?? 0),
+            // 'duration_s' => (int) round($route['duration'] ?? 0),
         ];
     }
 

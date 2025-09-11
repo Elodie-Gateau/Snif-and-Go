@@ -101,7 +101,7 @@ final class TrailController extends AbstractController
         GpxService $gpx,
         SluggerInterface $slugger
     ): Response {
-        // On prérempli le user avec l'user connecté
+
         $user = $this->getUser();
         $trail = new Trail();
         $trail->setUser($user);
@@ -176,7 +176,6 @@ final class TrailController extends AbstractController
                     }
                 } else {
                     $this->addFlash('error', "Fichier GPX invalide (aucun point exploitable).");
-                    // On retombe sur l’affichage du form en bas
                 }
             } else {
                 // Si méthode de saisie manuelle des infos :
@@ -207,9 +206,10 @@ final class TrailController extends AbstractController
 
 
                     if ($route) {
-                        // On enregistre la distance convertie en km, et la durée en minutes
-                        $trail->setDistance(round($route['distance_m'] / 1000, 2));
-                        $trail->setDuration((int) round($route['duration_s'] / 60));
+                        // On enregistre la distance convertie en km, et on fait une estimation de la durée
+                        $km = $route['distance_m'] / 1000;
+                        $trail->setDistance(round($km, 2));
+                        $trail->setDuration($distanceService->estimateMinutesFromKm($km));
                     } else {
                         // sinon on tente la méthode Haversine + estimation durée
                         $meters = $distanceService->haversine($from['lat'], $from['lon'], $to['lat'], $to['lon']);
@@ -221,7 +221,7 @@ final class TrailController extends AbstractController
             }
             $em->persist($trail);
             $em->flush();
-
+            $this->addFlash('success', 'Itinéraire créé avec succès');
             return $this->redirectToRoute('app_trail_index');
         }
 
@@ -285,7 +285,7 @@ final class TrailController extends AbstractController
 
             $em->flush();
 
-
+            $this->addFlash('success', 'Photos ajoutées avec succès');
             return $this->redirectToRoute('app_trail_show', ['id' => $trail->getId()]);
         }
 
@@ -304,7 +304,7 @@ final class TrailController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Vos modifications sont enregistrées !');
             return $this->redirectToRoute('app_trail_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -315,14 +315,15 @@ final class TrailController extends AbstractController
     }
 
     #[Route('/{id}/inactive', name: 'app_trail_inactive', methods: ['POST'])]
-    public function inactive(Request $request, Trail $trail, EntityManagerInterface $entityManager): Response
+    public function inactive(Trail $trail, EntityManagerInterface $entityManager): Response
     {
         $trail->setStatus("Inactive");
         $entityManager->flush();
 
-
+        $this->addFlash('warning', 'Votre itinéraire a été supprimé');
         return $this->redirectToRoute('app_home');
     }
+
     #[Route('/{id}', name: 'app_trail_delete', methods: ['POST'])]
     public function delete(Request $request, Trail $trail, EntityManagerInterface $entityManager): Response
     {
@@ -330,7 +331,7 @@ final class TrailController extends AbstractController
             $entityManager->remove($trail);
             $entityManager->flush();
         }
-
+        $this->addFlash('warning', 'Votre itinéraire a été supprimé');
         return $this->redirectToRoute('app_trail_index', [], Response::HTTP_SEE_OTHER);
     }
 }

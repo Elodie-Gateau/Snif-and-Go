@@ -28,10 +28,12 @@
 							<div class="home-user__walk--card">
 								<div class="home-user__walk-wrapper">
 									<p class="home-user__walk-accent">{{ walk.date|format_datetime('full', 'short', locale: 'fr') }}</p>
-									<p class="home-user__walk-content">
-										<strong>{{ walk.trail.name }}</strong>
-									</p>
-									<p class="home-user__walk-content">{{ walk.trail.startCity }}</p>
+									<div class="home-user__walk-item">
+										<a href="{{ path('app_trail_show', {id:walk.trail.id})}}" class="walk__content">
+											<strong>{{ walk.trail.name }}</strong>
+										</a>
+										<p class="home-user__walk-content">{{ walk.trail.startCity }}</p>
+									</div>
 								</div>
 								<div class="home-user__walk-wrapper">
 									<a class="home-user__walk-button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">S'inscrire</a>
@@ -47,7 +49,7 @@
 				{% endif %}
 
 				{% if nextWalks|length > 4 %}
-					<a class="btn" href="{{ path('app_walk_registration_index') }}">Voir plus</a>
+					<a class="home-user__walk-button" href="{{ path('app_walk_index') }}">Voir plus</a>
 				{% endif %}
 			</div>
 		</div>
@@ -59,29 +61,33 @@
 			</div>
 
 			{% if dogs|length > 0 %}
+			<div class="home-user__dog-container">
 				{% for dog in dogs %}
 					<div class="home-user__dog--card">
-						{% if dog.photo and dog.sex == "female" %}
-							<img class="home-user__dog-photo-female" src="{{ asset('uploads/images/' ~ dog.photo)}}">
-						{% elseif dog.photo and dog.sex == "male" %}
-							<img class="home-user__dog-photo-male" src="{{ asset('uploads/images/' ~ dog.photo)}}">
-						{% elseif (not dog.photo) and dog.sex == "female" %}
-							{{ux_icon('streamline-plump:dog-1-remix', {class: 'home-user__dog-photo-female'})}}
-						{% elseif (not dog.photo) and dog.sex == "male" %}
-							{{ux_icon('streamline-plump:dog-1-remix', {class: 'home-user__dog-photo-male'})}}
-						{% endif %}
+										<div class="home-user__dog-photo-container">
+								{% set dogPhotoClass = ['home-user__dog-photo', dog.sex] | join(' ') %}
+								{% if dog.photo %}
+									<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
+								{% else %}
+									{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+								{% endif %}
+								</div>
+							<div class="home-user__dog-item">
 						<p class="home-user__dog-name">{{ dog.name }}</p>
+						<a class="home-user__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'home-user__dog-edit-icon' }) }}</a>
+						</div>
 						{% if dogNextWalks|length > 0 and dogNextWalks[dog.id] %}
 							<div class="home-user__dog-infos">
 								<p class="home-user__dog-subtitle">{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}
 									Prochaine balade
 									{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}</p>
-								<p class="home-user__dog-content">{{ dogNextWalks[dog.id].walk.date|format_datetime('medium','short', locale='fr')}}</p>
+								<p class="home-user__dog-content">{{ dogNextWalks[dog.id].walk.date|format_datetime('medium','short', locale='fr')}} 
+								<a class="home-user__dog-link" href="{{ path('app_walk_registration_show', {'id': dogNextWalks[dog.id].id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a></p>
 							</div>
 						{% endif %}
 					</div>
 				{% endfor %}
-
+			</div>
 
 			{% else %}
 				<p>Aucun chien n'est encore inscrit</p>
@@ -192,62 +198,62 @@
 				<div class="home-user__trail-search--results">
 
 					{% for trail in foundTrails %}
-					{% if trail.status == "Active" %}
-						<div class="home-user__trail-card">
-							{% if trail.photos|length > 0 %}
-								<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
-							{% else %}
-								{{ux_icon('f7:photo', {class: 'home-user__trail-photo'})}}
-							{% endif %}
-							<p class="home-user__trail-name">
-								<strong>{{ trail.name }}</strong>
-							</p>
+						{% if trail.status == "Active" %}
+							<div class="home-user__trail-card">
+								{% if trail.photos|length > 0 %}
+									<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
+								{% else %}
+									{{ux_icon('f7:photo', {class: 'home-user__trail-photo'})}}
+								{% endif %}
+								<p class="home-user__trail-name">
+									<strong>{{ trail.name }}</strong>
+								</p>
 
-							<div class="home-user__trail-description">
-								<div class="home-user__trail-item">
-									{{ux_icon('material-symbols:distance-rounded', {class: 'home-user__trail-icon'})}}
-									<p class="home-user__trail-content">{{ trail.startCity }}
-									</p>
-								</div>
 								<div class="home-user__trail-description">
 									<div class="home-user__trail-item">
-										{{ux_icon('game-icons:path-distance', {class: 'home-user__trail-icon'})}}
-										<p class="home-user__trail-content">{{ trail.distance|round }}
-											km{{ trail.distance > 1 ? "s" : "" }}</p>
+										{{ux_icon('material-symbols:distance-rounded', {class: 'home-user__trail-icon'})}}
+										<p class="home-user__trail-content">{{ trail.startCity }}
+										</p>
 									</div>
-									<div class="home-user__trail-item">
-										{{ux_icon('mingcute:time-fill', {class: 'home-user__trail-icon'})}}
-										<p class="home-user__trail-content">{% import 'macros/duration.html.twig' as dur %}
-											{{ dur.minutes(trail.duration) }}</p>
-									</div>
-									<div class="home-user__trail-item">
-										{{ux_icon('game-icons:strong', {class: 'home-user__trail-icon'})}}
-
-										{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'
-} %}
-										<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
-									</div>
-									{% if trail.score %}
+									<div class="home-user__trail-description">
 										<div class="home-user__trail-item">
-											{{ux_icon('mdi:like', {class: 'home-user__trail-icon'})}}
-											<div class="home-user__trail-content">
-
-												{% for i in 1.. trail.score %}
-													{{ux_icon('material-symbols:star-rounded', {class: 'home-user__trail-score'})}}
-												{% endfor %}
-												{% for i in 1.. (5 - trail.score) %}
-													{{ux_icon('material-symbols:star-outline-rounded', {class: 'home-user__trail-score'})}}
-												{% endfor %}
-											</div>
+											{{ux_icon('game-icons:path-distance', {class: 'home-user__trail-icon'})}}
+											<p class="home-user__trail-content">{{ trail.distance|round }}
+												km{{ trail.distance > 1 ? "s" : "" }}</p>
 										</div>
-									{% endif %}
+										<div class="home-user__trail-item">
+											{{ux_icon('mingcute:time-fill', {class: 'home-user__trail-icon'})}}
+											<p class="home-user__trail-content">{% import 'macros/duration.html.twig' as dur %}
+												{{ dur.minutes(trail.duration) }}</p>
+										</div>
+										<div class="home-user__trail-item">
+											{{ux_icon('game-icons:strong', {class: 'home-user__trail-icon'})}}
+
+											{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'
+} %}
+											<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
+										</div>
+										{% if trail.score %}
+											<div class="home-user__trail-item">
+												{{ux_icon('mdi:like', {class: 'home-user__trail-icon'})}}
+												<div class="home-user__trail-content">
+
+													{% for i in 1.. trail.score %}
+														{{ux_icon('material-symbols:star-rounded', {class: 'home-user__trail-score'})}}
+													{% endfor %}
+													{% for i in 1.. (5 - trail.score) %}
+														{{ux_icon('material-symbols:star-outline-rounded', {class: 'home-user__trail-score'})}}
+													{% endfor %}
+												</div>
+											</div>
+										{% endif %}
+									</div>
+
 								</div>
+								<a class="home-user__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
+
 
 							</div>
-							<a class="home-user__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
-
-
-						</div>
 						{% endif %}
 					{% endfor %}
 

@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrailRepository::class)]
+#[UniqueEntity(fields: ['user', 'name'], message: "Vous avez déjà créé un itinéraire avec ce nom.")]
 class Trail
 {
     #[ORM\Id]
@@ -17,21 +20,33 @@ class Trail
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 50)]
+    #[Assert\Regex(
+        pattern: '/^[\p{L}0-9\s\'\-]+$/u',
+    )]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive(message: "La distance doit être positive.")]
+    #[Assert\LessThanOrEqual(value: 80, message: "Distance maximale 80 km.")]
     private ?float $distance = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive(message: "La durée doit être positive.")]
+    #[Assert\LessThanOrEqual(value: 600, message: "Durée maximale 10 h.")]
     private ?float $duration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Choice(choices: ['easy', 'medium', 'hard'])]
     private ?string $difficulty = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Range(min: 0, max: 5)]
     private ?float $score = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Choice(choices: ['true', 'false'])]
     private ?string $water_point = null;
 
     #[ORM\ManyToOne(inversedBy: 'trails')]
@@ -45,21 +60,51 @@ class Trail
     private Collection $walks;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(
+        pattern: "/^[\p{L}0-9\s,'\.\-]+$/u",
+        message: "Adresse invalide."
+    )]
     private ?string $startAddress = null;
 
     #[ORM\Column(length: 10, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(
+        pattern: '/^\d{5}$/',
+        message: "Code postal invalide."
+    )]
     private ?string $startCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(
+        pattern: "/^[\p{L}\s'\-]+$/u",
+        message: "Ville invalide."
+    )]
     private ?string $startCity = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(
+        pattern: "/^[\p{L}0-9\s,'\.\-]+$/u",
+        message: "Adresse invalide."
+    )]
     private ?string $endAddress = null;
 
     #[ORM\Column(length: 10, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(
+        pattern: '/^\d{5}$/',
+        message: "Code postal invalide."
+    )]
     private ?string $endCode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(
+        pattern: "/^[\p{L}\s'\-]+$/u",
+        message: "Ville invalide."
+    )]
     private ?string $endCity = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -78,31 +123,45 @@ class Trail
     private Collection $photos;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(
+        pattern: '/\.gpx$/i',
+        message: "Seuls les fichiers .gpx sont acceptés."
+    )]
     private ?string $gpxFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Choice(
+        choices: ['gpx', 'manual'],
+        message: "Mode d'entrée invalide."
+    )]
     private ?string $inputMode = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Range(min: -90, max: 90)]
     private ?float $startLat = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Range(min: -180, max: 180)]
     private ?float $startLon = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Range(min: -90, max: 90)]
     private ?float $endLat = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Range(min: -180, max: 180)]
     private ?float $endLon = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Status = null;
+    #[Assert\Choice(choices: ['Active', 'Inactive'])]
+    private ?string $status = null;
 
     public function __construct()
     {
         $this->walks = new ArrayCollection();
         $this->photos = new ArrayCollection();
-        $this->Status = "Active";
+        $this->status = "Active";
     }
 
     private function normalize(string $value): string
@@ -446,12 +505,12 @@ class Trail
 
     public function getStatus(): ?string
     {
-        return $this->Status;
+        return $this->status;
     }
 
     public function setStatus(string $Status): static
     {
-        $this->Status = $Status;
+        $this->status = $Status;
 
         return $this;
     }

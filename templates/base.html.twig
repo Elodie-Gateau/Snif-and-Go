@@ -24,6 +24,17 @@
 			{% include 'layout/header.html.twig' %}
 		{% endblock %}
 		<main>
+			{% block flash %}
+				<div class="flash">
+					{% for label, messages in app.flashes %}
+						{% for message in messages %}
+							<div class="flash__{{label}}">
+								{{ message }}
+							</div>
+						{% endfor %}
+					{% endfor %}
+				</div>
+			{% endblock %}
 			{% block body %}{% endblock %}
 		</main>
 		{% block footer %}

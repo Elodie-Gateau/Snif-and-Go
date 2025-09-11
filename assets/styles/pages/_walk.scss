@@ -1,5 +1,6 @@
 @use "../utils/variables" as *;
 @use "../utils/mixins" as *;
+@use "../utils/breakpoints" as *;
 
 .walk-register,
 .add-walk {
@@ -36,5 +37,20 @@
     &__button {
         align-self: center;
         margin: $size-10 0;
+    }
+}
+
+@media (min-width: $md) {
+    .walk-register,
+    .add-walk {
+        @include infos-main;
+
+        &__desc {
+            @include infos-desc;
+        }
+
+        &__desc-container {
+            width: 15%;
+        }
     }
 }

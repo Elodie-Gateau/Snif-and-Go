@@ -1,4 +1,9 @@
 {{ form_start(form) }}
+{% if form_errors(form) %}
+	<div class="form__global-errors">
+		{{ form_errors(form) }}
+	</div>
+{% endif %}
 <div class="walk-register__desc-item">
 	<p class="walk-register__desc-title">{{ form_label(form.dog)}}</p>
 	{% set dogsChoices = form.dog.vars.choices is not empty %}
@@ -6,12 +11,13 @@
 		<p class="walk-register__desc-content">
 			Vous n'avez pas de chiens disponibles pour la balade.
 		</p>
-		{% do form.dog.setRendered %}
+		{{ form_errors(form.dog) }}
 	{% else %}
+		{{ form_errors(form.dog) }}
 		{{ form_widget(form.dog) }}
 		<button class="walk-register__button">{{ button_label|default('Valider') }}</button>
 	{% endif %}
 
 
 </div>
-{{ form_end(form) }}
+{{ form_end(form, { render_rest: false }) }}

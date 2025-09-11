@@ -2,12 +2,17 @@
 
 namespace App\Entity;
 
+use DateTime;
 use App\Repository\WalkRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: WalkRepository::class)]
+#[UniqueEntity(fields: ['date', 'trail'], message: "Il existe déjà une balade de programmée sur cet itinéraire à la même date.")]
 class Walk
 {
     #[ORM\Id]
@@ -16,13 +21,22 @@ class Walk
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\GreaterThan('today')]
+    #[Assert\Range(
+        min: new DateTime('today'),
+        max: new DateTime('+6 months'),
+    )]
     private ?\DateTime $date = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\Positive]
+    #[Assert\Range(
+        min: 2,
+        max: 10,
+    )]
     private ?int $max_dogs = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
 
     /**
      * @var Collection<int, WalkRegistration>
@@ -32,6 +46,7 @@ class Walk
 
     #[ORM\ManyToOne(inversedBy: 'walks')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private ?Trail $trail = null;
 
     /**
@@ -40,11 +55,15 @@ class Walk
     #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'walk')]
     private Collection $photos;
 
+    #[ORM\Column(length: 255)]
+    #[Assert\Choice(choices: ['Active', 'Inactive'])]
+    private ?string $status = null;
+
     public function __construct()
     {
         $this->walk_registration = new ArrayCollection();
         $this->photos = new ArrayCollection();
-        $this->status = "upcoming";
+        $this->status = "Active";
     }
 
     public function getId(): ?int
@@ -76,17 +95,7 @@ class Walk
         return $this;
     }
 
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
 
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, WalkRegistration>
@@ -156,6 +165,18 @@ class Walk
                 $photo->setWalk(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

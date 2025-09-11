@@ -30,13 +30,23 @@ final class WalkRegistrationController extends AbstractController
     }
 
     #[Route('/new/{walkId}', name: 'app_walk_registration_new', methods: ['GET', 'POST'])]
-    public function new(int $walkId, WalkRepository $walkRepository, DogRepository $dogRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function new(int $walkId, WalkRegistrationRepository $walkRegistrationRepository, WalkRepository $walkRepository, DogRepository $dogRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $walk = $walkRepository->find($walkId);
         $walkRegistration = new WalkRegistration();
         $walkRegistration->setWalk($walk);
 
-        $availableDogs = $dogRepository->findAvailableForWalk($this->getUser(), $walk);
+
+        $dogsId = $dogRepository->findAvailableForWalk($this->getUser(), $walk);
+        $availableDogs = [];
+
+        if ($dogsId) {
+            foreach ($dogsId as $id) {
+                $dog = $dogRepository->find($id);
+                $availableDogs[] = $dog;
+            }
+        }
+        $validRegisters = $walkRegistrationRepository->findValidRegisters($walk);
 
 
         $form = $this->createForm(
@@ -49,21 +59,26 @@ final class WalkRegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($walkRegistration);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Votre inscription est validée');
             return $this->redirectToRoute('app_home');
         }
 
         return $this->render('walk_registration/new.html.twig', [
             'walk' => $walk,
+            'validRegisters' => $validRegisters,
             'form' => $form,
         ]);
     }
 
     #[Route('/{id}', name: 'app_walk_registration_show', methods: ['GET'])]
-    public function show(WalkRegistration $walkRegistration): Response
+    public function show(WalkRegistration $walkRegistration, WalkRegistrationRepository $walkRegistrationRepository, WalkRepository $walkRepository): Response
     {
+        $walk = $walkRegistration->getWalk();
+        $validRegisters = $walkRegistrationRepository->findValidRegisters($walk);
         return $this->render('walk_registration/show.html.twig', [
-            'walk_registration' => $walkRegistration,
+            'wr' => $walkRegistration,
+            'walk' => $walk,
+            'validRegisters' => $validRegisters
         ]);
     }
 
@@ -75,7 +90,7 @@ final class WalkRegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
+            $this->addFlash('notice', 'Vos modifications sont enregistrées');
             return $this->redirectToRoute('app_walk_registration_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -85,12 +100,22 @@ final class WalkRegistrationController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/inactive', name: 'app_walk_registration_cancelled', methods: ['GET'])]
+    public function inactive(WalkRegistration $walkRegistration, EntityManagerInterface $entityManager): Response
+    {
+        $walkRegistration->setStatus("cancelled");
+        $entityManager->flush();
+
+        $this->addFlash('warning', 'Vous êtes désinscrit de cette balade');
+        return $this->redirectToRoute('app_home');
+    }
     #[Route('/{id}', name: 'app_walk_registration_delete', methods: ['POST'])]
     public function delete(Request $request, WalkRegistration $walkRegistration, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $walkRegistration->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($walkRegistration);
             $entityManager->flush();
+            $this->addFlash('warning', "L'inscription est supprimée");
         }
 
         return $this->redirectToRoute('app_walk_registration_index', [], Response::HTTP_SEE_OTHER);

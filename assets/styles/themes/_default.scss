@@ -15,4 +15,13 @@
     --text: #{$color-primary};
     --secondary: #{$color-secondary};
     --accent: #{$color-accent};
+    --notice: #{$color-notice};
+    --notice-border: #{$color-notice-border};
+    --notice-bg: #{$color-notice-bg};
+    --success: #{$color-success};
+    --success-border: #{$color-success-border};
+    --success-bg: #{$color-success-bg};
+    --warning: #{$color-warning};
+    --warning-border: #{$color-warning-border};
+    --warning-bg: #{$color-warning-bg};
 }

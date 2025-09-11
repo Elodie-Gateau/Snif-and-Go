@@ -24,7 +24,7 @@
                 <td>{{ dog.name }}</td>
                 <td>{{ dog.birthDate ? dog.birthDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ dog.sex }}</td>
-                <td>{{ dog.breed }}</td>
+                {# <td>{{ dog.dogBreed }}</td> #}
                 <td>{{ dog.identityNumber }}</td>
                 <td>
                     <a href="{{ path('app_dog_show', {'id': dog.id}) }}">show</a>

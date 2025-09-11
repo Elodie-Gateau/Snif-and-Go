@@ -28,7 +28,7 @@
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Difficulté</p>
 				<p class="walk-register__desc-content">{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
-                        {{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
+                        {{ difficultyLabels[walk.trail.difficulty] ?? 'Non défini' }}</p>
 			</div>
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Point d'eau</p>
@@ -58,8 +58,8 @@
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Les chiens inscrits</p>
 				<div class="walk-register__desc-wrapper">
-					{% if walk.walkRegistration|length > 0 %}
-						{% for register in walk.walkRegistration %}
+					{% if validRegisters|length > 0 %}
+						{% for register in validRegisters %}
 							<div class="walk-register__desc-container">
 								{% set dogPhotoClass = ['walk-register__dog-photo', register.dog.sex] | join(' ') %}
 									{% if register.dog.photo %}

@@ -8,21 +8,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: $size-24;
     padding: $size-12 $size-24;
 
     &__brand {
         display: flex;
         align-items: center;
-        gap: $size-12;
-        flex: 1 1 auto;
-        min-width: 0;
+        justify-content: space-between;
+        flex: 1;
     }
-
-    &__logo-img {
+    &__logo-img-inline {
+        display: block;
         width: 6rem;
     }
+    &__logo-img-block {
+        display: none;
+    }
 
-    &__tagline {
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__tagline,
+    &__tagline-end {
         font-family: "Fredoka";
         font-weight: 600;
         font-size: 1rem;
@@ -38,7 +48,7 @@
         flex: 0 0 auto;
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: center;
         gap: $size-6;
         z-index: 100;
     }
@@ -59,6 +69,14 @@
         text-align: end;
     }
 
+    &__link:focus {
+        color: var(--title);
+    }
+
+    &__link:hover {
+        color: var(--accent);
+    }
+
     &__burger {
         width: $size-30;
         height: $size-30;
@@ -66,27 +84,83 @@
         color: var(--accent);
         cursor: pointer;
     }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: $size-10;
+    }
 }
 
 @media (min-width: $md) {
     .site-header {
+        height: 6rem;
+        padding: $size-10 $size-20;
+
         &__container {
-            display: block;
+            display: flex;
+            flex-direction: column;
             width: auto;
+            justify-content: flex-end;
+            align-items: flex-end;
+            align-self: flex-end;
+            gap: $size-6;
+            padding: 0;
         }
 
         &__brand {
-            min-width: 30%;
-            width: 30%;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            gap: $size-4;
+            height: 100%;
+        }
+
+        &__wrapper {
+            flex-direction: column;
+            gap: $size-4;
+            justify-content: flex-start;
+            width: auto;
+        }
+
+        &__logo {
+            width: auto;
+            padding-top: $size-10;
+            padding-bottom: $size-20;
+        }
+
+        &__logo-img-inline {
+            display: none;
+        }
+        &__logo-img-block {
+            display: block;
+            width: 5rem;
+        }
+
+        &__nav {
+            position: static;
+            background-color: none;
+            padding: 0;
+            border-radius: 0;
         }
 
         &__menu {
+            flex-direction: row;
+            gap: $size-14;
+            font-weight: 600;
+        }
+
+        &__burger {
+            display: none;
+        }
+        &__toggle {
             display: flex;
-            gap: $size-10;
+            justify-content: center;
+            align-items: center;
         }
     }
 
-    .site-header .hidden {
+    .site-header__nav.hidden {
         display: block;
     }
 }

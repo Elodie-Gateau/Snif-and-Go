@@ -1,0 +1,30 @@
+@use "../utils/variables" as *;
+
+.flash {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__notice {
+        padding: $size-10 $size-20;
+        border-radius: $size-10;
+        border: solid 1px var(--notice-border);
+        background-color: var(--notice-bg);
+        color: var(--notice);
+    }
+    &__success {
+        padding: $size-10 $size-20;
+        border-radius: $size-10;
+        border: solid 1px var(--success-border);
+        background-color: var(--success-bg);
+        color: var(--success);
+    }
+    &__warning {
+        padding: $size-10 $size-20;
+        border-radius: $size-10;
+        border: solid 1px var(--warning-border);
+        background-color: var(--warning-bg);
+        color: var(--warning);
+    }
+}

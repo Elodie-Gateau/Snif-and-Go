@@ -69,7 +69,7 @@
 					</a>
 				{% endif %}
 			</div>
-			<div id="map" style="height: 400px;"></div>
+			{# <div id="map" style="height: 400px;"></div>
 
 			{% block javascripts %}
 				{{ parent() }}
@@ -95,7 +95,7 @@
 					}).addTo(map);
 					});
 				</script>
-			{% endblock %}
+			{% endblock %} #}
 
 			{% if trail.photos and trail.photos|length > 1 %}
 				<div class="trail__desc-item">
@@ -149,7 +149,7 @@
 		{% endif %}
 	</section>
 	<section class="trail__actions">
-		{% if app.user and app.user == trail.user %}
+		{% if app.user and app.user == trail.user and not nextWalks and nextWalks|length == 0 %} 
 			<div class="trail__actions-wrapper">
 				<a class="trail__button" href="{{ path('app_trail_edit', {'id': trail.id}) }}">Modifier</a>
 				<form method="post" class="trail__form-delete" action="{{ path('app_trail_inactive', { 'id': trail.id }) }}">

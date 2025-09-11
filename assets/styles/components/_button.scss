@@ -18,12 +18,14 @@
 .profile__button,
 .profile__trail-button,
 .trails-search--button,
-.trails-button {
+.trails-button,
+.walks__button {
     @include button(
         var(--background-button),
         var(--background-button-hover),
         var(--text-button)
     );
+    align-self: center;
 }
 
 .trail__form-submit {
@@ -36,6 +38,7 @@
 
 .trail__button-delete,
 .profile__trail-button-delete,
-.profile__dog-button-delete {
+.profile__dog-button-delete,
+.edit-dog__button-delete {
     @include delete-button(var(--background-button));
 }

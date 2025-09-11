@@ -24,11 +24,22 @@ class WalkRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('walk')
             ->andWhere('walk.date >= :now')
-            ->andWhere('walk.status = :status')
             ->setParameter('now', new \DateTimeImmutable())
-            ->setParameter('status', 'upcoming')
+            ->andWhere('walk.status = :statut')
+            ->setParameter('statut', 'Active')
             ->orderBy('walk.date', 'ASC')
             ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+    public function findAllNext(): array
+    {
+        return $this->createQueryBuilder('walk')
+            ->andWhere('walk.date >= :now')
+            ->andWhere('walk.status = :statut')
+            ->setParameter('statut', 'Active')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->orderBy('walk.date', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -38,6 +49,8 @@ class WalkRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('walk')
             ->andWhere('walk.date >= :today')
             ->andWhere('walk.trail = :trail')
+            ->andWhere('walk.status = :statut')
+            ->setParameter('statut', 'Active')
             ->setParameter('today', new \DateTimeImmutable('today'))
             ->setParameter('trail', $trail)
             ->orderBy('walk.date', 'ASC')

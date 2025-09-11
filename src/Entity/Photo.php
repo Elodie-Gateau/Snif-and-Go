@@ -4,8 +4,11 @@ namespace App\Entity;
 
 use App\Repository\PhotoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PhotoRepository::class)]
+#[UniqueEntity(fields: ['name'], message: "Une photo porte déjà ce nom de fichier.")]
 class Photo
 {
     #[ORM\Id]
@@ -14,6 +17,7 @@ class Photo
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
     private ?\DateTime $date = null;
     public function __construct()
     {
@@ -23,6 +27,7 @@ class Photo
 
     #[ORM\ManyToOne(inversedBy: 'photos')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'photos')]
@@ -31,7 +36,13 @@ class Photo
     #[ORM\ManyToOne(inversedBy: 'photos')]
     private ?Walk $walk = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9_\-]+\.[a-zA-Z0-9]{2,5}$/',
+        message: 'Le nom de fichier doit contenir uniquement lettres, chiffres, tirets ou underscores et une extension valide.'
+    )]
     private ?string $name = null;
 
     public function getId(): ?int

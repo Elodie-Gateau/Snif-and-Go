@@ -7,8 +7,13 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: DogRepository::class)]
+#[UniqueEntity(fields: ['identity_number'], message: "Ce n° d'identification est déjà utilisé par un autre chien.")]
+#[UniqueEntity(fields: ['user', 'name'], message: "Vous avez déjà un chien avec ce nom.")]
 class Dog
 {
     #[ORM\Id]
@@ -17,19 +22,36 @@ class Dog
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 50)]
+    #[Assert\Regex(
+        pattern: '/^[\p{L}0-9\s\'\-]+$/u',
+    )]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\LessThan('today')]
+    #[Assert\Range(
+        min: new DateTime('-30 years'),
+        max: new DateTime('today'),
+    )]
     private ?\DateTime $birth_date = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Choice(choices: ['male', 'female'])]
     private ?string $sex = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true, unique: true)]
+    #[Assert\Regex(
+        pattern: '/^(\d{15}|[A-Z]{3}\d{3,4})$/i'
+    )]
     private ?string $identity_number = null;
 
     #[ORM\ManyToOne(inversedBy: 'dogs')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private ?User $user = null;
 
     /**
@@ -39,12 +61,16 @@ class Dog
     private Collection $walk_registration;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $photo = null;
 
     #[ORM\ManyToOne(inversedBy: 'dogs')]
+    #[Assert\NotNull]
     private ?DogBreed $dogBreed = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Choice(choices: ['Active', 'Inactive'])]
     private ?string $status = null;
 
     public function __construct()

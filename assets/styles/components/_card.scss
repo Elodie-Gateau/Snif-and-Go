@@ -1,5 +1,6 @@
 @use "../utils/variables" as *;
 @use "../utils/mixins" as *;
+@use "../utils/breakpoints" as *;
 
 .home-user {
     &__walk--card {
@@ -166,5 +167,57 @@
     &-score {
         color: rgb(255, 213, 0);
         width: $size-20;
+    }
+}
+
+.walks {
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: $size-20;
+        align-items: center;
+        padding: $size-10;
+    }
+    &__card {
+        @include card(100%, row, space-between, $size-10);
+        padding: $size-10;
+    }
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    &__accent {
+        color: var(--accent);
+        font-weight: 600;
+    }
+
+    &__link {
+        font-weight: 500;
+        text-decoration: underline;
+    }
+}
+@media (min-width: $md) {
+    .home-user {
+        &__dog--card {
+            @include card(40%, column, space-evenly, $size-20);
+        }
+
+        &__trail-card {
+            @include card(45%, column, flex-start, $size-16);
+
+            align-items: center;
+            padding: $size-20 $size-10;
+        }
+    }
+
+    .trails {
+        &-card {
+            @include card(40%, column, flex-start, $size-30);
+
+            align-items: center;
+            padding: $size-20 $size-10;
+        }
     }
 }

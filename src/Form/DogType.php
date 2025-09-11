@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -31,17 +32,18 @@ class DogType extends AbstractType
                     new Length([
                         'min' => 2,
                         'minMessage' => 'Votre nom doit contenir au moins {{ limit }} caractères',
-                        'max' => 4096,
+                        'max' => 50,
                     ]),
                 ],
             ])
             ->add('birth_date', DateType::class, [
                 'widget' => 'choice',
-                'years' => range(2005, 2030),
+                'years' => range(date('Y') - 30, date('Y')),
                 'attr' => ['class' => 'add-dog__form-dateselect'],
                 'label' => 'Date de naissance :',
                 'label_attr' => ['class' => 'add-dog__form-label'],
             ])
+
             ->add('sex', ChoiceType::class, [
                 'choices' => [
                     'Choisir le genre' => null,

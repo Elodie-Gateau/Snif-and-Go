@@ -1,5 +1,6 @@
 @use "../utils/variables" as *;
 @use "../utils/mixins" as *;
+@use "../utils/breakpoints" as *;
 
 .add-walk_form {
     // background: var(--background-tertiary);
@@ -70,24 +71,21 @@
 .login__form-label,
 .home-user__trail--search-label,
 .add-dog__form-label {
-    @include form-label(var(--text));
-    width: 45%;
+    @include form-label(var(--text), 45%);
 }
 
 .add-trail__form-label {
-    @include form-label(var(--text));
-    width: 100%;
+    @include form-label(var(--text), 100%);
+
     font-weight: 600;
 }
 
 .add-walk__form-label-date {
-    @include form-label(var(--text));
-    width: 40%;
+    @include form-label(var(--text), 40%);
 }
 
 .add-walk__form-label-number {
-    @include form-label(var(--text));
-    width: 70%;
+    @include form-label(var(--text), 70%);
 }
 
 .register__form-error,
@@ -174,5 +172,18 @@
 
     &.is-invalid .ts-control {
         border-color: $color-error;
+    }
+}
+
+@media (min-width: $md) {
+    .home-user__trail--search-input {
+        width: 60%;
+    }
+
+    .register__form-label,
+    .login__form-label,
+    .home-user__trail--search-label,
+    .add-dog__form-label {
+        @include form-label(var(--text), 50%);
     }
 }

@@ -1,4 +1,5 @@
 @use "../utils/variables" as *;
+@use "../utils/breakpoints" as *;
 
 .site-footer {
     width: 100%;
@@ -24,5 +25,26 @@
 
     &__legal {
         padding: $size-32 0;
+    }
+}
+
+@media (min-width: $md) {
+    .site-footer {
+        &__container {
+            justify-content: center;
+            gap: $size-24;
+            align-items: flex-end;
+        }
+
+        &__logo-img {
+            width: 6.5rem;
+        }
+
+        &__menu {
+            display: flex;
+            flex-direction: column;
+            gap: $size-6;
+            font-weight: 600;
+        }
     }
 }

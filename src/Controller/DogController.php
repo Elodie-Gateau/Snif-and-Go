@@ -52,6 +52,7 @@ final class DogController extends AbstractController
             $entityManager->persist($dog);
             $entityManager->flush();
 
+            $this->addFlash('notice', 'Votre chien est bien enregistré !');
             return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -77,8 +78,8 @@ final class DogController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('notice', 'Vos modifications sont enregistrées !');
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('dog/edit.html.twig', [
@@ -93,7 +94,7 @@ final class DogController extends AbstractController
         $dog->setStatus("Inactive");
         $entityManager->flush();
 
-
+        $this->addFlash('warning', 'Le profil de ce chien est supprimé');
         return $this->redirectToRoute('app_profile');
     }
 
@@ -103,6 +104,7 @@ final class DogController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $dog->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($dog);
             $entityManager->flush();
+            $this->addFlash('warning', 'Le profil de ce chien est supprimé');
         }
 
         return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);

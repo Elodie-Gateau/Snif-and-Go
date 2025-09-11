@@ -1,6 +1,7 @@
 @use "../utils/variables" as *;
 @use "../utils/mixins" as *;
 
-.profile__trail-wrapper {
+.profile__trail-wrapper,
+.edit-dog__wrapper {
     @include actions-wrapper;
 }
