@@ -22,16 +22,27 @@ final class ProfileController extends AbstractController
         if (!$user instanceof User) {
             return $this->redirectToRoute('app_login');
         }
-        $trails = $user->getTrails();
-        $dogs = $user->getDogs();
+        $allTrails = $user->getTrails();
+        $trails = [];
+        foreach ($allTrails as $oneTrail) {
+            if ($oneTrail->getStatus() === "Active") {
+                $trails[] = $oneTrail;
+            }
+        }
+        $allDogs = $user->getDogs();
+        $dogs = [];
+        foreach ($allDogs as $oneDog) {
+            if ($oneDog->getStatus() === "Active") {
+                $dogs[] = $oneDog;
+            }
+        }
         $now = new DateTime('now');
         $walkRegistrations = [];
         foreach ($dogs as $dog) {
-
             $wrs = $dog->getWalkRegistration();
             foreach ($wrs as $wr) {
                 $walk = $wr->getWalk();
-                if ($walk->getDate()->getTimestamp() < $now->getTimestamp()) {
+                if ($walk->getDate()->getTimestamp() < $now->getTimestamp() && $walk->getStatus() === "Active") {
                     $walkRegistrations[] = $wr;
                 }
             }
