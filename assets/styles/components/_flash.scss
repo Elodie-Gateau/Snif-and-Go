@@ -9,21 +9,21 @@
     &__notice {
         padding: $size-10 $size-20;
         border-radius: $size-10;
-        border: solid 1px var(--notice-border);
+        border: solid 2px var(--notice);
         background-color: var(--notice-bg);
         color: var(--notice);
     }
     &__success {
         padding: $size-10 $size-20;
         border-radius: $size-10;
-        border: solid 1px var(--success-border);
+        border: solid 2px var(--success);
         background-color: var(--success-bg);
         color: var(--success);
     }
     &__warning {
         padding: $size-10 $size-20;
         border-radius: $size-10;
-        border: solid 1px var(--warning-border);
+        border: solid 2px var(--warning);
         background-color: var(--warning-bg);
         color: var(--warning);
     }

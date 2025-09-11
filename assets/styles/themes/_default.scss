@@ -15,13 +15,21 @@
     --text: #{$color-primary};
     --secondary: #{$color-secondary};
     --accent: #{$color-accent};
+    --background-accent: #{$color-background-accent};
     --notice: #{$color-notice};
-    --notice-border: #{$color-notice-border};
     --notice-bg: #{$color-notice-bg};
     --success: #{$color-success};
-    --success-border: #{$color-success-border};
     --success-bg: #{$color-success-bg};
     --warning: #{$color-warning};
-    --warning-border: #{$color-warning-border};
     --warning-bg: #{$color-warning-bg};
+    --admin: #{$color-admin};
+    --admin-bg: #{$color-admin-bg};
+    --user: #{$color-user};
+    --user-bg: #{$color-user-bg};
+    --active: #{$color-active};
+    --active-bg: #{$color-active-bg};
+    --inactive: #{$color-inactive};
+    --inactive-bg: #{$color-inactive-bg};
+    --ban: #{$color-ban};
+    --ban-bg: #{$color-ban-bg};
 }

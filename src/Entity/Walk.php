@@ -59,6 +59,10 @@ class Walk
     #[Assert\Choice(choices: ['Active', 'Inactive'])]
     private ?string $status = null;
 
+    #[ORM\ManyToOne(inversedBy: 'walks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->walk_registration = new ArrayCollection();
@@ -177,6 +181,18 @@ class Walk
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

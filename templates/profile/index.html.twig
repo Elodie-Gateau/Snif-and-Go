@@ -4,203 +4,236 @@
 {% endblock %}
 
 {% block body %}
-	<section class="profile">
-		<h1 class="profile__title">{{ app.user.title }}
-			{{ app.user.firstname }}
-			{{ app.user.name }}</h1>
+<section class="profile">
+	<h1 class="profile__title">{{ app.user.title }}
+		{{ app.user.firstname }}
+		{{ app.user.name }}</h1>
 
 
-		<div class="profile__user">
+	<div class="profile__user">
 
-			{% if app.user.title %}
-				<div class="profile__user-item">
-					<p class="profile__user-subtitle">Civilité</p>
-					{% set titleFull = {
+		{% if app.user.title %}
+			<div class="profile__user-item">
+				<p class="profile__user-subtitle">Civilité</p>
+				{% set titleFull = {
             'M': 'Monsieur',
             'Mme' :'Madame'}[app.user.title] ?? 'Non renseigné' %}
-					<p class="profile__user-content">{{ titleFull }}</p>
-				</div>
+				<p class="profile__user-content">{{ titleFull }}</p>
+			</div>
+		{% endif %}
+
+		<div class="profile__user-item">
+			<p class="profile__user-subtitle">Prénom</p>
+			<p class="profile__user-content">{{ app.user.firstname }}</p>
+		</div>
+		<div class="profile__user-item">
+			<p class="profile__user-subtitle">Nom</p>
+			<p class="profile__user-content">{{ app.user.name }}</p>
+		</div>
+		<div class="profile__user-item">
+			<p class="profile__user-subtitle">Adresse email</p>
+			<p class="profile__user-content">{{ app.user.email }}</p>
+		</div>
+
+		<a class="profile__button" href="{{ path('admin_user_edit', {'id': app.user.id}) }}">Modifier</a>
+	</div>
+
+	<h2 class="profile__title">Historique</h2>
+	<div class="profile__nav">
+		<ul class="profile__list">
+			<li class="profile__list-item">
+				<a href="{{ path('app_profile', {'section': 'dogs'}) }}" class="profile__list-link">{{ ux_icon('mdi:paw', {class: 'profile__icon'}) }}
+					Chiens</a>
+			</li>
+			<li class="profile__list-item">
+				<a href="{{ path('app_profile', {'section': 'trails'}) }}" class="profile__list-link">{{ ux_icon('streamline:arrow-roadmap', {class: 'profile__icon'}) }}
+					Itinéraires</a>
+			</li>
+			<li class="profile__list-item">
+				<a href="{{ path('app_profile', {'section': 'walks'}) }}" class="profile__list-link">{{ ux_icon('fa7-solid:dog', {class: 'profile__icon'}) }}
+					Balades</a>
+			</li>
+
+		</ul>
+	</div>
+
+	{% if app.request.query.get('section') == 'dogs' or app.request.query.get('section') is null %}
+		<div class="profile__dog">
+			{% if dogs %}
+				{% for dog in dogs %}
+					<div class="profile__dog-card">
+						<div class="profile__dog-container">
+							{% set dogPhotoClass = ['profile__dog-photo', dog.sex] | join(' ') %}
+							{% if dog.photo %}
+								<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
+							{% else %}
+								{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+							{% endif %}
+						</div>
+
+						<p class="profile__dog-content">
+							<strong>{{ dog.name }}</strong>
+						</p>
+						<div class="profile__dog-infos">
+							<p class="profile__dog-content">
+								{% if dog.birthDate and dog.age >= 1 %}
+									{{ dog.age }}
+									an{{ dog.age > 1 ? "s" : "" }}
+
+								{% endif %}
+								{% if dog.birthDate and dog.age == 0 and dog.ageM >= 1 %}
+
+									{{ dog.ageM }}
+									mois
+
+								{% endif %}
+
+								{% if dog.birthDate and dog.age > 0 and dog.ageM > 0 %}
+
+									{{ dog.ageM - (dog.age * 12) }}
+									mois
+
+								{% endif %}
+								{% if dog.dogBreed %}
+									<p class="profile__dog-content">{{ dog.dogBreed.nameFr }}</p>
+								{% endif %}
+							</p>
+						</div>
+						{% if dog.identityNumber %}
+							<p class="profile__dog-content">{{ dog.identityNumber }}</p>
+						{% endif %}
+						{% if dog.walkRegistration|length > 0 %}
+							<p class="profile__dog-content">{{ dog.walkRegistration|length }} inscription{{ dog.walkRegistration|length > 1 ? "s" : "" }} à {{ dog.walkRegistration|length > 1 ? "des" : "une" }} balade{{ dog.walkRegistration|length > 1 ? "s" : "" }}</p>
+						{% endif %}
+
+						<div class="profile__dog-wrapper">
+							<a class="profile__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__dog-edit-icon' }) }}</a>
+							<form method="post" class="profile__dog-form-delete" action="{{ path('app_dog_inactive', { 'id': dog.id }) }}">
+								<button type="submit" class="profile__dog-button-delete">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__dog-delete-icon'}) }}</button>
+							</form>
+						</div>
+					</div>
+				{% endfor %}
 			{% endif %}
+			{# 
+							{% if walkRegistrations %}
+								{% for walkRegistration in walkRegistrations %}
+									<div class="profile__walks-card">
+										<div class="profile__walks-wrapper">
+											<div class="profile__walks-container">
+												{% set dogPhotoClass = ['profile__walks-photo', walkRegistration.dog.sex] | join(' ') %}
+												{% if walkRegistration.dog.photo %}
+													<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ walkRegistration.dog.photo)}}">
+												{% else %}
+													{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+												{% endif %}
+											</div>
+			
+			
+											<p class="profile__walks-content">{{ walkRegistration.dog.name }}</p>
+										</div>
+										<div class="profile__walks-wrapper">
+											<p class="profile__walks-content">{{ walkRegistration.walk.date|format_datetime('long', 'short', locale: 'fr') }}</p>
+											<a class="profile__walks-link" href="{{ path('app_trail_show', {id: walkRegistration.walk.trail.id}) }}">{{ walkRegistration.walk.trail.name }}</a>
+											<p class="profile__walks-content">{{ walkRegistration.walk.trail.startCity }}</p>
+										</div>
+									</div>
+								{% endfor %}
+							{% endif %} #}
 
-			<div class="profile__user-item">
-				<p class="profile__user-subtitle">Prénom</p>
-				<p class="profile__user-content">{{ app.user.firstname }}</p>
-			</div>
-			<div class="profile__user-item">
-				<p class="profile__user-subtitle">Nom</p>
-				<p class="profile__user-content">{{ app.user.name }}</p>
-			</div>
-			<div class="profile__user-item">
-				<p class="profile__user-subtitle">Adresse email</p>
-				<p class="profile__user-content">{{ app.user.email }}</p>
-			</div>
 
-			<a class="profile__button" href="{{ path('admin_user_edit', {'id': app.user.id}) }}">Modifier</a>
 		</div>
+	{% elseif app.request.query.get('section') == 'trails' %}
+		<div class="profile__trails">
+			{% if trails %}
+				{% for trail in trails %}
+					<div class="profile__trail-card">
+						{% if trail.photos|length > 0 %}
+							<img class="profile__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
+						{% else %}
+							{{ux_icon('f7:photo', {class: 'profile__trail-photo'})}}
+						{% endif %}
+						<p class="profile__trail-name">
+							<strong>{{ trail.name }}</strong>
+						</p>
 
-		<h2 class="profile__title">Historique</h2>
-		<div class="profile__nav">
-			<ul class="profile__list">
-				<li class="profile__list-item">
-					<a href="{{ path('app_profile', {'section': 'dogs'}) }}" class="profile__list-link">{{ ux_icon('mdi:paw', {class: 'profile__icon'}) }}
-						Chiens</a>
-				</li>
-				<li class="profile__list-item">
-					<a href="{{ path('app_profile', {'section': 'trails'}) }}" class="profile__list-link">{{ ux_icon('streamline:arrow-roadmap', {class: 'profile__icon'}) }}
-						Itinéraires</a>
-				</li>
-				<li class="profile__list-item">
-					<a href="{{ path('app_profile', {'section': 'walksr'}) }}" class="profile__list-link">{{ ux_icon('fa7-solid:dog', {class: 'profile__icon'}) }}
-						Balades</a>
-				</li>
+						<div class="profile__trail-description">
+							<div class="profile__trail-item">
+								{{ux_icon('material-symbols:distance-rounded', {class: 'profile__trail-icon'})}}
+								<p class="profile__trail-content">{{ trail.startCity }}
+								</p>
+							</div>
+							<div class="profile__trail-description">
+								<div class="profile__trail-item">
+									{{ux_icon('game-icons:path-distance', {class: 'profile__trail-icon'})}}
+									<p class="profile__trail-content">{{ trail.distance|round }}
+										km{{ trail.distance > 1 ? "s" : "" }}</p>
+								</div>
+								<div class="profile__trail-item">
+									{{ux_icon('mingcute:time-fill', {class: 'profile__trail-icon'})}}
+									<p class="profile__trail-content">{% import 'macros/duration.html.twig' as dur %}
+										{{ dur.minutes(trail.duration) }}</p>
+								</div>
+								<div class="profile__trail-item">
+									{{ux_icon('game-icons:strong', {class: 'profile__trail-icon'})}}
 
-			</ul>
-		</div>
+									{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+									<p class="profile__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
+								</div>
+								{% if trail.score %}
+									<div class="profile__trail-item">
+										{{ux_icon('mdi:like', {class: 'profile__trail-icon'})}}
+										<div class="profile__trail-content">
 
-		{% if app.request.query.get('section') == 'dogs' or app.request.query.get('section') is null %}
-			<div class="profile__dog">
-				{% if dogs %}
-					{% for dog in dogs %}
-						<div class="profile__dog-card">
-							<div class="profile__dog-container">
-								{% set dogPhotoClass = ['profile__dog-photo', dog.sex] | join(' ') %}
-								{% if dog.photo %}
-									<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
-								{% else %}
-									{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+											{% for i in 1.. trail.score %}
+												{{ux_icon('material-symbols:star-rounded', {class: 'profile__trail-score'})}}
+											{% endfor %}
+											{% for i in 1.. (5 - trail.score) %}
+												{{ux_icon('material-symbols:star-outline-rounded', {class: 'profile__trail-score'})}}
+											{% endfor %}
+										</div>
+									</div>
 								{% endif %}
 							</div>
 
-							<p class="profile__dog-content"><strong>{{ dog.name }}</strong></p>
-							<p class="profile__dog-content">{% if dog.birthDate and dog.age >= 1 %}
-								{{ dog.age }}
-									an{{ dog.age > 1 ? "s" : "" }}
-								
-							{% endif %}
-							{% if dog.birthDate and dog.age == 0 and dog.ageM >= 1 %}
-								
-								{{ dog.ageM }}
-									mois
-							
-							{% endif %}
-
-							{% if dog.birthDate and dog.age > 0 and dog.ageM > 0 %}
-							
-								{{ dog.ageM - (dog.age * 12) }}
-									mois
-							
-							{% endif %}
-							{% if dog.dogBreed %}
-							<p class="profile__dog-content">{{ dog.dogBreed.nameFr }}</p>
-							{% endif %}
-							{% if dog.identityNumber %}
-								<p class="profile__dog-content">{{ dog.identityNumber }}</p>
-							{% endif %}
-
-							<div class="profile__dog-wrapper">
-								<a class="profile__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__dog-edit-icon' }) }}</a>
-								<form method="post" class="profile__dog-form-delete" action="{{ path('app_dog_inactive', { 'id': dog.id }) }}">
-									<button type="submit" class="profile__dog-button-delete">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__dog-delete-icon'}) }}</button>
-								</form>
-							</div>
 						</div>
-					{% endfor %}
-				{% endif %}
-			</div>
-		{% elseif app.request.query.get('section') == 'trails' %}
-			<div class="profile__trails">
-				{% if trails %}
-					{% for trail in trails %}
-						<div class="profile__trail-card">
-							{% if trail.photos|length > 0 %}
-								<img class="profile__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
-							{% else %}
-								{{ux_icon('f7:photo', {class: 'profile__trail-photo'})}}
-							{% endif %}
-							<p class="profile__trail-name">
-								<strong>{{ trail.name }}</strong>
-							</p>
-
-							<div class="profile__trail-description">
-								<div class="profile__trail-item">
-									{{ux_icon('material-symbols:distance-rounded', {class: 'profile__trail-icon'})}}
-									<p class="profile__trail-content">{{ trail.startCity }}
-									</p>
-								</div>
-								<div class="profile__trail-description">
-									<div class="profile__trail-item">
-										{{ux_icon('game-icons:path-distance', {class: 'profile__trail-icon'})}}
-										<p class="profile__trail-content">{{ trail.distance|round }}
-											km{{ trail.distance > 1 ? "s" : "" }}</p>
-									</div>
-									<div class="profile__trail-item">
-										{{ux_icon('mingcute:time-fill', {class: 'profile__trail-icon'})}}
-										<p class="profile__trail-content">{% import 'macros/duration.html.twig' as dur %}
-											{{ dur.minutes(trail.duration) }}</p>
-									</div>
-									<div class="profile__trail-item">
-										{{ux_icon('game-icons:strong', {class: 'profile__trail-icon'})}}
-
-										{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
-										<p class="profile__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
-									</div>
-									{% if trail.score %}
-										<div class="profile__trail-item">
-											{{ux_icon('mdi:like', {class: 'profile__trail-icon'})}}
-											<div class="profile__trail-content">
-
-												{% for i in 1.. trail.score %}
-													{{ux_icon('material-symbols:star-rounded', {class: 'profile__trail-score'})}}
-												{% endfor %}
-												{% for i in 1.. (5 - trail.score) %}
-													{{ux_icon('material-symbols:star-outline-rounded', {class: 'profile__trail-score'})}}
-												{% endfor %}
-											</div>
-										</div>
-									{% endif %}
-								</div>
-
-							</div>
-							<div class="profile__trail-wrapper">
-								<a class="profile__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
-								<a class="profile__button" href="{{ path('app_trail_edit', {'id': trail.id}) }}">Modifier</a>
-								<form method="post" class="profile__trail-form-delete" action="{{ path('app_trail_inactive', { 'id': trail.id }) }}">
-									<button type="submit" class="profile__trail-button-delete">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__trail-delete-icon'}) }}</button>
-								</form>
-							</div>
-
-
+						<div class="profile__trail-wrapper">
+							<a class="profile__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
+							<a class="profile__button" href="{{ path('app_trail_edit', {'id': trail.id}) }}">Modifier</a>
+							<form method="post" class="profile__trail-form-delete" action="{{ path('app_trail_inactive', { 'id': trail.id }) }}">
+								<button type="submit" class="profile__trail-button-delete">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__trail-delete-icon'}) }}</button>
+							</form>
 						</div>
-					{% endfor %}
-				{% endif %}
-			</div>
-		{% elseif app.request.query.get('section') == 'walksr' %}
-			<div class="profile__walks">
-				{% if walkRegistrations %}
-					{% for walkRegistration in walkRegistrations %}
-						<div class="profile__walks-card">
-							<div class="profile__walks-wrapper">
-								<div class="profile__walks-container">
-									{% set dogPhotoClass = ['profile__walks-photo', walkRegistration.dog.sex] | join(' ') %}
-									{% if walkRegistration.dog.photo %}
-										<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ walkRegistration.dog.photo)}}">
-									{% else %}
-										{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
-									{% endif %}
-								</div>
 
 
-								<p class="profile__walks-content">{{ walkRegistration.dog.name }}</p>
-							</div>
-							<div class="profile__walks-wrapper">
-								<p class="profile__walks-content">{{ walkRegistration.walk.date|format_datetime('long', 'short', locale: 'fr') }}</p>
-								<a class="profile__walks-link" href="{{ path('app_trail_show', {id: walkRegistration.walk.trail.id}) }}">{{ walkRegistration.walk.trail.name }}</a>
-								<p class="profile__walks-content">{{ walkRegistration.walk.trail.startCity }}</p>
-							</div>
-						</div>
-					{% endfor %}
-				{% endif %}
-			</div>
-		{% endif %}
-	</section>
-{% endblock %}
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	{% elseif app.request.query.get('section') == 'walks' %}
+		<div class="profile__walks">
+			{% if walks|length > 0 %}
+				{% for walk in walks %}
+
+					<div class="walks__card">
+						<div class="walks__wrapper">
+							<p class="walks__accent">{{ walk.date|format_datetime('medium', 'short', locale: 'fr') }}</p>
+							<a href="{{ path('app_trail_show', {id:walk.trail.id})}}" class="walks__link">
+								<strong>{{ walk.trail.name }}</strong>
+							</a>
+						</p>
+						<p class="walks__content">{{ walk.trail.startCity }}</p>
+						<p>{{ walk.walkRegistration|length }}
+							chiens inscrit{{ walk.walkRegistration|length > 1 ? "s" : "" }}</p>
+					</div>
+					<div class="walks__wrapper">
+						<a class="home-user__walk-button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
+					</div>
+				</div>
+
+			{% endfor %}
+		</div>
+	{% else %}
+		<p>Aucune balade prévue</p>
+	{% endif %}
+</div>{% endif %}</section>{% endblock %}

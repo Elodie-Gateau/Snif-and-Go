@@ -37,12 +37,20 @@ final class ProfileController extends AbstractController
             }
         }
         $now = new DateTime('now');
+
+        $allWalks = $user->getWalks();
+        $walks = [];
+        foreach ($allWalks as $oneWalk) {
+            if ($oneWalk->getStatus() === "Active") {
+                $walks[] = $oneWalk;
+            }
+        }
+
         $walkRegistrations = [];
         foreach ($dogs as $dog) {
             $wrs = $dog->getWalkRegistration();
             foreach ($wrs as $wr) {
-                $walk = $wr->getWalk();
-                if ($walk->getDate()->getTimestamp() < $now->getTimestamp() && $walk->getStatus() === "Active") {
+                if ($wr->getStatus() === "Active") {
                     $walkRegistrations[] = $wr;
                 }
             }
@@ -51,6 +59,7 @@ final class ProfileController extends AbstractController
             'user' => $user,
             'trails' => $trails,
             'dogs' => $dogs,
+            'walks' => $walks,
             'walkRegistrations' => $walkRegistrations
         ]);
     }

@@ -78,11 +78,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'user')]
     private Collection $photos;
 
+    /**
+     * @var Collection<int, Walk>
+     */
+    #[ORM\OneToMany(targetEntity: Walk::class, mappedBy: 'user')]
+    private Collection $walks;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Choice(choices: ['Active', 'Inactive', 'Banned'])]
+    private ?string $status = null;
+
     public function __construct()
     {
         $this->dogs = new ArrayCollection();
         $this->trails = new ArrayCollection();
         $this->photos = new ArrayCollection();
+        $this->walks = new ArrayCollection();
+        $this->status = "Active";
     }
 
     public function getId(): ?int
@@ -288,6 +301,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $photo->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Walk>
+     */
+    public function getWalks(): Collection
+    {
+        return $this->walks;
+    }
+
+    public function addWalk(Walk $walk): static
+    {
+        if (!$this->walks->contains($walk)) {
+            $this->walks->add($walk);
+            $walk->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWalk(Walk $walk): static
+    {
+        if ($this->walks->removeElement($walk)) {
+            // set the owning side to null (unless already changed)
+            if ($walk->getUser() === $this) {
+                $walk->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

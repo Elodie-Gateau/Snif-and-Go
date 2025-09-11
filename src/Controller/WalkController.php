@@ -28,6 +28,7 @@ final class WalkController extends AbstractController
     #[Route('/new', name: 'app_walk_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, TrailRepository $trailRepository): Response
     {
+        $user = $this->getUser();
         $trail = null;
         $walk = new Walk();
         $trailId = $request->query->getInt('trailId', 0);
@@ -37,6 +38,8 @@ final class WalkController extends AbstractController
                 $walk->setTrail($trail);
             }
         }
+
+        $walk->setUser($user);
 
         $form = $this->createForm(WalkType::class, $walk);
         $form->handleRequest($request);

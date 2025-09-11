@@ -1,4 +1,5 @@
 @use "../utils/variables" as *;
+@use "../utils/mixins" as *;
 @use "../utils/breakpoints" as *;
 
 .admin__users-table {
@@ -16,9 +17,121 @@
 .admin {
     &__nav {
         width: 100%;
+        padding: $size-20 0;
     }
 
     &__list {
         display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+
+        &-item {
+            text-align: center;
+            width: 20%;
+        }
+
+        &-link {
+            display: flex;
+            flex-direction: column;
+            gap: $size-6;
+            align-items: center;
+            height: $size-64;
+            justify-content: space-between;
+            color: var(--accent);
+            font-weight: 600;
+
+            &--container {
+                display: flex;
+                align-items: center;
+                gap: $size-10;
+
+                padding: $size-10 $size-14;
+                border-radius: $size-10;
+                background-color: var(--background-accent);
+            }
+        }
+    }
+
+    &__users {
+        background: var(--background-secondary);
+        border-radius: $size-10;
+        padding: $size-20 $size-10;
+
+        &-table {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+
+            thead {
+                display: none;
+            }
+
+            tbody {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: $size-20;
+            }
+
+            tr {
+                @include card(100%, column, space-around, $size-10);
+                align-items: flex-start;
+                padding: $size-20;
+            }
+
+            td {
+                @include card-item($size-10);
+                border-bottom: 1px solid var(--border-color);
+                width: 100%;
+                padding: $size-10 0;
+                align-items: center;
+            }
+
+            td::before {
+                content: attr(data-label);
+                flex: 0 0 $size-96;
+                font-weight: 600;
+                color: var(--title);
+            }
+        }
+
+        &-roles {
+            padding: $size-6;
+            border-radius: $size-16;
+            font-weight: 600;
+
+            &.admin {
+                background-color: var(--admin-bg);
+                border: 1px solid var(--admin);
+                color: var(--admin);
+            }
+            &.user {
+                background-color: var(--user-bg);
+                border: 1px solid var(--user);
+                color: var(--user);
+            }
+        }
+
+        &-status {
+            padding: $size-6;
+            border-radius: $size-16;
+            font-weight: 600;
+
+            &.Active {
+                background-color: var(--active-bg);
+                border: 1px solid var(--active);
+                color: var(--active);
+            }
+            &.Inactive {
+                background-color: var(--inactive-bg);
+                border: 1px solid var(--inactive);
+                color: var(--inactive);
+            }
+            &.Banned {
+                background-color: var(--ban-bg);
+                border: 1px solid var(--ban);
+                color: var(--ban);
+            }
+        }
     }
 }

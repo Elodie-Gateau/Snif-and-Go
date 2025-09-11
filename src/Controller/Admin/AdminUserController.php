@@ -23,11 +23,43 @@ final class AdminUserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function index(UserRepository $userRepository, DogRepository $dogRepository, TrailRepository $trailRepository, WalkRepository $walkRepository): Response
     {
+        $allUsers = $userRepository->findAll();
+        $activeUsers = [];
+        foreach ($allUsers as $user) {
+            if ($user->getStatus() === "Active") {
+                $activeUsers[] = $user;
+            }
+        }
+        $allDogs = $dogRepository->findAll();
+        $activeDogs = [];
+        foreach ($allDogs as $dog) {
+            if ($user->getStatus() === "Active") {
+                $activeDogs[] = $dog;
+            }
+        }
+        $allTrails = $trailRepository->findAll();
+        $activeTrails = [];
+        foreach ($allTrails as $trail) {
+            if ($user->getStatus() === "Active") {
+                $activeTrails[] = $trail;
+            }
+        }
+        $allWalks = $walkRepository->findAll();
+        $activeWalks = [];
+        foreach ($allWalks as $Walk) {
+            if ($user->getStatus() === "Active") {
+                $activeWalks[] = $Walk;
+            }
+        }
         return $this->render('admin/user/index.html.twig', [
-            'users' => $userRepository->findAll(),
-            'dogs' => $dogRepository->findAll(),
-            'trails' => $trailRepository->findAll(),
-            'walks' => $walkRepository->findAll(),
+            'users' => $allUsers,
+            'activeUsers' => $activeUsers,
+            'dogs' => $allDogs,
+            'activeDogs' => $activeDogs,
+            'trails' => $allTrails,
+            'activeTrails' => $activeTrails,
+            'walks' => $allWalks,
+            'activeWalks' => $activeWalks
         ]);
     }
 
@@ -91,5 +123,38 @@ final class AdminUserController extends AbstractController
         }
 
         return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/ban', name: 'ban', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function ban(Request $request, User $user, EntityManagerInterface $em): Response
+    {
+        if (!$this->isCsrfTokenValid('ban' . $user->getId(), $request->getPayload()->getString('_token'))) {
+            throw $this->createAccessDeniedException('CSRF token invalid.');
+        }
+
+        $user->setStatus('Banned');
+        $em->flush();
+        $this->addFlash('success', sprintf('Utilisateur banni.', $user->getEmail()));
+
+        if ($this->getUser() && $this->getUser()->getUserIdentifier() === $user->getUserIdentifier()) {
+            return $this->redirectToRoute('app_logout');
+        }
+        return $this->redirectToRoute('admin_user_index');
+    }
+
+    #[Route('/{id}/unban', name: 'unban', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function unban(Request $request, User $user, EntityManagerInterface $em): Response
+    {
+        if (!$this->isCsrfTokenValid('unban' . $user->getId(), $request->getPayload()->getString('_token'))) {
+            throw $this->createAccessDeniedException('CSRF token invalid.');
+        }
+
+        $user->setStatus('Active');
+        $em->flush();
+        $this->addFlash('success', sprintf('Utilisateur %s réactivé.', $user->getEmail()));
+
+        return $this->redirectToRoute('admin_user_index');
     }
 }

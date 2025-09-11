@@ -10,6 +10,8 @@
 .profile__trail-delete-icon,
 .profile__trail-icon,
 .theme-toggle__content-icon,
-.home-user__dog-edit-icon {
+.home-user__dog-edit-icon,
+.admin__nav-icon,
+.admin__users-icon {
     @include icon(var(--accent), $size-22);
 }

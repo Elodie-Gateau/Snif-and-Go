@@ -46,4 +46,20 @@
         gap: $size-20;
         padding: $size-20;
     }
+
+    &__trails {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $size-20;
+        padding: $size-20;
+    }
+    &__walks {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $size-20;
+        padding: $size-20;
+        width: 100%;
+    }
 }
