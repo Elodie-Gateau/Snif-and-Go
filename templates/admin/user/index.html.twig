@@ -111,9 +111,9 @@
 					<tbody>
 						{% for dog in dogs %}
 							<tr>
-								<td>{{ dog.name }}</td>
-								<td>{{ dog.dogBreed.nameFr }}</td>
-								<td>
+								<td data-label="Nom">{{ dog.name }}</td>
+								<td data-label="Race">{{ dog.dogBreed.nameFr }}</td>
+								<td data-label="Âge">
 									{% if dog.birthDate and dog.age >= 1 %}
 										{{ dog.age }}
 										an{{ dog.age > 1 ? "s" : "" }}
@@ -127,14 +127,16 @@
 										mois
 									{% endif %}
 								</td>
-								<td>{{ dog.identityNumber }}</td>
-								<td>
+								<td data-label="Numéro d'identification">{{ dog.identityNumber }}</td>
+								<td data-label="Sexe">
 									{% set sexDogLabels = {'female': 'Femelle', 'male': 'Male'} %}
 									{{ sexDogLabels[dog.sex] ?? 'Non renseigné' }}</td>
-								<td>{{ dog.status }}</td>
-								<td>
-									<a class="admin__dogs-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__dogs-edit-icon' }) }}</a>
-									<a class="admin__dogs-delete-icon" href="{{ path('app_dog_delete', {'id': dog.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__dogs-delete-icon' }) }}</a>
+								{% set status = {'Active' : 'Actif', 'Inactive' : 'Désactivé'} %}
+								<td data-label="Statut"><p class="admin__users-status {{ dog.status }}">
+									{{ status[dog.status] }}</p></td>
+								<td data-label="Actions">
+									<a class="admin__dogs-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__dogs-edit-icon' }) }}</a>
+									<a class="admin__dogs-icon" href="{{ path('app_dog_delete', {'id': dog.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__dogs-delete-icon' }) }}</a>
 								</td>
 							</tr>
 						{% endfor %}
@@ -160,31 +162,37 @@
 							<th>Ville d'arrivée</th>
 							<th>Fichier GPX</th>
 							<th>Statut</th>
+							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for trail in trails %}
 							<tr>
-								<td>{{ trail.name }}</td>
-								<td>{{ trail.distance|round }}
+								<td data-label="Nom">{{ trail.name }}</td>
+								<td data-label="Distance">{{ trail.distance|round }}
 									km{{ trail.distance > 1 ? "s" : "" }}</td>
-								<td>{% import 'macros/duration.html.twig' as dur %}
+								<td data-label="Durée">{% import 'macros/duration.html.twig' as dur %}
 									{{ dur.minutes(trail.duration) }}</td>
-								<td>{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+								<td data-label="Difficulté">
+								{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
 									{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</td>
-								<td>{{ trail.waterPoint }}</td>
-								<td>{{ trail.score }}</td>
-								<td>{{ trail.user.firstname ~' ' ~ trail.user.name}}</td>
-								<td>{{ trail.startCity }}</td>
-								<td>{{ trail.endCity }}</td>
-								<td>
+								{% set waterpointLabels = {'true': 'Oui','false': 'Non'} %}
+								<td data-label="Point d'eau">{{ waterpointLabels[trail.waterPoint] ?? "Non défini" }}</td>
+								<td data-label="Score">{{ trail.score }}</td>
+								<td data-label="Créateur">{{ trail.user.firstname ~' ' ~ trail.user.name}}</td>
+								<td data-label="Ville de départ">{{ trail.startCity }}</td>
+								<td data-label="Ville d'arrivée">{{ trail.endCity }}</td>
+								{% if trail.gpxFile %}
+								<td data-label="Fichier GPX">
 									<a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
 										{{ trail.gpxFile }}</a>
 								</td>
-								<td>{{ trail.status }}</td>
-								<td>
-									<a class="admin__trails-edit-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__trails-edit-icon' }) }}</a>
-									<a class="admin__trails-delete-icon" href="{{ path('app_trail_delete', {'id': trail.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-delete-icon' }) }}</a>
+								{% endif %}
+								{% set status = {'Active' : 'Actif', 'Inactive' : 'Désactivé'} %}
+								<td data-label="Statut">{{ status[trail.status] }}</td>
+								<td data-label="Actions">
+									<a class="admin__trails-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__trails-edit-icon' }) }}</a>
+									<a class="admin__trails-icon" href="{{ path('app_trail_delete', {'id': trail.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-delete-icon' }) }}</a>
 								</td>
 							</tr>
 						{% endfor %}
@@ -209,13 +217,13 @@
 					<tbody>
 						{% for walk in walks %}
 							<tr>
-								<td>{{ walk.date|format_datetime('full', 'short', locale: 'fr') }}</td>
-								<td>{{ walk.maxDogs }}</td>
-								<td>{{ walk.trail.name }}</td>
-								<td>{{ walk.walkRegistration|length }}</td>
-								<td>
-									<a class="admin__walks-edit-icon" href="{{ path('app_walk_edit', {'id': walk.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__walks-edit-icon' }) }}</a>
-									<a class="admin__walks-delete-icon" href="{{ path('app_walk_delete', {'id': walk.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__walks-delete-icon' }) }}</a>
+								<td data-label="Date">{{ walk.date|format_datetime('full', 'short', locale: 'fr') }}</td>
+								<td data-label="Nombre de chiens maximum">{{ walk.maxDogs }}</td>
+								<td data-label="Itinéraire"><a href="{{ path('app_trail_show', {'id': walk.trail.id})}}">{{ walk.trail.name }}</a></td>
+								<td data-label="Nombre d'inscriptions">{{ walk.walkRegistration|length }}</td>
+								<td data-label="Actions">
+									<a class="admin__walks-icon" href="{{ path('app_walk_edit', {'id': walk.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__walks-edit-icon' }) }}</a>
+									<a class="admin__walks-icon" href="{{ path('app_walk_delete', {'id': walk.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__walks-delete-icon' }) }}</a>
 								</td>
 							</tr>
 						{% endfor %}

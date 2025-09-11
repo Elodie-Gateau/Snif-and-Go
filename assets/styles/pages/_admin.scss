@@ -52,7 +52,10 @@
         }
     }
 
-    &__users {
+    &__users,
+    &__dogs,
+    &__trails,
+    &__walks {
         background: var(--background-secondary);
         border-radius: $size-10;
         padding: $size-20 $size-10;
