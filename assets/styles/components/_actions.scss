@@ -1,5 +1,6 @@
 @use "../utils/variables" as *;
 @use "../utils/mixins" as *;
+@use "../utils/breakpoints" as *;
 
 .profile__trail-wrapper,
 .edit-dog__wrapper {

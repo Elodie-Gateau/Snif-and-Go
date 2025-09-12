@@ -160,7 +160,7 @@
 							{% if trail.photos|length > 0 %}
 								<img class="profile__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
 							{% else %}
-								{{ux_icon('f7:photo', {class: 'profile__trail-photo'})}}
+								<img class="profile__trail-photo" src="{{ asset('images/photo-trail-default.jpg') }}" alt="Photo de l'itinéraire {{ trail.name }}">
 							{% endif %}
 							<p class="profile__trail-name">
 								<strong>{{ trail.name }}</strong>

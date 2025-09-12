@@ -128,6 +128,7 @@
         &-wrapper {
             display: flex;
             flex-direction: row;
+
             gap: $size-10;
             align-items: center;
         }
@@ -154,6 +155,7 @@
                 display: table;
                 width: 100%;
                 border-collapse: collapse;
+                font-size: $size-14;
 
                 thead {
                     display: table-header-group;
@@ -178,6 +180,70 @@
                     display: table-cell;
                     width: auto;
                     padding: $size-10 $size-14;
+                    border-bottom: 1px solid var(--border-color);
+                    vertical-align: middle;
+                }
+
+                td::before {
+                    content: none;
+                }
+            }
+            &-roles {
+                text-align: center;
+            }
+
+            &-status {
+                text-align: center;
+            }
+        }
+    }
+}
+
+@media (min-width: $lg) {
+    .admin {
+        &__users,
+        &__dogs,
+        &__trails,
+        &__walks {
+            &-wrapper {
+                justify-content: space-around;
+            }
+        }
+
+        &__trails {
+            background: var(--background-secondary);
+            border-radius: $size-10;
+            padding: $size-20 $size-10;
+
+            &-table {
+                display: table;
+                width: 100%;
+                border-collapse: collapse;
+                font-size: $size-12;
+
+                thead {
+                    display: table-header-group;
+                }
+
+                tbody {
+                    display: table-row-group;
+                    gap: 0;
+                }
+
+                tr {
+                    display: table-row;
+
+                    padding: 0;
+                    align-items: initial;
+                    border-radius: 0;
+                    box-shadow: none;
+                }
+
+                th,
+                td {
+                    display: table-cell;
+                    width: auto;
+                    padding: $size-6;
                     border-bottom: 1px solid var(--border-color);
                     vertical-align: middle;
                 }

@@ -24,8 +24,12 @@
     transition: background-color 0.2s ease, filter 0.2s ease;
 
     &:hover {
-        background-color: $bg-color-hover;
-        color: $text-color;
+        background-color: var(--background-button-hover);
+        color: var(--background);
+    }
+
+    @media (min-width: $lg) {
+        padding: $size-8 $size-20;
     }
 }
 

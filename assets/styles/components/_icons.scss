@@ -35,13 +35,16 @@
     .profile__dog-edit-icon,
     .profile__trail-delete-icon,
     .profile__trail-icon,
-    .theme-toggle__content-icon,
     .home-user__dog-edit-icon,
     .admin__nav-icon,
     .admin__users-icon,
     .admin__dogs-icon,
     .admin__trails-icon,
     .admin__walks-icon {
+        @include icon(var(--accent), $size-26);
+    }
+
+    .theme-toggle__content-icon {
         @include icon(var(--accent), $size-30);
     }
 

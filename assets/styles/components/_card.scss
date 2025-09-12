@@ -212,15 +212,6 @@
         }
     }
 
-    .trails {
-        &-card {
-            @include card(40%, column, flex-start, $size-30);
-
-            align-items: center;
-            padding: $size-20 $size-10;
-        }
-    }
-
     .profile {
         &__walks {
             &-card {
@@ -232,6 +223,15 @@
             &-wrapper {
                 text-align: center;
                 width: 100%;
+            }
+        }
+
+        &__trail {
+            &-card {
+                @include card(100%, column, space-between, $size-20);
+
+                align-items: center;
+                padding: $size-20 $size-10;
             }
         }
     }

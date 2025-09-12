@@ -61,31 +61,42 @@
 								<td data-label="Nom">{{ user.name }}</td>
 								<td data-label="Email">{{ user.email }}</td>
 								{% set roles = user.roles ?? [] %}
-								<td data-label="Rôle"><p class="admin__users-roles {{ 'ROLE_ADMIN' in roles ? 'admin' : 'user' }}">
-									{{ 'ROLE_ADMIN' in roles ? 'Administrateur' : 'Utilisateur' }}</p>
+								<td data-label="Rôle">
+									<p class="admin__users-roles {{ 'ROLE_ADMIN' in roles ? 'admin' : 'user' }}">
+										{{ 'ROLE_ADMIN' in roles ? 'Administrateur' : 'Utilisateur' }}</p>
 								</td>
 								{% set status = {'Active' : 'Actif', 'Inactive' : 'Désactivé', 'Banned': 'Banni'} %}
-								<td data-label="Statut"><p class="admin__users-status {{ user.status }}">
-									{{ status[user.status] }}</p></td>
+								<td data-label="Statut">
+									<p class="admin__users-status {{ user.status }}">
+										{{ status[user.status] }}</p>
+								</td>
 								<td data-label="Actions">
-								<div class="admin__users-wrapper">
-									<a class="admin__users-icon" href="{{ path('admin_user_edit', {'id': user.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__users-icon' }) }}</a>
-									<a class="admin__users-icon" href="{{ path('admin_user_delete', {'id': user.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}</a>
-									{% if user.status != 'Banned' %}
-										<form method="post" action="{{ path('admin_user_ban', {'id': user.id}) }}">
-											<input type="hidden" name="_token" value="{{ csrf_token('ban' ~ user.id) }}">
+									<div class="admin__users-wrapper">
+										<a class="admin__users-icon" href="{{ path('admin_user_edit', {'id': user.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__users-icon' }) }}</a>
+										{# <a class="admin__users-icon" href="{{ path('admin_user_delete', {'id': user.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}</a> #}
+										<form method="post" action="{{ path('admin_user_delete', {'id': user.id}) }}">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
 											<button class="admin__users-icon" type="submit">
-												{{ ux_icon('fa:ban',{ class: 'admin__users-ban-icon' }) }}
+												{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}
 											</button>
 										</form>
-									{% else %}
-										<form method="post" action="{{ path('admin_user_unban', {'id': user.id}) }}">
-											<input type="hidden" name="_token" value="{{ csrf_token('unban' ~ user.id) }}">
-											<button class="admin__users-icon" type="submit">
-												{{ ux_icon('fa:check-circle',{ class: 'admin__users-unban-icon' }) }}
-											</button>
-										</form>
-									{% endif %}</div>
+
+										{% if user.status != 'Banned' %}
+											<form method="post" action="{{ path('admin_user_ban', {'id': user.id}) }}">
+												<input type="hidden" name="_token" value="{{ csrf_token('ban' ~ user.id) }}">
+												<button class="admin__users-icon" type="submit">
+													{{ ux_icon('fa:ban',{ class: 'admin__users-ban-icon' }) }}
+												</button>
+											</form>
+										{% else %}
+											<form method="post" action="{{ path('admin_user_unban', {'id': user.id}) }}">
+												<input type="hidden" name="_token" value="{{ csrf_token('unban' ~ user.id) }}">
+												<button class="admin__users-icon" type="submit">
+													{{ ux_icon('fa:check-circle',{ class: 'admin__users-unban-icon' }) }}
+												</button>
+											</form>
+										{% endif %}
+									</div>
 								</td>
 							</tr>
 						{% endfor %}
@@ -133,13 +144,15 @@
 									{% set sexDogLabels = {'female': 'Femelle', 'male': 'Male'} %}
 									{{ sexDogLabels[dog.sex] ?? 'Non renseigné' }}</td>
 								{% set status = {'Active' : 'Actif', 'Inactive' : 'Désactivé'} %}
-								<td data-label="Statut"><p class="admin__users-status {{ dog.status }}">
-									{{ status[dog.status] }}</p></td>
+								<td data-label="Statut">
+									<p class="admin__users-status {{ dog.status }}">
+										{{ status[dog.status] }}</p>
+								</td>
 								<td data-label="Actions">
-								<div class="admin__dogs-wrapper">
-									<a class="admin__dogs-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__dogs-edit-icon' }) }}</a>
-									<a class="admin__dogs-icon" href="{{ path('app_dog_delete', {'id': dog.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__dogs-delete-icon' }) }}</a>
-								</div>
+									<div class="admin__dogs-wrapper">
+										<a class="admin__dogs-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__dogs-edit-icon' }) }}</a>
+										<a class="admin__dogs-icon" href="{{ path('app_dog_delete', {'id': dog.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__dogs-delete-icon' }) }}</a>
+									</div>
 								</td>
 							</tr>
 						{% endfor %}
@@ -171,13 +184,15 @@
 					<tbody>
 						{% for trail in trails %}
 							<tr>
-								<td data-label="Nom">{{ trail.name }}</td>
+								<td data-label="Nom">
+									<a href="{{ path('app_trail_show', {id: trail.id}) }}">{{ trail.name }}</a>
+								</td>
 								<td data-label="Distance">{{ trail.distance|round }}
 									km{{ trail.distance > 1 ? "s" : "" }}</td>
 								<td data-label="Durée">{% import 'macros/duration.html.twig' as dur %}
 									{{ dur.minutes(trail.duration) }}</td>
 								<td data-label="Difficulté">
-								{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+									{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
 									{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</td>
 								{% set waterpointLabels = {'true': 'Oui','false': 'Non'} %}
 								<td data-label="Point d'eau">{{ waterpointLabels[trail.waterPoint] ?? "Non défini" }}</td>
@@ -185,19 +200,21 @@
 								<td data-label="Créateur">{{ trail.user.firstname ~' ' ~ trail.user.name}}</td>
 								<td data-label="Ville de départ">{{ trail.startCity }}</td>
 								<td data-label="Ville d'arrivée">{{ trail.endCity }}</td>
-								{% if trail.gpxFile %}
+
 								<td data-label="Fichier GPX">
-									<a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
-										{{ trail.gpxFile }}</a>
+									{% if trail.gpxFile %}
+										<a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
+											{{ trail.gpxFile }}</a>
+									{% endif %}
 								</td>
-								{% endif %}
+
 								{% set status = {'Active' : 'Actif', 'Inactive' : 'Désactivé'} %}
 								<td data-label="Statut">{{ status[trail.status] }}</td>
 								<td data-label="Actions">
-								<div class="admin__trails-wrapper">
-									<a class="admin__trails-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__trails-edit-icon' }) }}</a>
-									<a class="admin__trails-icon" href="{{ path('app_trail_delete', {'id': trail.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-delete-icon' }) }}</a>
-								</div>
+									<div class="admin__trails-wrapper">
+										<a class="admin__trails-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__trails-edit-icon' }) }}</a>
+										<a class="admin__trails-icon" href="{{ path('app_trail_delete', {'id': trail.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-delete-icon' }) }}</a>
+									</div>
 								</td>
 							</tr>
 						{% endfor %}
@@ -213,9 +230,10 @@
 					<thead>
 						<tr>
 							<th>Date</th>
-							<th>Nombre maximum de chiens</th>
 							<th>Itinéraire</th>
-							<th>Nombre de chiens inscrits</th>
+							<th>Chiens max</th>
+
+							<th>Chiens inscrits</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -223,14 +241,17 @@
 						{% for walk in walks %}
 							<tr>
 								<td data-label="Date">{{ walk.date|format_datetime('full', 'short', locale: 'fr') }}</td>
+								<td data-label="Itinéraire">
+									<a href="{{ path('app_trail_show', {'id': walk.trail.id})}}">{{ walk.trail.name }}</a>
+								</td>
 								<td data-label="Nombre de chiens maximum">{{ walk.maxDogs }}</td>
-								<td data-label="Itinéraire"><a href="{{ path('app_trail_show', {'id': walk.trail.id})}}">{{ walk.trail.name }}</a></td>
+
 								<td data-label="Nombre d'inscriptions">{{ walk.walkRegistration|length }}</td>
 								<td data-label="Actions">
-								<div class="admin__walks-wrapper">
-									<a class="admin__walks-icon" href="{{ path('app_walk_edit', {'id': walk.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__walks-edit-icon' }) }}</a>
-									<a class="admin__walks-icon" href="{{ path('app_walk_delete', {'id': walk.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__walks-delete-icon' }) }}</a>
-								</div>
+									<div class="admin__walks-wrapper">
+										<a class="admin__walks-icon" href="{{ path('app_walk_edit', {'id': walk.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__walks-edit-icon' }) }}</a>
+										<a class="admin__walks-icon" href="{{ path('app_walk_delete', {'id': walk.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__walks-delete-icon' }) }}</a>
+									</div>
 								</td>
 							</tr>
 						{% endfor %}

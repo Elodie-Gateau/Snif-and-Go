@@ -156,14 +156,19 @@
         }
 
         &__trails {
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: stretch;
-            justify-content: space-evenly;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: $size-30 0;
+            gap: $size-10;
         }
         &__trail-card {
-            flex: 0 0 45%;
+            flex: 0 0 20%;
             align-items: center;
+        }
+
+        &__trail-description {
+            width: 100%;
+            font-size: $size-14;
         }
 
         &__walks {
