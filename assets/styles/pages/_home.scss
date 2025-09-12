@@ -76,6 +76,19 @@
     width: 100%;
     gap: $size-20;
 
+    &__container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $size-20;
+    }
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $size-20;
+    }
+
     &__intro {
         background: center/cover no-repeat
             url("../images/photo-accueil-user.webp");
@@ -93,6 +106,10 @@
     }
 
     &__walk {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $size-20;
         background: var(--background-secondary);
         border-radius: $size-10;
         padding: $size-30 $size-10;
@@ -257,6 +274,12 @@
     }
 
     .home-user {
+        &__wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $size-20;
+        }
         &__intro {
             width: 50%;
 
@@ -277,8 +300,9 @@
         &__walk-wrapper:nth-child(1) {
             display: flex;
             flex-direction: row;
-            flex: 1;
-            justify-content: space-evenly;
+            // flex: 1;
+            justify-content: flex-start;
+            gap: $size-24;
         }
 
         &__dog {
@@ -291,16 +315,16 @@
             }
 
             &-container {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                align-items: stretch;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: $size-20;
+                width: 100%;
             }
 
             &-item {
                 display: flex;
-                width: 65%;
-                justify-content: space-between;
+                width: 100%;
+                justify-content: flex-end;
                 align-self: flex-end;
             }
         }
@@ -359,13 +383,14 @@
             display: flex;
             flex-direction: row-reverse;
             width: 100%;
-            gap: $size-20;
+            gap: $size-10;
+            align-items: flex-start;
         }
 
         &__wrapper {
             display: flex;
             flex-direction: column;
-            width: 70%;
+            width: 75%;
             gap: $size-20;
         }
 
@@ -374,8 +399,16 @@
         }
 
         &__dog {
-            padding: $size-20 0;
+            padding: $size-20 $size-10;
             gap: $size-10;
+
+            &-item {
+                width: 100%;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                gap: $size-10;
+            }
 
             &-wrapper {
                 padding: 0 $size-10;
@@ -383,12 +416,15 @@
 
             &-container {
                 gap: $size-10;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
                 padding: 0;
+                justify-items: stretch;
             }
             &--card {
-                width: 45%;
-                padding: $size-20;
+                width: 100%;
+                padding: $size-6;
                 gap: $size-10;
+                font-size: $size-14;
             }
 
             &-title {
@@ -397,15 +433,32 @@
         }
 
         &__walk {
-            height: auto;
+            display: flex;
+            flex-direction: column;
+            gap: $size-20;
+            align-items: center;
+            justify-content: space-around;
+
+            &-container {
+                width: 100%;
+            }
+            &--card {
+                gap: $size-10;
+                font-size: $size-14;
+            }
+
             &-wrapper:nth-child(1) {
                 justify-content: flex-start;
-                gap: $size-40;
-                padding-left: $size-20;
+                gap: $size-48;
+                width: 70%;
             }
 
             &-item {
-                flex-direction: row;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: $size-4;
+                text-align: center;
             }
             &-content {
                 text-align: center;
@@ -414,8 +467,31 @@
 
         &__trail {
             &-search {
-                width: 60%;
+                width: 80%;
                 padding: $size-30;
+
+                &--results {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    width: 100%;
+                    gap: $size-20;
+                    align-items: stretch;
+                }
+            }
+
+            &-card {
+                width: 100%;
+                justify-content: space-between;
+                font-size: $size-14;
+            }
+
+            &-name {
+                text-align: center;
+            }
+
+            &-description {
+                width: 100%;
+                gap: $size-8;
             }
         }
         // display: flex;

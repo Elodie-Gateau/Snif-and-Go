@@ -125,6 +125,20 @@ final class AdminUserController extends AbstractController
         return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/{id}/inactive', name: 'inactive', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function inactive(Request $request, User $user, EntityManagerInterface $em): Response
+    {
+        $user->setStatus('Inactive');
+        $em->flush();
+        $this->addFlash('success', sprintf('Votre compte est désactivé.', $user->getEmail()));
+
+        if ($this->getUser() && $this->getUser()->getUserIdentifier() === $user->getUserIdentifier()) {
+            return $this->redirectToRoute('app_logout');
+        }
+        return $this->redirectToRoute('admin_user_index');
+    }
+
     #[Route('/{id}/ban', name: 'ban', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function ban(Request $request, User $user, EntityManagerInterface $em): Response

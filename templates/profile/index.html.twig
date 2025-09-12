@@ -35,7 +35,12 @@
 				<p class="profile__user-content">{{ app.user.email }}</p>
 			</div>
 
-			<a class="profile__button" href="{{ path('admin_user_edit', {'id': app.user.id}) }}">Modifier</a>
+			<div class="profile__user-wrapper">
+				<a class="profile__user-icon" href="{{ path('admin_user_edit', {'id': app.user.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__user-icon' }) }}</a>
+				<form method="post" class="profile__user-form-delete" action="{{ path('admin_user_inactive', { 'id': app.user.id }) }}">
+					<button type="submit" class="profile__user-icon">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__user-icon'}) }}</button>
+				</form>
+			</div>
 		</div>
 
 		<h2 class="profile__title">Historique</h2>
@@ -120,30 +125,30 @@
 					{% endfor %}
 				{% endif %}
 				{# 
-											{% if walkRegistrations %}
-												{% for walkRegistration in walkRegistrations %}
-													<div class="profile__walks-card">
-														<div class="profile__walks-wrapper">
-															<div class="profile__walks-container">
-																{% set dogPhotoClass = ['profile__walks-photo', walkRegistration.dog.sex] | join(' ') %}
-																{% if walkRegistration.dog.photo %}
-																	<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ walkRegistration.dog.photo)}}">
-																{% else %}
-																	{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
-																{% endif %}
-															</div>
-							
-							
-															<p class="profile__walks-content">{{ walkRegistration.dog.name }}</p>
-														</div>
-														<div class="profile__walks-wrapper">
-															<p class="profile__walks-content">{{ walkRegistration.walk.date|format_datetime('long', 'short', locale: 'fr') }}</p>
-															<a class="profile__walks-link" href="{{ path('app_trail_show', {id: walkRegistration.walk.trail.id}) }}">{{ walkRegistration.walk.trail.name }}</a>
-															<p class="profile__walks-content">{{ walkRegistration.walk.trail.startCity }}</p>
-														</div>
-													</div>
-												{% endfor %}
-											{% endif %} #}
+																			{% if walkRegistrations %}
+																				{% for walkRegistration in walkRegistrations %}
+																					<div class="profile__walks-card">
+																						<div class="profile__walks-wrapper">
+																							<div class="profile__walks-container">
+																								{% set dogPhotoClass = ['profile__walks-photo', walkRegistration.dog.sex] | join(' ') %}
+																								{% if walkRegistration.dog.photo %}
+																									<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ walkRegistration.dog.photo)}}">
+																								{% else %}
+																									{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+																								{% endif %}
+																							</div>
+															
+															
+																							<p class="profile__walks-content">{{ walkRegistration.dog.name }}</p>
+																						</div>
+																						<div class="profile__walks-wrapper">
+																							<p class="profile__walks-content">{{ walkRegistration.walk.date|format_datetime('long', 'short', locale: 'fr') }}</p>
+																							<a class="profile__walks-link" href="{{ path('app_trail_show', {id: walkRegistration.walk.trail.id}) }}">{{ walkRegistration.walk.trail.name }}</a>
+																							<p class="profile__walks-content">{{ walkRegistration.walk.trail.startCity }}</p>
+																						</div>
+																					</div>
+																				{% endfor %}
+																			{% endif %} #}
 
 
 			</div>
@@ -229,7 +234,8 @@
 
 								<p class="profile__walks-content">{{ walk.trail.startCity }}</p>
 								<p class="profile__walks-content">{{ walk.walkRegistration|length }}
-									chien{{ walk.walkRegistration|length > 1 ? "s" : "" }} inscrit{{ walk.walkRegistration|length > 1 ? "s" : "" }}</p>
+									chien{{ walk.walkRegistration|length > 1 ? "s" : "" }}
+									inscrit{{ walk.walkRegistration|length > 1 ? "s" : "" }}</p>
 							</div>
 							<div class="profile__walks-wrapper">
 								<a class="home-user__walk-button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>

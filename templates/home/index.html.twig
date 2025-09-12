@@ -26,7 +26,7 @@
 					<div class="home-user__dog">
 						<div class="home-user__dog-wrapper">
 							<h2 class="home-user__dog-title">Mes chiens</h2>
-							<a class="home-user__dog-button" href="{{ path('app_dog_new') }}">Ajouter</a>
+							<a class="home-user__button" href="{{ path('app_dog_new') }}">Ajouter</a>
 						</div>
 
 						{% if dogs|length > 0 %}
@@ -41,10 +41,9 @@
 												{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
 											{% endif %}
 										</div>
-										<div class="home-user__dog-item">
-											<p class="home-user__dog-name">{{ dog.name }}</p>
-											<a class="home-user__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'home-user__dog-edit-icon' }) }}</a>
-										</div>
+
+										<p class="home-user__dog-name">{{ dog.name }}</p>
+
 										{% if dogNextWalks|length > 0 and dogNextWalks[dog.id] %}
 											<div class="home-user__dog-infos">
 												<p class="home-user__dog-subtitle">{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}
@@ -55,6 +54,9 @@
 												</p>
 											</div>
 										{% endif %}
+										<div class="home-user__dog-item">
+											<a class="home-user__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'home-user__dog-edit-icon' }) }}</a>
+										</div>
 									</div>
 								{% endfor %}
 							</div>
@@ -71,7 +73,7 @@
 							{% for walk in nextWalks %}
 								<div class="home-user__walk--card">
 									<div class="home-user__walk-wrapper">
-										<p class="home-user__walk-accent">{{ walk.date|format_datetime('full', 'short', locale: 'fr') }}</p>
+										<p class="home-user__walk-accent">{{ walk.date|format_datetime('medium', 'short', locale: 'fr') }}</p>
 										<div class="home-user__walk-item">
 											<a href="{{ path('app_trail_show', {id:walk.trail.id})}}" class="walk__content">
 												<strong>{{ walk.trail.name }}</strong>
@@ -80,7 +82,7 @@
 										</div>
 									</div>
 									<div class="home-user__walk-wrapper">
-										<a class="home-user__walk-button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">S'inscrire</a>
+										<a class="home-user__button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">S'inscrire</a>
 										<p class="home-user__walk-accent">{{ walk.maxDogs - walk.walkRegistration|length }}
 											place{{ walk.maxDogs - walk.walkRegistration|length > 1 ? "s" : "" }}
 											restantes</p>
@@ -93,7 +95,7 @@
 					{% endif %}
 
 					{% if hasMore|length > 0 %}
-						<a class="home-user__walk-button" href="{{ path('app_walk_index') }}">Voir plus</a>
+						<a class="home-user__button" href="{{ path('app_walk_index') }}">Voir plus</a>
 					{% endif %}
 				</div>
 			</div>
@@ -101,7 +103,7 @@
 		<div class="home-user__trail">
 			<div class="home-user__trail-wrapper">
 				<h2 class="home-user__trail-title">Rechercher une balade</h2>
-				<a class="home-user__trail-button" href="{{ path('app_trail_new') }}">Ajouter un itinéraire</a>
+				<a class="home-user__button" href="{{ path('app_trail_new') }}">Ajouter un itinéraire</a>
 			</div>
 
 			<div class="home-user__trail-search">
@@ -191,7 +193,7 @@
 						{% endif %}
 					</div>
 					<div class="home-user__trail-search--advanced-button">
-						<button class="home-user__trail-search--button">Rechercher</button>
+						<button class="home-user__button">Rechercher</button>
 					</div>
 				</div>
 				{{ form_end(form) }}
@@ -207,7 +209,7 @@
 								{% if trail.photos|length > 0 %}
 									<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
 								{% else %}
-									{{ux_icon('f7:photo', {class: 'home-user__trail-photo'})}}
+									<img class="home-user__trail-photo" src="{{ asset('images/photo-trail-default.jpg') }}" alt="Photo de l'itinéraire {{ trail.name }}">
 								{% endif %}
 								<p class="home-user__trail-name">
 									<strong>{{ trail.name }}</strong>
@@ -233,8 +235,7 @@
 										<div class="home-user__trail-item">
 											{{ux_icon('game-icons:strong', {class: 'home-user__trail-icon'})}}
 
-											{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'
-} %}
+											{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
 											<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
 										</div>
 										{% if trail.score %}
@@ -254,7 +255,7 @@
 									</div>
 
 								</div>
-								<a class="home-user__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
+								<a class="home-user__button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
 
 
 							</div>
@@ -267,10 +268,11 @@
 					<a class="home-user__trail-link" href="{{ path('app_home') }}">Réinitialiser la recherche</a>
 				{% endif %}
 
-				{% if foundTrails|length > 8 %}
-					<a class="btn" href="{{ path('app_trail_index') }}">Voir plus</a>
-				{% endif %}
+
 			</div>
+			{% if hasMoreTrails|length > 0 %}
+				<a class="home-user__button" href="{{ path('app_trail_index') }}">Voir plus</a>
+			{% endif %}
 		</section>
 
 		{# Page d'accueil pour visiteurs non connectés #}

@@ -1,8 +1,6 @@
 @use "utils/variables";
 @use "utils/mixins";
 @use "utils/fonts";
-@use "utils/breakpoints";
-
 @use "themes/default";
 @use "themes/eco";
 
@@ -32,3 +30,4 @@
 @use "pages/profile";
 @use "pages/admin";
 @use "utils/helpers";
+@use "utils/breakpoints";

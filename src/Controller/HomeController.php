@@ -66,7 +66,9 @@ final class HomeController extends AbstractController
         ) {
             $foundTrails = $trailRepository->search($criteria);
         } else {
-            $foundTrails = $trailRepository->findAllLimit(8);
+            $limitTrail = 7;
+            $foundTrails = $trailRepository->findAllLimit($limitTrail + 1);
+            $hasMoreTrails = count($foundTrails) > $limitTrail;
         }
 
 
@@ -77,6 +79,7 @@ final class HomeController extends AbstractController
             'dogNextWalks' => $dogNextWalks,
             'form'        => $searchForm->createView(),
             'foundTrails' => $foundTrails,
+            'hasMoreTrails' => $hasMoreTrails
         ]);
     }
 }

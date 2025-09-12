@@ -196,9 +196,14 @@
 @media (min-width: $md) {
     .home-user {
         &__dog--card {
-            @include card(35%, column, space-evenly, $size-20);
+            @include card(100%, column, space-evenly, $size-10);
+            padding: $size-20;
+            height: 100%;
         }
 
+        &__walk--card {
+            @include card(100%, row, space-between, $size-16);
+        }
         &__trail-card {
             @include card(45%, column, flex-start, $size-16);
 
@@ -228,6 +233,13 @@
                 text-align: center;
                 width: 100%;
             }
+        }
+    }
+}
+@media (min-width: $lg) {
+    .home-user {
+        &__walk--card {
+            @include card(100%, row, space-between, $size-30);
         }
     }
 }

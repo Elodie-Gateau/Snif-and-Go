@@ -16,6 +16,14 @@
         &-subtitle {
             @include infos-subtitle;
         }
+
+        &-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: $size-10;
+            padding: 0 $size-20;
+        }
     }
     &__nav {
         width: 100%;
@@ -75,6 +83,56 @@
         padding: 0 $size-20;
         &__user {
             max-width: 90%;
+        }
+
+        &__list {
+            justify-content: space-evenly;
+        }
+
+        &__dog {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content: space-evenly;
+
+            &-card {
+                flex: 0 0 30%;
+                align-items: center;
+            }
+
+            &-content {
+                text-align: center;
+            }
+        }
+
+        &__trails {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content: space-evenly;
+        }
+        &__trail-card {
+            flex: 0 0 45%;
+            align-items: center;
+        }
+
+        &__walks {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content: space-evenly;
+
+            &-card {
+                flex: 0 0 40%;
+            }
+        }
+    }
+}
+@media (min-width: $lg) {
+    .profile {
+        padding: 0 $size-20;
+        &__user {
+            max-width: 70%;
         }
 
         &__list {

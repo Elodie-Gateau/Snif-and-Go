@@ -5,7 +5,7 @@
 .profile__icon {
     @include icon(var(--title), $size-22);
 }
-
+.profile__user-icon,
 .profile__dog-delete-icon,
 .profile__dog-edit-icon,
 .profile__trail-delete-icon,
@@ -20,7 +20,17 @@
     @include icon(var(--accent), $size-22);
 }
 
+.theme-toggle__icon-on,
+.theme-toggle__icon-off {
+    width: $size-30;
+}
+
+.theme-toggle__icon-off {
+    color: var(--toggle-off);
+}
+
 @media (min-width: $lg) {
+    .profile__user-icon,
     .profile__dog-delete-icon,
     .profile__dog-edit-icon,
     .profile__trail-delete-icon,
@@ -37,10 +47,6 @@
 
     .theme-toggle__icon-on,
     .theme-toggle__icon-off {
-        width: $size-48;
-    }
-
-    .theme-toggle__icon-off {
-        color: var(--toggle-off);
+        width: $size-40;
     }
 }
