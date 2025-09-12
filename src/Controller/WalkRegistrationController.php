@@ -100,7 +100,7 @@ final class WalkRegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/inactive', name: 'app_walk_registration_cancelled', methods: ['GET'])]
+    #[Route('/{id}/cancelled', name: 'app_walk_registration_cancelled', methods: ['POST'])]
     public function inactive(WalkRegistration $walkRegistration, EntityManagerInterface $entityManager): Response
     {
         $walkRegistration->setStatus("cancelled");

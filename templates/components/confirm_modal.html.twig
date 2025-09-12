@@ -1,0 +1,18 @@
+<div id="confirm-modal" class="modal hidden" role="dialog">
+	<div class="modal__overlay" data-close="overlay"></div>
+	<div class="modal__content" role="document">
+		<h2 id="confirm-title" class="modal__title">Confirmation</h2>
+		<p id="confirm-message" class="modal__message">
+			Voulez-vous vraiment supprimer cet élément ?
+		</p>
+
+		<div class="modal__actions">
+			<button type="button" class="modal__button-cancel" data-close="cancel">Annuler</button>
+
+			<form id="confirm-form" method="post">
+				<input type="hidden" name="_token" value="">
+				<button type="submit" class="modal__button">Supprimer</button>
+			</form>
+		</div>
+	</div>
+</div>

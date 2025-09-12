@@ -16,7 +16,10 @@
 .admin__users-icon,
 .admin__dogs-icon,
 .admin__trails-icon,
-.admin__walks-icon {
+.admin__walks-icon,
+.profile__walks-icon,
+.walk-register__icon,
+.trail__icon {
     @include icon(var(--accent), $size-22);
 }
 
@@ -40,7 +43,10 @@
     .admin__users-icon,
     .admin__dogs-icon,
     .admin__trails-icon,
-    .admin__walks-icon {
+    .admin__walks-icon,
+    .profile__walks-icon,
+    .walk-register__icon,
+    .trail__icon {
         @include icon(var(--accent), $size-26);
     }
 

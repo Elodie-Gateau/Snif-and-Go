@@ -108,6 +108,11 @@
         }
         &-wrapper:nth-child(2) {
             width: 20%;
+            flex-direction: row;
+
+            .profile__walks-icon:nth-child(1) {
+                width: $size-18;
+            }
         }
 
         &-link {

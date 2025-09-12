@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Service\DeletedUserProvider;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\DogRepository;
@@ -33,22 +34,22 @@ final class AdminUserController extends AbstractController
         $allDogs = $dogRepository->findAll();
         $activeDogs = [];
         foreach ($allDogs as $dog) {
-            if ($user->getStatus() === "Active") {
+            if ($dog->getStatus() === "Active") {
                 $activeDogs[] = $dog;
             }
         }
         $allTrails = $trailRepository->findAll();
         $activeTrails = [];
         foreach ($allTrails as $trail) {
-            if ($user->getStatus() === "Active") {
+            if ($trail->getStatus() === "Active") {
                 $activeTrails[] = $trail;
             }
         }
         $allWalks = $walkRepository->findAll();
         $activeWalks = [];
-        foreach ($allWalks as $Walk) {
-            if ($user->getStatus() === "Active") {
-                $activeWalks[] = $Walk;
+        foreach ($allWalks as $walk) {
+            if ($walk->getStatus() === "Active") {
+                $activeWalks[] = $walk;
             }
         }
         return $this->render('admin/user/index.html.twig', [
@@ -115,14 +116,49 @@ final class AdminUserController extends AbstractController
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager, DeletedUserProvider $deletedUserProvider): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
+        if (!$this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('CSRF token invalid.');
+        }
+        $deletedUser = $deletedUserProvider->get();
+
+        if ($user->getId() === $deletedUser->getId()) {
+            $this->addFlash('warning', 'Ce compte spécial ne peut pas être supprimé.');
+            return $this->redirectToRoute('admin_user_index');
         }
 
-        return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
+        $dogs = $user->getDogs();
+        $trails = $user->getTrails();
+        $walks = $user->getWalks();
+        $photos = $user->getPhotos();
+
+        if ($dogs) {
+            foreach ($dogs as $dog) {
+                $dog->setUser($deletedUser);
+            }
+        }
+        if ($trails) {
+            foreach ($trails as $trail) {
+                $trail->setUser($deletedUser);
+            }
+        }
+        if ($walks) {
+            foreach ($walks as $walk) {
+                $walk->setUser($deletedUser);
+            }
+        }
+        if ($photos) {
+            foreach ($photos as $photo) {
+                $photo->setUser($deletedUser);
+            }
+        }
+        $entityManager->flush();
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Utilisateur supprimé, contenus ré-attribués.');
+        return $this->redirectToRoute('admin_user_index');
     }
 
     #[Route('/{id}/inactive', name: 'inactive', methods: ['POST'])]

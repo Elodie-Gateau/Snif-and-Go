@@ -4,72 +4,72 @@
 {% endblock %}
 
 {% block body %}
-	<section class="trail">
-		<h1 class="trail__title">{{ trail.name }}</h1>
+<section class="trail">
+	<h1 class="trail__title">{{ trail.name }}</h1>
 
-		<div class="trail__desc">
-			{% if trail.photos and trail.photos|length > 0 %}
-				<div class="trail__desc-item">
-					<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
-				</div>
+	<div class="trail__desc">
+		{% if trail.photos and trail.photos|length > 0 %}
+			<div class="trail__desc-item">
+				<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
+			</div>
+		{% endif %}
+
+
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Distance</p>
+			<p class="trail__desc-content">{{ trail.distance }}
+				km{{ trail.distance > 1 ? "s" : "" }}</p>
+		</div>
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Durée</p>
+			<p class="trail__desc-content">{% import 'macros/duration.html.twig' as dur %}
+				{{ dur.minutes(trail.duration) }}</p>
+		</div>
+		{% if trail.difficulty %}
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Difficulté</p>
+				{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+				<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
+			</div>
+		{% endif %}
+		{% if trail.score %}
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Note</p>
+				<p class="trail__desc-content">{{ trail.score }}</p>
+			</div>
+		{% endif %}
+
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Point d'eau</p>
+			{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
+			<p class="trail__desc-content">{{ waterPointLabels[trail.waterPoint] ?? "Inconnu" }}</p>
+		</div>
+
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Point de départ</p>
+			<div class="trail__wrapper">
+				<p class="trail__desc-content">{{ trail.startAddress }}</p>
+				<p class="trail__desc-content">{{ trail.startCode }}</p>
+				<p class="trail__desc-content">{{ trail.startCity }}</p>
+			</div>
+		</div>
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Point d'arrivée</p>
+			<div class="trail__wrapper">
+				<p class="trail__desc-content">{{ trail.endAddress }}</p>
+				<p class="trail__desc-content">{{ trail.endCode }}</p>
+				<p class="trail__desc-content">{{ trail.endCity }}</p>
+			</div>
+		</div>
+		<div class="trail__desc-item">
+			{% if trail.gpxFile %}
+				<a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
+					Télécharger le fichier GPX
+					{{ ux_icon('material-symbols:download-rounded', {class: 'trail__icon'}) }}
+				</a>
 			{% endif %}
-
-
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Distance</p>
-				<p class="trail__desc-content">{{ trail.distance }}
-					km{{ trail.distance > 1 ? "s" : "" }}</p>
-			</div>
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Durée</p>
-				<p class="trail__desc-content">{% import 'macros/duration.html.twig' as dur %}
-					{{ dur.minutes(trail.duration) }}</p>
-			</div>
-			{% if trail.difficulty %}
-				<div class="trail__desc-item">
-					<p class="trail__desc-title">Difficulté</p>
-					{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
-					<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
-				</div>
-			{% endif %}
-			{% if trail.score %}
-				<div class="trail__desc-item">
-					<p class="trail__desc-title">Note</p>
-					<p class="trail__desc-content">{{ trail.score }}</p>
-				</div>
-			{% endif %}
-
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Point d'eau</p>
-				{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
-				<p class="trail__desc-content">{{ waterPointLabels[trail.waterPoint] ?? "Inconnu" }}</p>
-			</div>
-
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Point de départ</p>
-				<div class="trail__wrapper">
-					<p class="trail__desc-content">{{ trail.startAddress }}</p>
-					<p class="trail__desc-content">{{ trail.startCode }}</p>
-					<p class="trail__desc-content">{{ trail.startCity }}</p>
-				</div>
-			</div>
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Point d'arrivée</p>
-				<div class="trail__wrapper">
-					<p class="trail__desc-content">{{ trail.endAddress }}</p>
-					<p class="trail__desc-content">{{ trail.endCode }}</p>
-					<p class="trail__desc-content">{{ trail.endCity }}</p>
-				</div>
-			</div>
-			<div class="trail__desc-item">
-				{% if trail.gpxFile %}
-					<a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
-						Télécharger le fichier GPX
-						{{ ux_icon('material-symbols:download-rounded', {class: 'trail__icon'}) }}
-					</a>
-				{% endif %}
-			</div>
-			{# <div id="map" style="height: 400px;"></div>
+		</div>
+		{# <div id="map" style="height: 400px;"></div>
 
 			{% block javascripts %}
 				{{ parent() }}
@@ -121,6 +121,17 @@
 
 				{{ form_end(form) }}
 			</div>
+			{% if app.user == trail.user %}
+				<div class="trail__wrapper actions">
+					<a class="trail__icon" href="{{ path('app_trail_edit', { 'id': trail.id }) }}">{{ ux_icon('fa:edit', {class: 'trail__icon'}) }}</a>
+					<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
+						<input type="hidden" name="_token" value="notoken">
+						<button class="js-delete trail__icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="notoken" data-name="l'itinéraire {{ trail.name }} }}" type="submit">
+							{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'trail__icon' }) }}
+						</button>
+					</form>
+				</div>
+			{% endif %}
 			{% if not nextWalks %}
 				<a class="next-walks__button" href="{{ path('app_walk_new', { trailId: trail.id }) }}">Programmer une balade</a>
 			{% endif %}
@@ -149,7 +160,7 @@
 		{% endif %}
 	</section>
 	<section class="trail__actions">
-		{% if app.user and app.user == trail.user and not nextWalks and nextWalks|length == 0 %} 
+		{% if app.user and app.user == trail.user and not nextWalks and nextWalks|length == 0 %}
 			<div class="trail__actions-wrapper">
 				<a class="trail__button" href="{{ path('app_trail_edit', {'id': trail.id}) }}">Modifier</a>
 				<form method="post" class="trail__form-delete" action="{{ path('app_trail_inactive', { 'id': trail.id }) }}">

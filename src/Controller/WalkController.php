@@ -94,7 +94,7 @@ final class WalkController extends AbstractController
         $this->addFlash('warning', 'Votre balade a été annulée');
         return $this->redirectToRoute('app_home');
     }
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'app_walk_delete', methods: ['POST'])]
     public function delete(Request $request, Walk $walk, EntityManagerInterface $entityManager): Response
     {
@@ -104,6 +104,6 @@ final class WalkController extends AbstractController
             $this->addFlash('warning', 'La balade a été supprimé');
         }
 
-        return $this->redirectToRoute('app_walk_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

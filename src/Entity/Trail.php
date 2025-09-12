@@ -56,7 +56,7 @@ class Trail
     /**
      * @var Collection<int, Walk>
      */
-    #[ORM\OneToMany(targetEntity: Walk::class, mappedBy: 'trail')]
+    #[ORM\OneToMany(targetEntity: Walk::class, mappedBy: 'trail', cascade: ['remove'], orphanRemoval: true)]
     private Collection $walks;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -119,7 +119,7 @@ class Trail
     /**
      * @var Collection<int, Photo>
      */
-    #[ORM\OneToMany(mappedBy: 'trail', targetEntity: Photo::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trail', targetEntity: Photo::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $photos;
 
     #[ORM\Column(length: 255, nullable: true)]

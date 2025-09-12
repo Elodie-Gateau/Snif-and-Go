@@ -76,7 +76,16 @@
 				</div>
 			</div>
 
-    <a class="walk-register__button" href="{{ path('app_walk_registration_cancelled', {id:wr.id}) }}">Annuler l'inscription de {{ wr.dog.name }}</a>
-    	<a class="walk-register__back" href="{{ path('app_home') }}">Retour</a>
+    			{% if app.user == wr.dog.user %}
+				<div class="walk-register__wrapper actions">
+					<form method="post" action="{{ path('app_walk_registration_cancelled', {'id': wr.id}) }}">
+						<input type="hidden" name="_token" value="notoken">
+						<button class="js-delete walk-register__button" data-url="{{ path('app_walk_registration_cancelled', {'id': wr.id}) }}" data-token="notoken" data-name="l'inscription de {{ wr.dog.name }} " type="submit">
+							Annuler l'inscription de {{ wr.dog.name }}
+						</button>
+					</form>
+				</div>
+			{% endif %}
+	<a class="walk-register__back" href="{{ path('app_home') }}">Retour</a>
     </section>
 {% endblock %}

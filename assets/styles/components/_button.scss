@@ -19,11 +19,21 @@
 .profile__trail-button,
 .trails-search--button,
 .trails-button,
-.walks__button {
+.walks__button,
+.modal__button-cancel {
     @include button(
         var(--background-button),
         var(--background-button-hover),
         var(--text-button)
+    );
+    align-self: center;
+}
+
+.modal__button {
+    @include button(
+        var(--background-secondary),
+        var(--background-button-hover),
+        var(--text)
     );
     align-self: center;
 }

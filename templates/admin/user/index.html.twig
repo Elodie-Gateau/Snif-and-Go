@@ -73,10 +73,9 @@
 								<td data-label="Actions">
 									<div class="admin__users-wrapper">
 										<a class="admin__users-icon" href="{{ path('admin_user_edit', {'id': user.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__users-icon' }) }}</a>
-										{# <a class="admin__users-icon" href="{{ path('admin_user_delete', {'id': user.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}</a> #}
 										<form method="post" action="{{ path('admin_user_delete', {'id': user.id}) }}">
 											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-											<button class="admin__users-icon" type="submit">
+											<button class="js-delete admin__users-icon" data-url="{{ path('admin_user_delete', {'id': user.id}) }}" data-token="{{ csrf_token('delete' ~ user.id) }}" data-name="{{ user.email }}" type="submit">
 												{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}
 											</button>
 										</form>
@@ -149,9 +148,14 @@
 										{{ status[dog.status] }}</p>
 								</td>
 								<td data-label="Actions">
-									<div class="admin__dogs-wrapper">
+									<div class="admin__dogs-wrapper actions">
 										<a class="admin__dogs-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__dogs-edit-icon' }) }}</a>
-										<a class="admin__dogs-icon" href="{{ path('app_dog_delete', {'id': dog.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__dogs-delete-icon' }) }}</a>
+										<form method="post" action="{{ path('app_dog_delete', {'id': dog.id}) }}">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ dog.id) }}">
+											<button class="js-delete admin__dogs-icon" data-url="{{ path('app_dog_delete', {'id': dog.id}) }}" data-token="{{ csrf_token('delete' ~ dog.id) }}" data-name="{{ dog.name }}" type="submit">
+												{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}
+											</button>
+										</form>
 									</div>
 								</td>
 							</tr>
@@ -213,7 +217,12 @@
 								<td data-label="Actions">
 									<div class="admin__trails-wrapper">
 										<a class="admin__trails-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__trails-edit-icon' }) }}</a>
-										<a class="admin__trails-icon" href="{{ path('app_trail_delete', {'id': trail.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-delete-icon' }) }}</a>
+										<form method="post" action="{{ path('app_trail_delete', {'id': trail.id}) }}">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trail.id) }}">
+											<button class="js-delete admin__trails-icon" data-url="{{ path('app_trail_delete', {'id': trail.id}) }}" data-token="{{ csrf_token('delete' ~ trail.id) }}" data-name="{{ trail.name }}" type="submit">
+												{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-icon' }) }}
+											</button>
+										</form>
 									</div>
 								</td>
 							</tr>
@@ -250,7 +259,12 @@
 								<td data-label="Actions">
 									<div class="admin__walks-wrapper">
 										<a class="admin__walks-icon" href="{{ path('app_walk_edit', {'id': walk.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__walks-edit-icon' }) }}</a>
-										<a class="admin__walks-icon" href="{{ path('app_walk_delete', {'id': walk.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__walks-delete-icon' }) }}</a>
+										<form method="post" action="{{ path('app_walk_delete', {'id': walk.id}) }}">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ walk.id) }}">
+											<button class="js-delete admin__walks-icon" data-url="{{ path('app_walk_delete', {'id': walk.id}) }}" data-token="{{ csrf_token('delete' ~ walk.id) }}" data-name="La balade du {{ walk.date|format_datetime('short', 'short', locale: 'fr') }}" type="submit">
+												{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__walks-icon' }) }}
+											</button>
+										</form>
 									</div>
 								</td>
 							</tr>

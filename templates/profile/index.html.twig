@@ -37,8 +37,10 @@
 
 			<div class="profile__user-wrapper">
 				<a class="profile__user-icon" href="{{ path('admin_user_edit', {'id': app.user.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__user-icon' }) }}</a>
-				<form method="post" class="profile__user-form-delete" action="{{ path('admin_user_inactive', { 'id': app.user.id }) }}">
-					<button type="submit" class="profile__user-icon">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__user-icon'}) }}</button>
+				<form method="post" action="{{ path('admin_user_inactive', {'id': app.user.id}) }}">
+					<button class="js-delete profile__user-icon" data-url="{{ path('admin_user_inactive', {'id': app.user.id}) }}" data-token="notoken" data-name="votre compte Snif & Go {{ app.user.firstname }}" type="submit">
+						{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__user-icon' }) }}
+					</button>
 				</form>
 			</div>
 		</div>
@@ -117,39 +119,15 @@
 
 							<div class="profile__dog-wrapper">
 								<a class="profile__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__dog-edit-icon' }) }}</a>
-								<form method="post" class="profile__dog-form-delete" action="{{ path('app_dog_inactive', { 'id': dog.id }) }}">
-									<button type="submit" class="profile__dog-button-delete">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__dog-delete-icon'}) }}</button>
+								<form method="post" action="{{ path('app_dog_inactive', {'id': dog.id}) }}">
+									<button class="js-delete admin__dogs-icon" data-url="{{ path('app_dog_inactive', {'id': dog.id}) }}" data-token="notoken" data-name="le profil de {{ dog.name }}" type="submit">
+										{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}
+									</button>
 								</form>
 							</div>
 						</div>
 					{% endfor %}
 				{% endif %}
-				{# 
-																			{% if walkRegistrations %}
-																				{% for walkRegistration in walkRegistrations %}
-																					<div class="profile__walks-card">
-																						<div class="profile__walks-wrapper">
-																							<div class="profile__walks-container">
-																								{% set dogPhotoClass = ['profile__walks-photo', walkRegistration.dog.sex] | join(' ') %}
-																								{% if walkRegistration.dog.photo %}
-																									<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ walkRegistration.dog.photo)}}">
-																								{% else %}
-																									{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
-																								{% endif %}
-																							</div>
-															
-															
-																							<p class="profile__walks-content">{{ walkRegistration.dog.name }}</p>
-																						</div>
-																						<div class="profile__walks-wrapper">
-																							<p class="profile__walks-content">{{ walkRegistration.walk.date|format_datetime('long', 'short', locale: 'fr') }}</p>
-																							<a class="profile__walks-link" href="{{ path('app_trail_show', {id: walkRegistration.walk.trail.id}) }}">{{ walkRegistration.walk.trail.name }}</a>
-																							<p class="profile__walks-content">{{ walkRegistration.walk.trail.startCity }}</p>
-																						</div>
-																					</div>
-																				{% endfor %}
-																			{% endif %} #}
-
 
 			</div>
 		{% elseif app.request.query.get('section') == 'trails' %}
@@ -210,8 +188,11 @@
 
 								<a class="profile__trail-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__trail-icon' }) }}</a>
 								<a class="profile__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter</a>
-								<form method="post" class="profile__trail-form-delete" action="{{ path('app_trail_inactive', { 'id': trail.id }) }}">
-									<button type="submit" class="profile__trail-button-delete">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__trail-delete-icon'}) }}</button>
+								<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
+									<input type="hidden" name="_token" value="notoken">
+									<button class="js-delete profile__trail-icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="notoken" data-name="l'itinéraire {{ trail.name }}" type="submit">
+										{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__trail-icon' }) }}
+									</button>
 								</form>
 							</div>
 
@@ -237,8 +218,14 @@
 									chien{{ walk.walkRegistration|length > 1 ? "s" : "" }}
 									inscrit{{ walk.walkRegistration|length > 1 ? "s" : "" }}</p>
 							</div>
-							<div class="profile__walks-wrapper">
-								<a class="home-user__walk-button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
+							<div class="profile__walks-wrapper actions">
+								<a class="profile__walks-icon" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
+								<form method="post" action="{{ path('app_walk_inactive', {'id': walk.id}) }}">
+									<input type="hidden" name="_token" value="notoken">
+									<button class="js-delete profile__walks-icon" data-url="{{ path('app_walk_inactive', {'id': walk.id}) }}" data-token="notoken" data-name="la balade du {{ walk.date|format_datetime('full', 'short', locale: 'fr') }}" type="submit">
+										{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__walks-icon' }) }}
+									</button>
+								</form>
 							</div>
 						</div>
 

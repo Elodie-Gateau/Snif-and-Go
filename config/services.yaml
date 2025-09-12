@@ -6,6 +6,7 @@
 parameters:
     images_directory: "%kernel.project_dir%/public/uploads/images"
     gpx_directory: "%kernel.project_dir%/public/uploads/gpx"
+    app.deleted_user_email: "deleted@example.com"
 
 services:
     # default configuration for services in *this* file
@@ -17,6 +18,8 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: "../src/"
-
+    App\Service\DeletedUserProvider:
+        arguments:
+            $email: "%app.deleted_user_email%"
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -41,7 +41,7 @@ class Walk
     /**
      * @var Collection<int, WalkRegistration>
      */
-    #[ORM\OneToMany(targetEntity: WalkRegistration::class, mappedBy: 'walk')]
+    #[ORM\OneToMany(targetEntity: WalkRegistration::class, mappedBy: 'walk', cascade: ['remove'], orphanRemoval: true)]
     private Collection $walk_registration;
 
     #[ORM\ManyToOne(inversedBy: 'walks')]
@@ -52,7 +52,7 @@ class Walk
     /**
      * @var Collection<int, Photo>
      */
-    #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'walk')]
+    #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'walk', cascade: ['remove'], orphanRemoval: true)]
     private Collection $photos;
 
     #[ORM\Column(length: 255)]

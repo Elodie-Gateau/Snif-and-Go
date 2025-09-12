@@ -3,6 +3,8 @@
 @use "../utils/breakpoints" as *;
 
 .profile__trail-wrapper,
-.edit-dog__wrapper {
+.edit-dog__wrapper,
+.walk-register__wrapper,
+.actions {
     @include actions-wrapper;
 }

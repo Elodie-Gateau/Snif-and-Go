@@ -97,7 +97,7 @@ final class DogController extends AbstractController
         $this->addFlash('warning', 'Le profil de ce chien est supprimé');
         return $this->redirectToRoute('app_profile');
     }
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'app_dog_delete', methods: ['POST'])]
     public function delete(Request $request, Dog $dog, EntityManagerInterface $entityManager): Response
     {
@@ -107,6 +107,6 @@ final class DogController extends AbstractController
             $this->addFlash('warning', 'Le profil de ce chien est supprimé');
         }
 
-        return $this->redirectToRoute('app_dog_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

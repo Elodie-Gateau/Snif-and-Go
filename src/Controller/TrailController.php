@@ -323,15 +323,15 @@ final class TrailController extends AbstractController
         $this->addFlash('warning', 'Votre itinéraire a été supprimé');
         return $this->redirectToRoute('app_home');
     }
-
-    #[Route('/{id}', name: 'app_trail_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{id}/delete', name: 'app_trail_delete', methods: ['POST'])]
     public function delete(Request $request, Trail $trail, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $trail->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($trail);
             $entityManager->flush();
         }
-        $this->addFlash('warning', 'Votre itinéraire a été supprimé');
-        return $this->redirectToRoute('app_trail_index', [], Response::HTTP_SEE_OTHER);
+        $this->addFlash('warning', "L'itinéraire a été supprimé");
+        return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }
