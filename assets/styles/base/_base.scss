@@ -23,14 +23,10 @@ h2 {
 }
 
 h1 {
-    font-size: $size-32;
-    text-align: center;
     padding: $size-30 0;
 }
 
 h2 {
-    font-size: $size-24;
-    text-align: center;
     padding: $size-20 0;
 }
 
@@ -49,19 +45,11 @@ a:hover {
 
 .site-header__toggle {
     cursor: pointer;
-    width: $size-24;
+
     color: var(--title);
 }
 
 @media (min-width: $md) {
-    h1 {
-        font-size: $size-40;
-    }
-
-    h2 {
-        font-size: $size-32;
-    }
-
     main {
         padding: $size-20;
     }

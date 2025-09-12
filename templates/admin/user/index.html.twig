@@ -68,8 +68,9 @@
 								<td data-label="Statut"><p class="admin__users-status {{ user.status }}">
 									{{ status[user.status] }}</p></td>
 								<td data-label="Actions">
-									<a class="admin__users-icon" href="{{ path('admin_user_edit', {'id': user.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__users-edit-icon' }) }}</a>
-									<a class="admin__users-icon" href="{{ path('admin_user_delete', {'id': user.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-delete-icon' }) }}</a>
+								<div class="admin__users-wrapper">
+									<a class="admin__users-icon" href="{{ path('admin_user_edit', {'id': user.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__users-icon' }) }}</a>
+									<a class="admin__users-icon" href="{{ path('admin_user_delete', {'id': user.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}</a>
 									{% if user.status != 'Banned' %}
 										<form method="post" action="{{ path('admin_user_ban', {'id': user.id}) }}">
 											<input type="hidden" name="_token" value="{{ csrf_token('ban' ~ user.id) }}">
@@ -84,7 +85,7 @@
 												{{ ux_icon('fa:check-circle',{ class: 'admin__users-unban-icon' }) }}
 											</button>
 										</form>
-									{% endif %}
+									{% endif %}</div>
 								</td>
 							</tr>
 						{% endfor %}
@@ -135,8 +136,10 @@
 								<td data-label="Statut"><p class="admin__users-status {{ dog.status }}">
 									{{ status[dog.status] }}</p></td>
 								<td data-label="Actions">
+								<div class="admin__dogs-wrapper">
 									<a class="admin__dogs-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__dogs-edit-icon' }) }}</a>
 									<a class="admin__dogs-icon" href="{{ path('app_dog_delete', {'id': dog.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__dogs-delete-icon' }) }}</a>
+								</div>
 								</td>
 							</tr>
 						{% endfor %}
@@ -191,8 +194,10 @@
 								{% set status = {'Active' : 'Actif', 'Inactive' : 'Désactivé'} %}
 								<td data-label="Statut">{{ status[trail.status] }}</td>
 								<td data-label="Actions">
+								<div class="admin__trails-wrapper">
 									<a class="admin__trails-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__trails-edit-icon' }) }}</a>
 									<a class="admin__trails-icon" href="{{ path('app_trail_delete', {'id': trail.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-delete-icon' }) }}</a>
+								</div>
 								</td>
 							</tr>
 						{% endfor %}
@@ -222,8 +227,10 @@
 								<td data-label="Itinéraire"><a href="{{ path('app_trail_show', {'id': walk.trail.id})}}">{{ walk.trail.name }}</a></td>
 								<td data-label="Nombre d'inscriptions">{{ walk.walkRegistration|length }}</td>
 								<td data-label="Actions">
+								<div class="admin__walks-wrapper">
 									<a class="admin__walks-icon" href="{{ path('app_walk_edit', {'id': walk.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__walks-edit-icon' }) }}</a>
 									<a class="admin__walks-icon" href="{{ path('app_walk_delete', {'id': walk.id}) }}">{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__walks-delete-icon' }) }}</a>
+								</div>
 								</td>
 							</tr>
 						{% endfor %}

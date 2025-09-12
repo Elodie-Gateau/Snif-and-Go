@@ -20,7 +20,7 @@ class WalkRepository extends ServiceEntityRepository
     //    /**
     //     * @return Walk[] Returns an array of Walk objects
     //     */
-    public function findNext(int $limit = 10): array
+    public function findNext(int $limit): array
     {
         return $this->createQueryBuilder('walk')
             ->andWhere('walk.date >= :now')

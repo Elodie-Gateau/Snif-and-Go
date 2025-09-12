@@ -1,5 +1,6 @@
 @use "../utils/mixins" as *;
 @use "../utils/variables" as *;
+@use "../utils/breakpoints" as *;
 
 .profile {
     @include infos-main($size-30);
@@ -61,5 +62,61 @@
         gap: $size-20;
         padding: $size-20;
         width: 100%;
+
+        &-accent {
+            font-weight: 600;
+            color: var(--accent);
+        }
+    }
+}
+
+@media (min-width: $md) {
+    .profile {
+        padding: 0 $size-20;
+        &__user {
+            max-width: 90%;
+        }
+
+        &__list {
+            justify-content: space-evenly;
+        }
+
+        &__dog {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content: space-evenly;
+
+            &-card {
+                flex: 0 0 30%;
+                align-items: center;
+            }
+
+            &-content {
+                text-align: center;
+            }
+        }
+
+        &__trails {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content: space-evenly;
+        }
+        &__trail-card {
+            flex: 0 0 45%;
+            align-items: center;
+        }
+
+        &__walks {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content: space-evenly;
+
+            &-card {
+                flex: 0 0 40%;
+            }
+        }
     }
 }

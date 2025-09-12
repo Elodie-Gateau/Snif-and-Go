@@ -26,8 +26,9 @@ final class HomeController extends AbstractController
         TrailRepository $trailRepository
     ): Response {
 
-        $nextWalks = $walkRepository->findNext(4);
-
+        $limit = 3;
+        $nextWalks = $walkRepository->findNext($limit + 1);
+        $hasMore = count($nextWalks) > $limit;
         $currentUser = $this->getUser();
 
         if ($currentUser) {
@@ -71,6 +72,7 @@ final class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'nextWalks'   => $nextWalks,
+            'hasMore' => $hasMore,
             'dogs'        => $dogs,
             'dogNextWalks' => $dogNextWalks,
             'form'        => $searchForm->createView(),

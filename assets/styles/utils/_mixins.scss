@@ -203,7 +203,7 @@
 
 @mixin actions-wrapper {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
     align-items: center;
 }

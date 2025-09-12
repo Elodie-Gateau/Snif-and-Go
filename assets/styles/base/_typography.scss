@@ -13,3 +13,36 @@ h2 {
     font-weight: 700;
     line-height: 1.2;
 }
+
+h1 {
+    font-size: $size-32;
+    text-align: center;
+}
+
+h2 {
+    font-size: $size-24;
+    text-align: center;
+}
+
+@media (min-width: $md) {
+    body {
+        font-size: $size-16;
+    }
+
+    h1 {
+        font-size: $size-40;
+    }
+
+    h2 {
+        font-size: $size-32;
+    }
+}
+@media (min-width: $lg) {
+    h1 {
+        font-size: $size-48;
+    }
+
+    h2 {
+        font-size: $size-36;
+    }
+}

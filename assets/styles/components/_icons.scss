@@ -1,5 +1,6 @@
 @use "../utils/variables" as *;
 @use "../utils/mixins" as *;
+@use "../utils/breakpoints" as *;
 
 .profile__icon {
     @include icon(var(--title), $size-22);
@@ -17,4 +18,29 @@
 .admin__trails-icon,
 .admin__walks-icon {
     @include icon(var(--accent), $size-22);
+}
+
+@media (min-width: $lg) {
+    .profile__dog-delete-icon,
+    .profile__dog-edit-icon,
+    .profile__trail-delete-icon,
+    .profile__trail-icon,
+    .theme-toggle__content-icon,
+    .home-user__dog-edit-icon,
+    .admin__nav-icon,
+    .admin__users-icon,
+    .admin__dogs-icon,
+    .admin__trails-icon,
+    .admin__walks-icon {
+        @include icon(var(--accent), $size-30);
+    }
+
+    .theme-toggle__icon-on,
+    .theme-toggle__icon-off {
+        width: $size-48;
+    }
+
+    .theme-toggle__icon-off {
+        color: var(--toggle-off);
+    }
 }

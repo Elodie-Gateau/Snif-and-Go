@@ -72,7 +72,7 @@
 .profile {
     &__trail {
         &-card {
-            @include card(100%, column, flex-start, $size-30);
+            @include card(100%, column, space-between, $size-30);
             padding: $size-10;
         }
 
@@ -101,18 +101,13 @@
             justify-content: space-around;
         }
         &-wrapper:nth-child(1) {
-            width: 30%;
-        }
-        &-wrapper:nth-child(2) {
-            width: 70%;
+            width: 80%;
             display: flex;
             flex-direction: column;
-            gap: $size-16;
-
-            .profile__walks-content:nth-child(1) {
-                color: var(--title);
-                font-weight: 600;
-            }
+            gap: $size-8;
+        }
+        &-wrapper:nth-child(2) {
+            width: 20%;
         }
 
         &-link {
@@ -201,7 +196,7 @@
 @media (min-width: $md) {
     .home-user {
         &__dog--card {
-            @include card(40%, column, space-evenly, $size-20);
+            @include card(35%, column, space-evenly, $size-20);
         }
 
         &__trail-card {
@@ -218,6 +213,21 @@
 
             align-items: center;
             padding: $size-20 $size-10;
+        }
+    }
+
+    .profile {
+        &__walks {
+            &-card {
+                @include card(100%, column, space-around, $size-10);
+                padding: $size-10;
+                align-items: center;
+            }
+
+            &-wrapper {
+                text-align: center;
+                width: 100%;
+            }
         }
     }
 }

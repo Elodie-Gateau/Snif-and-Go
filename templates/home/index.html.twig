@@ -12,88 +12,92 @@
 			<h1 class="home-user__title">Bonjour
 				{{ app.user.firstname }}
 				{{ux_icon('fa6-solid:paw', {style: 'height: 1em'})}}</h1>
-			<div class="home-user__intro">
-				<div class="home-user__intro-wrapper">
-					<p class="home-user__intro-content">Bienvenue sur votre espace. Ici, vous pouvez accédez à toutes les fonctionnalités de Snif & Go.
-					</p>
-					<p class="home-user__intro-content">Bonne balade !</p>
-				</div>
-			</div>
-
-			<div class="home-user__walk">
-				<h2 class="home-user__walk-title">Les prochaines balades disponibles</h2>
-				<div class="home-user__walk-container">
-					{% if nextWalks|length > 0 %}
-						{% for walk in nextWalks %}
-							<div class="home-user__walk--card">
-								<div class="home-user__walk-wrapper">
-									<p class="home-user__walk-accent">{{ walk.date|format_datetime('full', 'short', locale: 'fr') }}</p>
-									<div class="home-user__walk-item">
-										<a href="{{ path('app_trail_show', {id:walk.trail.id})}}" class="walk__content">
-											<strong>{{ walk.trail.name }}</strong>
-										</a>
-										<p class="home-user__walk-content">{{ walk.trail.startCity }}</p>
-									</div>
-								</div>
-								<div class="home-user__walk-wrapper">
-									<a class="home-user__walk-button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">S'inscrire</a>
-									<p class="home-user__walk-accent">{{ walk.maxDogs - walk.walkRegistration|length }}
-										place{{ walk.maxDogs - walk.walkRegistration|length > 1 ? "s" : "" }}
-										restantes</p>
-								</div>
-							</div>
-						{% endfor %}
-					</div>
-				{% else %}
-					<p>Aucune balade prévue</p>
-				{% endif %}
-
-				{% if nextWalks|length > 4 %}
-					<a class="home-user__walk-button" href="{{ path('app_walk_index') }}">Voir plus</a>
-				{% endif %}
-			</div>
-		</div>
-
-		<div class="home-user__dog">
-			<div class="home-user__dog-wrapper">
-				<h2 class="home-user__dog-title">Mes chiens</h2>
-				<a class="home-user__dog-button" href="{{ path('app_dog_new') }}">Ajouter</a>
-			</div>
-
-			{% if dogs|length > 0 %}
-			<div class="home-user__dog-container">
-				{% for dog in dogs %}
-					<div class="home-user__dog--card">
-										<div class="home-user__dog-photo-container">
-								{% set dogPhotoClass = ['home-user__dog-photo', dog.sex] | join(' ') %}
-								{% if dog.photo %}
-									<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
-								{% else %}
-									{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
-								{% endif %}
-								</div>
-							<div class="home-user__dog-item">
-						<p class="home-user__dog-name">{{ dog.name }}</p>
-						<a class="home-user__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'home-user__dog-edit-icon' }) }}</a>
+			<div class="home-user__container">
+				<div class="home-user__wrapper">
+					<div class="home-user__intro">
+						<div class="home-user__intro-wrapper">
+							<p class="home-user__intro-content">Bienvenue sur votre espace. Ici, vous pouvez accédez à toutes les fonctionnalités de Snif & Go.
+							</p>
+							<p class="home-user__intro-content">Bonne balade !</p>
 						</div>
-						{% if dogNextWalks|length > 0 and dogNextWalks[dog.id] %}
-							<div class="home-user__dog-infos">
-								<p class="home-user__dog-subtitle">{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}
-									Prochaine balade
-									{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}</p>
-								<p class="home-user__dog-content">{{ dogNextWalks[dog.id].walk.date|format_datetime('medium','short', locale='fr')}} 
-								<a class="home-user__dog-link" href="{{ path('app_walk_registration_show', {'id': dogNextWalks[dog.id].id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a></p>
+					</div>
+
+
+					<div class="home-user__dog">
+						<div class="home-user__dog-wrapper">
+							<h2 class="home-user__dog-title">Mes chiens</h2>
+							<a class="home-user__dog-button" href="{{ path('app_dog_new') }}">Ajouter</a>
+						</div>
+
+						{% if dogs|length > 0 %}
+							<div class="home-user__dog-container">
+								{% for dog in dogs %}
+									<div class="home-user__dog--card">
+										<div class="home-user__dog-photo-container">
+											{% set dogPhotoClass = ['home-user__dog-photo', dog.sex] | join(' ') %}
+											{% if dog.photo %}
+												<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
+											{% else %}
+												{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+											{% endif %}
+										</div>
+										<div class="home-user__dog-item">
+											<p class="home-user__dog-name">{{ dog.name }}</p>
+											<a class="home-user__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'home-user__dog-edit-icon' }) }}</a>
+										</div>
+										{% if dogNextWalks|length > 0 and dogNextWalks[dog.id] %}
+											<div class="home-user__dog-infos">
+												<p class="home-user__dog-subtitle">{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}
+													Prochaine balade
+													{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}</p>
+												<p class="home-user__dog-content">{{ dogNextWalks[dog.id].walk.date|format_datetime('medium','short', locale='fr')}}
+													<a class="home-user__dog-link" href="{{ path('app_walk_registration_show', {'id': dogNextWalks[dog.id].id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
+												</p>
+											</div>
+										{% endif %}
+									</div>
+								{% endfor %}
 							</div>
+
+						{% else %}
+							<p>Aucun chien n'est encore inscrit</p>
 						{% endif %}
 					</div>
-				{% endfor %}
+				</div>
+				<div class="home-user__walk">
+					<h2 class="home-user__walk-title">Les prochaines balades disponibles</h2>
+					<div class="home-user__walk-container">
+						{% if nextWalks|length > 0 %}
+							{% for walk in nextWalks %}
+								<div class="home-user__walk--card">
+									<div class="home-user__walk-wrapper">
+										<p class="home-user__walk-accent">{{ walk.date|format_datetime('full', 'short', locale: 'fr') }}</p>
+										<div class="home-user__walk-item">
+											<a href="{{ path('app_trail_show', {id:walk.trail.id})}}" class="walk__content">
+												<strong>{{ walk.trail.name }}</strong>
+											</a>
+											<p class="home-user__walk-content">{{ walk.trail.startCity }}</p>
+										</div>
+									</div>
+									<div class="home-user__walk-wrapper">
+										<a class="home-user__walk-button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">S'inscrire</a>
+										<p class="home-user__walk-accent">{{ walk.maxDogs - walk.walkRegistration|length }}
+											place{{ walk.maxDogs - walk.walkRegistration|length > 1 ? "s" : "" }}
+											restantes</p>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					{% else %}
+						<p>Aucune balade prévue</p>
+					{% endif %}
+
+					{% if hasMore|length > 0 %}
+						<a class="home-user__walk-button" href="{{ path('app_walk_index') }}">Voir plus</a>
+					{% endif %}
+				</div>
 			</div>
-
-			{% else %}
-				<p>Aucun chien n'est encore inscrit</p>
-			{% endif %}
 		</div>
-
 		<div class="home-user__trail">
 			<div class="home-user__trail-wrapper">
 				<h2 class="home-user__trail-title">Rechercher une balade</h2>

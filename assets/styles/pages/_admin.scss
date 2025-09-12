@@ -2,18 +2,6 @@
 @use "../utils/mixins" as *;
 @use "../utils/breakpoints" as *;
 
-.admin__users-table {
-    overflow-x: auto;
-}
-.admin__users-table > table {
-    min-width: 600px;
-}
-@media (max-width: 640px) {
-    .table-scroll {
-        -webkit-overflow-scrolling: touch;
-    }
-}
-
 .admin {
     &__nav {
         width: 100%;
@@ -134,6 +122,76 @@
                 background-color: var(--ban-bg);
                 border: 1px solid var(--ban);
                 color: var(--ban);
+            }
+        }
+
+        &-wrapper {
+            display: flex;
+            flex-direction: row;
+            gap: $size-10;
+            align-items: center;
+        }
+    }
+}
+
+@media (min-width: $md) {
+    .admin {
+        &__list {
+            &-link {
+                flex-direction: row;
+                justify-content: flex-start;
+            }
+        }
+
+        &__users,
+        &__dogs,
+        &__walks {
+            background: var(--background-secondary);
+            border-radius: $size-10;
+            padding: $size-20 $size-10;
+
+            &-table {
+                display: table;
+                width: 100%;
+                border-collapse: collapse;
+
+                thead {
+                    display: table-header-group;
+                }
+
+                tbody {
+                    display: table-row-group;
+                    gap: 0;
+                }
+
+                tr {
+                    display: table-row;
+
+                    padding: 0;
+                    align-items: initial;
+                    border-radius: 0;
+                    box-shadow: none;
+                }
+
+                th,
+                td {
+                    display: table-cell;
+                    width: auto;
+                    padding: $size-10 $size-14;
+                    border-bottom: 1px solid var(--border-color);
+                    vertical-align: middle;
+                }
+
+                td::before {
+                    content: none;
+                }
+            }
+            &-roles {
+                text-align: center;
+            }
+
+            &-status {
+                text-align: center;
             }
         }
     }

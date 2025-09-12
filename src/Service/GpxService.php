@@ -45,7 +45,6 @@ final class GpxService
 
         if ($route) {
             $distanceOsrm = $route['distance_m'];
-            $durationOsrm = $route['duration_s'];
         }
         // si la méthode OSRM n'a pas fonctionné on applique une somme de distance calculées via la méthode haversine
         $distanceHav = 0;
@@ -62,22 +61,14 @@ final class GpxService
             $prevLat = $lat;
             $prevLon = $lon;
         }
-        $durationHav = $this->distanceService->estimateMinutesFromKm($distanceHav / 1000);
-
 
         if ($distanceOsrm > $distanceHav) {
             $distance = $distanceOsrm;
         } else {
             $distance = $distanceHav;
         }
-        if ($durationOsrm > $durationHav) {
-            $duration = $durationOsrm;
-        } else {
-            $duration = $durationHav * 60;
-        }
 
-
-
+        $duration = ($this->distanceService->estimateMinutesFromKm($distance / 1000)) * 60;
 
         return [
             'distance_m' => $distance,
