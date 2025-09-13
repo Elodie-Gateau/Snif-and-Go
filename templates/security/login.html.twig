@@ -4,38 +4,45 @@
 {% endblock %}
 
 {% block body %}
-<section class="login">
-	<form class="login__form" method="post">
+	<section class="login">
+		<form class="login__form" method="post">
 
-		{% if app.user %}
-			<div class="login__form-info">
-				<p class="login__form-content">Vous êtes connecté{{ app.user.title == "Mme" ? "e" : "" }}
-				en tant que
-				{{ app.user.userIdentifier }},</p> 
-				<p class="login__form-content"><strong><a href="{{ path('app_logout') }}">Se déconnecter</a></strong></p> 
+			{% if app.user %}
+				<div class="login__form-info">
+					<p class="login__form-content">Vous êtes connecté{{ app.user.title == "Mme" ? "e" : "" }}
+						en tant que
+						{{ app.user.userIdentifier }},</p>
+					<p class="login__form-content">
+						<strong>
+							<a href="{{ path('app_logout') }}">Se déconnecter</a>
+						</strong>
+					</p>
+				</div>
+			{% endif %}
+
+			<h1 class="login__form-title">Connectez-vous</h1>
+			<div class="login__form-item">
+				<label class="login__form-label" for="username">Email</label>
+				<input type="email" value="{{ last_username }}" name="_username" id="username" class="login__form-input" autocomplete="email" autofocus>
 			</div>
-		{% endif %}
-
-		<h1 class="login__form-title">Connectez-vous</h1>
-		<div class="login__form-item">
-			<label class="login__form-label" for="username">Email</label>
-			<input type="email" value="{{ last_username }}" name="_username" id="username" class="login__form-input" autocomplete="email" autofocus>
-		</div>
-		<div class="login__form-item">
-			<label class="login__form-label" for="password">Mot de passe</label>
-			<input type="password" name="_password" id="password" class="login__form-input" autocomplete="current-password">
-		</div>
+			<div class="login__form-item">
+				<label class="login__form-label" for="password">Mot de passe</label>
+				<input type="password" name="_password" id="password" class="login__form-input" autocomplete="current-password">
+			</div>
 			<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
+			<label>
+				<input type="checkbox" name="_remember_me" checked>
+				Se souvenir de moi
+			</label>
 			{% if error %}
-			<div class="login__form-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-		{% endif %}
+				<div class="login__form-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+			{% endif %}
 
-		<div class="login__form-item--submit">
-			<button class="login__form-submit" type="submit">
-				Se connecter
-			</button>
-		</div>
+			<div class="login__form-item--submit">
+				<button class="login__form-submit" type="submit">
+					Se connecter
+				</button>
+			</div>
 		</form>
 	</section>
-	{% endblock %}
+{% endblock %}

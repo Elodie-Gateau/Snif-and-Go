@@ -7,6 +7,7 @@ import "./js/burger.js";
 import "./js/flatpickr.js";
 import "./js/theme.js";
 import "./js/confirm-modal.js";
+import "./js/trail-map.js";
 
 function init() {
     // ne bind que si le formulaire est présent

@@ -17,7 +17,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home', methods: ['GET'])]
-    // #[IsGranted('ROLE_USER')]
     public function index(
         WalkRepository $walkRepository,
         DogRepository $dogRepository,

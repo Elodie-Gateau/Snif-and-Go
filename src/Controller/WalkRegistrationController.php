@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Walk;
+use App\Entity\Dog;
 use App\Entity\WalkRegistration;
 use App\Form\WalkRegistrationType;
 use App\Repository\DogRepository;
@@ -37,15 +38,9 @@ final class WalkRegistrationController extends AbstractController
         $walkRegistration->setWalk($walk);
 
 
-        $dogsId = $dogRepository->findAvailableForWalk($this->getUser(), $walk);
-        $availableDogs = [];
+        $availableDogs = $dogRepository->findAvailableForWalk($this->getUser(), $walk);
 
-        if ($dogsId) {
-            foreach ($dogsId as $id) {
-                $dog = $dogRepository->find($id);
-                $availableDogs[] = $dog;
-            }
-        }
+
         $validRegisters = $walkRegistrationRepository->findValidRegisters($walk);
 
 
@@ -67,6 +62,7 @@ final class WalkRegistrationController extends AbstractController
             'walk' => $walk,
             'validRegisters' => $validRegisters,
             'form' => $form,
+            'dogs' => $availableDogs
         ]);
     }
 

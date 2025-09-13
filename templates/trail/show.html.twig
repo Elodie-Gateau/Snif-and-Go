@@ -4,99 +4,74 @@
 {% endblock %}
 
 {% block body %}
-<section class="trail">
-	<h1 class="trail__title">{{ trail.name }}</h1>
+	<section class="trail">
+		<h1 class="trail__title">{{ trail.name }}</h1>
 
-	<div class="trail__desc">
-		{% if trail.photos and trail.photos|length > 0 %}
-			<div class="trail__desc-item">
-				<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
-			</div>
-		{% endif %}
-
-
-		<div class="trail__desc-item">
-			<p class="trail__desc-title">Distance</p>
-			<p class="trail__desc-content">{{ trail.distance }}
-				km{{ trail.distance > 1 ? "s" : "" }}</p>
-		</div>
-		<div class="trail__desc-item">
-			<p class="trail__desc-title">Durée</p>
-			<p class="trail__desc-content">{% import 'macros/duration.html.twig' as dur %}
-				{{ dur.minutes(trail.duration) }}</p>
-		</div>
-		{% if trail.difficulty %}
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Difficulté</p>
-				{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
-				<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
-			</div>
-		{% endif %}
-		{% if trail.score %}
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Note</p>
-				<p class="trail__desc-content">{{ trail.score }}</p>
-			</div>
-		{% endif %}
-
-		<div class="trail__desc-item">
-			<p class="trail__desc-title">Point d'eau</p>
-			{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
-			<p class="trail__desc-content">{{ waterPointLabels[trail.waterPoint] ?? "Inconnu" }}</p>
-		</div>
-
-		<div class="trail__desc-item">
-			<p class="trail__desc-title">Point de départ</p>
-			<div class="trail__wrapper">
-				<p class="trail__desc-content">{{ trail.startAddress }}</p>
-				<p class="trail__desc-content">{{ trail.startCode }}</p>
-				<p class="trail__desc-content">{{ trail.startCity }}</p>
-			</div>
-		</div>
-		<div class="trail__desc-item">
-			<p class="trail__desc-title">Point d'arrivée</p>
-			<div class="trail__wrapper">
-				<p class="trail__desc-content">{{ trail.endAddress }}</p>
-				<p class="trail__desc-content">{{ trail.endCode }}</p>
-				<p class="trail__desc-content">{{ trail.endCity }}</p>
-			</div>
-		</div>
-		<div class="trail__desc-item">
-			{% if trail.gpxFile %}
-				<a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
-					Télécharger le fichier GPX
-					{{ ux_icon('material-symbols:download-rounded', {class: 'trail__icon'}) }}
-				</a>
+		<div class="trail__desc">
+			{% if trail.photos and trail.photos|length > 0 %}
+				<div class="trail__desc-item">
+					<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
+				</div>
 			{% endif %}
-		</div>
-		{# <div id="map" style="height: 400px;"></div>
 
-			{% block javascripts %}
-				{{ parent() }}
-				<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-				<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
-				<script>
-					document.addEventListener("DOMContentLoaded", () => {
-					const map = L.map('map');
-					L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap contributors'}).addTo(map);
-					
-					// Charge le fichier GPX stocké pour le trail
-					const gpxUrl = "{{ asset('uploads/gpx/' ~ trail.gpxFile) }}";
-					new L.GPX(gpxUrl, {
-					async: true,
-					marker_options: {
-					startIconUrl: 'https://unpkg.com/leaflet-gpx/pin-icon-start.png',
-					endIconUrl: 'https://unpkg.com/leaflet-gpx/pin-icon-end.png',
-					shadowUrl: 'https://unpkg.com/leaflet-gpx/pin-shadow.png'
-					}
-					}).on('loaded', function (e) {
-					map.fitBounds(e.target.getBounds());
-					}).addTo(map);
-					});
-				</script>
-			{% endblock %} #}
 
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Distance</p>
+				<p class="trail__desc-content">{{ trail.distance }}
+					km{{ trail.distance > 1 ? "s" : "" }}</p>
+			</div>
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Durée</p>
+				<p class="trail__desc-content">{% import 'macros/duration.html.twig' as dur %}
+					{{ dur.minutes(trail.duration) }}</p>
+			</div>
+			{% if trail.difficulty %}
+				<div class="trail__desc-item">
+					<p class="trail__desc-title">Difficulté</p>
+					{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+					<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
+				</div>
+			{% endif %}
+			{% if trail.score %}
+				<div class="trail__desc-item">
+					<p class="trail__desc-title">Note</p>
+					<p class="trail__desc-content">{{ trail.score }}</p>
+				</div>
+			{% endif %}
+
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Point d'eau</p>
+				{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
+				<p class="trail__desc-content">{{ waterPointLabels[trail.waterPoint] ?? "Inconnu" }}</p>
+			</div>
+
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Point de départ</p>
+				<div class="trail__wrapper">
+					<p class="trail__desc-content">{{ trail.startAddress }}</p>
+					<p class="trail__desc-content">{{ trail.startCode }}</p>
+					<p class="trail__desc-content">{{ trail.startCity }}</p>
+				</div>
+			</div>
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Point d'arrivée</p>
+				<div class="trail__wrapper">
+					<p class="trail__desc-content">{{ trail.endAddress }}</p>
+					<p class="trail__desc-content">{{ trail.endCode }}</p>
+					<p class="trail__desc-content">{{ trail.endCity }}</p>
+				</div>
+			</div>
+			<div class="trail__desc-item">
+				{% if trail.gpxFile %}
+					<a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
+						Télécharger le fichier GPX
+						{{ ux_icon('material-symbols:download-rounded', {class: 'trail__icon'}) }}
+					</a>
+
+				</div>
+				<div id="map" class="trail__map" data-gpx="{{ trail.gpxFile ? asset('uploads/gpx/' ~ trail.gpxFile) : '' }}" style="height: 400px"></div>
+				<p class="trail__desc-content">Pour respecter votre vie privée, nous utilisons une carte sans cookies tiers</p>
+			{% endif %}
 			{% if trail.photos and trail.photos|length > 1 %}
 				<div class="trail__desc-item">
 					<p class="trail__desc-title">Photos</p>

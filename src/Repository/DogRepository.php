@@ -38,7 +38,20 @@ class DogRepository extends ServiceEntityRepository
             'walk_id' => $walk->getId(),
         ]);
         $dogsId = $resultSet->fetchAllAssociative();
-        return $dogsId;
+
+        $dogIds = array_map('intval', array_column($dogsId, 'id'));
+
+        if (!$dogIds) {
+            return [];
+        } else {
+
+            return $this->createQueryBuilder('d')
+                ->andWhere('d.id IN (:ids)')
+                ->setParameter('ids', $dogIds)
+                ->orderBy('d.name', 'ASC')
+                ->getQuery()
+                ->getResult();
+        }
     }
 
     public function findByUser($user): array

@@ -75,10 +75,14 @@
 						<p class="walk-register__desc-content">Aucun chien n'est encore inscrit à cette balade</p>
 					{% endif %}
 				</div>
+
 			</div>
 
-
-			{{ include('walk_registration/_form.html.twig') }}
+			{% if dogs|length > 0 %}
+				{{ include('walk_registration/_form.html.twig') }}
+				{% else %}
+						<p class="walk-register__desc-content">Vous n'avez pas de chien(s) disponible(s) pour cette balade.</p>
+			{% endif %}
 			{% if app.user == walk.user %}
 				<div class="walk-register__wrapper actions">
 					<a class="walk-register__icon" href="{{ path('app_walk_edit', { 'id': walk.id }) }}">{{ ux_icon('fa:edit', {class: 'walk-register__icon'}) }}</a>
