@@ -1,0 +1,141 @@
+{# templates/legal/mentions_legales.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales & Politique de confidentialité – Snif & Go{% endblock %}
+
+{% block body %}
+<main class="legal">
+  <header class="legal__header">
+    <h1>Mentions légales &amp; Politique de confidentialité</h1>
+    <p class="legal__intro">Dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+  </header>
+  <nav class="legal__nav" aria-label="Plan de la page">
+    <ul>
+      <li><a href="#mentions-legales">Mentions légales</a></li>
+      <li><a href="#confidentialite">Politique de confidentialité (RGPD)</a></li>
+      <li><a href="#cgu">Conditions générales d’utilisation (CGU)</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <article class="legal__content">
+    <section id="mentions-legales" class="legal__section">
+      <h2>Mentions légales</h2>
+      <dl class="legal__dl">
+        <dt>Nom du service</dt>
+        <dd>Snif &amp; Go</dd>
+
+        <dt>Responsable de la publication</dt>
+        <dd>Elodie Gateau</dd>
+
+        <dt>Adresse</dt>
+        <dd>Adresse fictive</dd>
+
+        <dt>Contact</dt>
+        <dd><a href="mailto:elodie.gateau.raffeneau@gmail.com">elodie.gateau.raffeneau@gmail.com</a></dd>
+
+        <dt>Hébergement</dt>
+        <dd>Site en développement (en local / XAMPP)</dd>
+      </dl>
+    </section>
+
+    <section id="confidentialite" class="legal__section">
+      <h2>Politique de confidentialité (RGPD)</h2>
+
+      <h3>1) Données collectées</h3>
+      <ul>
+        <li><strong>Compte</strong> : civilité, prénom, nom, e-mail.</li>
+        <li><strong>Chiens</strong> : nom, race, date de naissance, statut (actif/inactif), <strong>numéro d’identification (puce ou tatouage)</strong>.</li>
+        <li><strong>Fonctionnel</strong> : itinéraires (trails), balades (walks), inscriptions (walk registrations).</li>
+      </ul>
+
+      <h3>2) Finalités</h3>
+      <ul>
+        <li>Création et gestion du compte utilisateur ;</li>
+        <li>Gestion des balades et des inscriptions ;</li>
+        <li>Partage et consultation d’itinéraires.</li>
+      </ul>
+
+      <h3>3) Bases légales</h3>
+      <ul>
+        <li><strong>Exécution du contrat</strong> (CGU) : création/gestion du compte, inscriptions, organisation des balades ;</li>
+        <li><strong>Intérêt légitime</strong> : sécurité de l’application, lutte contre les abus ;</li>
+        <li><strong>Consentement</strong> : le cas échéant pour des fonctionnalités optionnelles (non utilisées à des fins publicitaires).</li>
+      </ul>
+
+      <h3>4) Destinataires</h3>
+      <p>Les données sont traitées par Snif &amp; Go. Aucun partage à des tiers à des fins commerciales.</p>
+
+      <h3>5) Durées de conservation</h3>
+      <ul>
+        <li><strong>Données de compte</strong> : conservées tant que le compte est actif.</li>
+        <li><strong>Compte désactivé</strong> : anonymisation des données personnelles ; les contenus (chiens, trails, walks) peuvent être ré-attribués à un compte « Utilisateur supprimé » à des fins d’historique.</li>
+        <li><strong>Journaux techniques</strong> : conservation courte pour sécurité et débogage.</li>
+      </ul>
+
+      <h3>6) Vos droits</h3>
+      <ul>
+        <li><strong>Accès</strong> et <strong>Téléchargement</strong> de vos données ;
+          {% if app.user %}
+            <a href="{{ path('profile_download_data') }}">JSON</a>
+          {% else %}
+            (disponible après connexion)
+          {% endif %}
+        </li>
+        <li><strong>Rectification</strong> via la page profil ;</li>
+        <li><strong>Suppression / Désactivation</strong> du compte, avec anonymisation des chiens rattachés ;</li>
+        <li><strong>Opposition / Limitation</strong> selon les cas.</li>
+      </ul>
+      <p>Pour exercer ces droits : <a href="mailto:elodie.gateau.raffeneau@gmail.com">elodie.gateau.raffeneau@gmail.com</a>.</p>
+
+      <h3>7) Cookies, localStorage et autres traceurs</h3>
+      <ul>
+        <li><strong>Cookies techniques</strong> : cookie de session Symfony (indispensable) ; cookie « remember me » (si activé) avec une durée indicative de <code>7 jours</code>.</li>
+        <li><strong>Pas de cookies de tracking</strong> : pas de Google Analytics, pas de publicité.</li>
+        <li><strong>Carte</strong> : la carte utilise <em>Leaflet + OpenStreetMap</em> (pas de cookies tiers à des fins publicitaires).</li>
+        <li><strong>Préférences d’affichage</strong> : thème (clair/sombre, mode éco) stocké en <code>localStorage</code> côté navigateur.</li>
+      </ul>
+      <p>Vous pouvez gérer vos préférences d’affichage dans votre profil. Si un bandeau cookies est présent, vous pouvez y modifier vos choix à tout moment.</p>
+    </section>
+
+    <section id="cgu" class="legal__section">
+      <h2>Conditions générales d’utilisation (CGU)</h2>
+
+      <h3>1) Objet</h3>
+      <p>Snif &amp; Go met à disposition une plateforme de partage d’itinéraires (trails) et d’organisation de balades (walks) entre propriétaires de chiens.</p>
+
+      <h3>2) Inscription et exactitude des informations</h3>
+      <ul>
+        <li>Vous vous engagez à fournir des informations exactes ;</li>
+        <li>Le <strong>numéro d’identification du chien</strong> (puce ou tatouage) est <strong>obligatoire</strong> pour s’inscrire à une balade ;</li>
+        <li>Vous vous engagez à maintenir vos informations à jour.</li>
+      </ul>
+
+      <h3>3) Responsabilité</h3>
+      <ul>
+        <li>Vous êtes seul responsable de votre chien, de votre comportement et de votre sécurité pendant les balades ;</li>
+        <li>Snif &amp; Go n’organise pas matériellement les balades et ne saurait être tenu responsable d’un incident, accident, dommage ou litige entre utilisateurs ;</li>
+        <li>Vous devez respecter la réglementation locale (laisse, identification, vaccinations) et adopter un comportement respectueux (chiens et personnes).</li>
+      </ul>
+
+      <h3>4) Modération, suspension et bannissement</h3>
+      <p>En cas de non-respect des présentes CGU, Snif &amp; Go peut suspendre ou bannir un compte, ou désactiver des contenus.</p>
+
+      <h3>5) Propriété intellectuelle</h3>
+      <p>Les contenus du site (textes, logos, design, code, images) sont protégés. Toute reproduction est interdite sans autorisation.</p>
+
+      <h3>6) Disponibilité du service</h3>
+      <p>Le service est fourni « en l’état » sans garantie de disponibilité continue. Des interruptions (maintenance, mises à jour) peuvent survenir.</p>
+
+      <h3>7) Évolution</h3>
+      <p>Les présentes CGU et la politique de confidentialité peuvent évoluer. La date de mise à jour figure en haut de page.</p>
+    </section>
+
+    <section id="contact" class="legal__section">
+      <h2>Contact</h2>
+      <p>Pour toute question relative aux mentions légales, à la confidentialité ou aux CGU&nbsp;:</p>
+      <p><a href="mailto:elodie.gateau.raffeneau@gmail.com">elodie.gateau.raffeneau@gmail.com</a></p>
+    </section>
+  </article>
+</main>
+{% endblock %}

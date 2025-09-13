@@ -1,0 +1,44 @@
+@use "../utils/variables" as *;
+@use "../utils/breakpoints" as *;
+
+.legal {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.25rem;
+}
+.legal__header h1 {
+    margin: 0 0 0.25rem;
+}
+.legal__intro {
+    margin: 0 0 1rem;
+}
+.legal__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    padding: 0;
+    margin: 0 0 1rem;
+    list-style: none;
+}
+.legal__nav a {
+    text-decoration: underline;
+}
+.legal__section {
+    margin: 2rem 0;
+}
+.legal__dl {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 0.5rem 1rem;
+}
+.legal__dl dt {
+    font-weight: 600;
+}
+.legal__dl dd {
+    margin: 0;
+}
+// @media (max-width: 640px) {
+//     .legal__dl {
+//         grid-template-columns: 1fr;
+//     }
+// }

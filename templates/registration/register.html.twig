@@ -59,7 +59,10 @@
 				{% endif %}
 			</div>
 			<div class="register__form-item--terms">
-				{{ form_label(registrationForm.agreeTerms) }}
+				<label class="register__form-termes-label" for="{{ registrationForm.agreeTerms.vars.id }}">
+					J'accepte les
+					<a class="register__form-termes-link" href="{{ path('app_mentions_legales') }}" title="Cliquez ici pour lire les conditions en détail" target="_blank">conditions d'utilisation et la politique de confidentialité</a>
+				</label>
 				{{ form_widget(registrationForm.agreeTerms) }}
 				{% if form_errors(registrationForm.agreeTerms) %}
 					<div class="register__form-error">

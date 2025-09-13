@@ -38,15 +38,15 @@
 
     &__form-item--terms {
         display: flex;
+        flex-direction: row;
+        width: 100%;
         flex-wrap: wrap;
+        gap: $size-10;
         justify-content: flex-start;
         align-items: center;
 
-        .register__form-label {
-            width: 80%;
-        }
-        .register__form-input {
-            width: 20%;
+        .register__form-termes-link {
+            font-weight: 600;
         }
         .register__form-error {
             text-align: center;
@@ -76,12 +76,12 @@
             width: 70%;
         }
         &__form-item--terms {
-            .register__form-label {
-                width: 50%;
-            }
-            .register__form-input {
-                width: 45%;
-            }
+            // .register__form-label {
+            //     width: 50%;
+            // }
+            // .register__form-input {
+            //     width: 45%;
+            // }
             .register__form-error {
                 text-align: center;
             }

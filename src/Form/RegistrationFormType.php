@@ -133,7 +133,7 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Vous devez accepter les conditions pour vous inscrire',
                     ]),
                 ],
-                'label' => "J'accepte les conditions d'utilisation : ",
+                'label' => "J'accepte les conditions d'utilisation et la politique de confidentialité : ",
                 'label_attr' => ['class' => 'register__form-label'],
                 'attr' => ['class' => 'register__form-checkbox'],
             ])

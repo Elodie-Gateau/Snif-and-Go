@@ -64,7 +64,7 @@ final class ProfileController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/download-data', name: 'app_user_download_data')]
+    #[Route('/profile/download-data', name: 'profile_download_data')]
     #[IsGranted('ROLE_USER')]
     public function downloadData(): Response
     {
