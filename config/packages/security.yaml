@@ -26,7 +26,7 @@ security:
                 # where to redirect after logout
                 target: app_login
             remember_me:
-                secret: "%env(APP_SECRET)%"
+                secret: "%app.secret%"
                 lifetime: 604800 # 1 week in seconds
                 # by default, the feature is enabled by checking a
                 # checkbox in the login form (see below), uncomment the

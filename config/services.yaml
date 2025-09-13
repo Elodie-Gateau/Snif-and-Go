@@ -7,6 +7,7 @@ parameters:
     images_directory: "%kernel.project_dir%/public/uploads/images"
     gpx_directory: "%kernel.project_dir%/public/uploads/gpx"
     app.deleted_user_email: "deleted@example.com"
+    app.secret: "1e1b4c2b9d0a46c9b7f2a4e3f1c0d9a8"
 
 services:
     # default configuration for services in *this* file
