@@ -34,6 +34,21 @@
         width: 35%;
     }
 
+    &__desc-more {
+        display: flex;
+        flex-direction: column;
+        gap: $size-10;
+    }
+    &__desc-link {
+        font-weight: 600;
+        text-decoration: underline;
+        color: var(--title);
+    }
+
+    &__desc-infos {
+        font-style: italic;
+    }
+
     &__button {
         align-self: center;
         margin: $size-10 0;

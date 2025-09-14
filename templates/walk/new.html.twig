@@ -22,13 +22,15 @@
 			{% if trail.difficulty %}
 				<div class="add-walk__desc-item">
 					<p class="add-walk__desc-title">Difficulté</p>
-					<p class="add-walk__desc-content">{{ trail.difficulty }}</p>
+					{% set difficultyLabels = {'easy' : 'Facile', 'medium' : 'Moyen', 'hard' : "Difficile"} %}
+					<p class="add-walk__desc-content">{{ difficultyLabels[trail.difficulty] }}</p>
 				</div>
 			{% endif %}
 			{% if trail.waterPoint %}
 				<div class="add-walk__desc-item">
 					<p class="add-walk__desc-title">Point d'eau</p>
-					<p class="add-walk__desc-content">{{ trail.waterPoint }}</p>
+					{% set waterPointLabels = {'true' : 'Oui', 'false' : 'Non'} %}
+					<p class="add-walk__desc-content">{{ waterPointLabels[trail.waterPoint] }}</p>
 				</div>
 			{% endif %}
 			<div class="add-walk__desc-item">

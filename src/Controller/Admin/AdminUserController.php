@@ -135,6 +135,7 @@ final class AdminUserController extends AbstractController
 
         if ($dogs) {
             foreach ($dogs as $dog) {
+                $dog->setStatus('Inactive');
                 $dog->setUser($deletedUser);
             }
         }
@@ -145,6 +146,7 @@ final class AdminUserController extends AbstractController
         }
         if ($walks) {
             foreach ($walks as $walk) {
+                $walk->setStatus('Inactive');
                 $walk->setUser($deletedUser);
             }
         }
@@ -166,6 +168,18 @@ final class AdminUserController extends AbstractController
     public function inactive(Request $request, User $user, EntityManagerInterface $em): Response
     {
         $user->setStatus('Inactive');
+        $dogs = $user->getDogs();
+        $walks = $user->getWalks();
+        if ($dogs) {
+            foreach ($dogs as $dog) {
+                $dog->setStatus('Inactive');
+            }
+        }
+        if ($walks) {
+            foreach ($walks as $walk) {
+                $walk->setStatus('Inactive');
+            }
+        }
         $em->flush();
         $this->addFlash('success', sprintf('Votre compte est désactivé.', $user->getEmail()));
 

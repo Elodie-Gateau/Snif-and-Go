@@ -76,6 +76,16 @@
             color: var(--accent);
         }
     }
+    .empty {
+        display: block;
+        text-align: center;
+    }
+
+    #dogs,
+    #trails,
+    #walks {
+        scroll-margin-top: $size-80;
+    }
 }
 
 @media (min-width: $md) {

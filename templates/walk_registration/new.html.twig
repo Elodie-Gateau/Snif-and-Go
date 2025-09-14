@@ -12,6 +12,10 @@
 				{{ walk.date|format_datetime('full', 'short', locale: 'fr')  }}</h2>
 
 			<div class="walk-register__desc-item">
+				<p class="walk-register__desc-title">Organisa{{ walk.user.title == "Mme" ? "trice" : "teur"}}</p>
+				<p class="walk-register__desc-content">{{ walk.user.firstname }} {{ walk.user.name }}</p>
+			</div>
+			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Itinéraire</p>
 				<p class="walk-register__desc-content">{{ walk.trail.name }}</p>
 			</div>
@@ -32,7 +36,8 @@
 			</div>
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Point d'eau</p>
-				<p class="walk-register__desc-content">{{ walk.trail.waterPoint }}</p>
+					{% set waterPointLabels = {'true' : 'Oui', 'false' : 'Non'} %}
+					<p class="walk-register__desc-content">{{ waterPointLabels[walk.trail.waterPoint] }}</p>
 			</div>
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Point de départ</p>
@@ -80,8 +85,15 @@
 
 			{% if dogs|length > 0 %}
 				{{ include('walk_registration/_form.html.twig') }}
-				{% else %}
-						<p class="walk-register__desc-content">Vous n'avez pas de chien(s) disponible(s) pour cette balade.</p>
+			{% else %}
+				<div class="walk-register__desc-more">
+					<p class="walk-register__desc-content">Vous n'avez pas de chien(s) disponible(s) pour cette balade.</p>
+					<p class="walk-register__desc-infos">Conformément aux
+						<a class="walk-register__desc-link" href="{{path('app_mentions_legales')}}">conditions générales d'utilisation</a>, le numéro d'identification du chien (puce ou tatouage) est obligatoire pour s'inscrire à la balade.</p>
+					<p class="walk-register__desc-infos">Si ce n'est pas encore fait, mettez à jour les informations sur votre chien en vous rendant sur votre
+						<a class="walk-register__desc-link" href="{{ path('app_profile')}}">profil personnel</a>
+					</p>
+				</div>
 			{% endif %}
 			{% if app.user == walk.user %}
 				<div class="walk-register__wrapper actions">

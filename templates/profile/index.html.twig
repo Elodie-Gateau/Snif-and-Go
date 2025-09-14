@@ -38,7 +38,7 @@
 			<div class="profile__user-wrapper">
 				<a class="profile__user-icon" href="{{ path('admin_user_edit', {'id': app.user.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__user-icon' }) }}</a>
 				<form method="post" action="{{ path('admin_user_inactive', {'id': app.user.id}) }}">
-					<button class="js-delete profile__user-icon" data-url="{{ path('admin_user_inactive', {'id': app.user.id}) }}" data-token="notoken" data-name="votre compte Snif & Go {{ app.user.firstname }}" type="submit">
+					<button class="js-delete profile__user-icon" data-url="{{ path('admin_user_inactive', {'id': app.user.id}) }}" data-token="notoken" data-name="votre compte Snif & Go {{ app.user.firstname }} ? Les balades que vous avez organisé et vos chiens enregistrés seront désactivés. Êtes vous sur.e " type="submit">
 						{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__user-icon' }) }}
 					</button>
 				</form>
@@ -52,191 +52,195 @@
 		<div class="profile__nav">
 			<ul class="profile__list">
 				<li class="profile__list-item">
-					<a href="{{ path('app_profile', {'section': 'dogs'}) }}" class="profile__list-link">{{ ux_icon('mdi:paw', {class: 'profile__icon'}) }}
+					<a href="#dogs" class="profile__list-link" id="btn-dogs">{{ ux_icon('mdi:paw', {class: 'profile__icon'}) }}
 						Chiens</a>
 				</li>
 				<li class="profile__list-item">
-					<a href="{{ path('app_profile', {'section': 'trails'}) }}" class="profile__list-link">{{ ux_icon('streamline:arrow-roadmap', {class: 'profile__icon'}) }}
+					<a href="#trails" class="profile__list-link" id="btn-trails">{{ ux_icon('streamline:arrow-roadmap', {class: 'profile__icon'}) }}
 						Itinéraires</a>
 				</li>
 				<li class="profile__list-item">
-					<a href="{{ path('app_profile', {'section': 'walks'}) }}" class="profile__list-link">{{ ux_icon('fa7-solid:dog', {class: 'profile__icon'}) }}
+					<a href="#walks" class="profile__list-link" id="btn-walks">{{ ux_icon('fa7-solid:dog', {class: 'profile__icon'}) }}
 						Balades</a>
 				</li>
 
 			</ul>
 		</div>
 
-		{% if app.request.query.get('section') == 'dogs' or app.request.query.get('section') is null %}
-			<div class="profile__dog">
-				{% if dogs %}
-					{% for dog in dogs %}
-						<div class="profile__dog-card">
-							<div class="profile__dog-container">
-								{% set dogPhotoClass = ['profile__dog-photo', dog.sex] | join(' ') %}
-								{% if dog.photo %}
-									<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
-								{% else %}
-									{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+		<div id="dogs" class="profile__dog">
+			{% if dogs %}
+				{% for dog in dogs %}
+					<div class="profile__dog-card">
+						<div class="profile__dog-container">
+							{% set dogPhotoClass = ['profile__dog-photo', dog.sex] | join(' ') %}
+							{% if dog.photo %}
+								<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
+							{% else %}
+								{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+							{% endif %}
+						</div>
+
+						<p class="profile__dog-content">
+							<strong>{{ dog.name }}</strong>
+						</p>
+						<div class="profile__dog-infos">
+							<p class="profile__dog-content">
+								{% if dog.birthDate and dog.age >= 1 %}
+									{{ dog.age }}
+									an{{ dog.age > 1 ? "s" : "" }}
+
+								{% endif %}
+								{% if dog.birthDate and dog.age == 0 and dog.ageM >= 1 %}
+
+									{{ dog.ageM }}
+									mois
+
+								{% endif %}
+
+								{% if dog.birthDate and dog.age > 0 and dog.ageM > 0 %}
+
+									{{ dog.ageM - (dog.age * 12) }}
+									mois
+
+								{% endif %}
+								{% if dog.dogBreed %}
+									<p class="profile__dog-content">{{ dog.dogBreed.nameFr }}</p>
+								{% endif %}
+							</p>
+						</div>
+						{% if dog.identityNumber %}
+							<p class="profile__dog-content">{{ dog.identityNumber }}</p>
+						{% endif %}
+						{% if dog.walkRegistration|length > 0 %}
+							<p class="profile__dog-content">{{ dog.walkRegistration|length }}
+								inscription{{ dog.walkRegistration|length > 1 ? "s" : "" }}
+								à
+								{{ dog.walkRegistration|length > 1 ? "des" : "une" }}
+								balade{{ dog.walkRegistration|length > 1 ? "s" : "" }}</p>
+						{% endif %}
+
+						<div class="profile__dog-wrapper">
+							<a class="profile__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__dog-edit-icon' }) }}</a>
+							<form method="post" action="{{ path('app_dog_inactive', {'id': dog.id}) }}">
+								<button class="js-delete admin__dogs-icon" data-url="{{ path('app_dog_inactive', {'id': dog.id}) }}" data-token="notoken" data-name="le profil de {{ dog.name }}" type="submit">
+									{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}
+								</button>
+							</form>
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+				<p class="profile__dog empty">Vous n'avez aucun chien inscrit</p>
+			{% endif %}
+
+		</div>
+		{% if trails %}
+			<div id="trails" class="profile__trails hidden">
+
+				{% for trail in trails %}
+					<div class="profile__trail-card">
+						{% if trail.photos|length > 0 %}
+							<img class="profile__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
+						{% else %}
+							<img class="profile__trail-photo" src="{{ asset('images/photo-trail-default.jpg') }}" alt="Photo de l'itinéraire {{ trail.name }}">
+						{% endif %}
+						<p class="profile__trail-name">
+							<strong>{{ trail.name }}</strong>
+						</p>
+
+						<div class="profile__trail-description">
+							<div class="profile__trail-item">
+								{{ux_icon('material-symbols:distance-rounded', {class: 'profile__trail-icon'})}}
+								<p class="profile__trail-content">{{ trail.startCity }}
+								</p>
+							</div>
+							<div class="profile__trail-description">
+								<div class="profile__trail-item">
+									{{ux_icon('game-icons:path-distance', {class: 'profile__trail-icon'})}}
+									<p class="profile__trail-content">{{ trail.distance|round }}
+										km{{ trail.distance > 1 ? "s" : "" }}</p>
+								</div>
+								<div class="profile__trail-item">
+									{{ux_icon('mingcute:time-fill', {class: 'profile__trail-icon'})}}
+									<p class="profile__trail-content">{% import 'macros/duration.html.twig' as dur %}
+										{{ dur.minutes(trail.duration) }}</p>
+								</div>
+								<div class="profile__trail-item">
+									{{ux_icon('game-icons:strong', {class: 'profile__trail-icon'})}}
+
+									{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+									<p class="profile__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
+								</div>
+								{% if trail.score %}
+									<div class="profile__trail-item">
+										{{ux_icon('mdi:like', {class: 'profile__trail-icon'})}}
+										<div class="profile__trail-content">
+
+											{% for i in 1.. trail.score %}
+												{{ux_icon('material-symbols:star-rounded', {class: 'profile__trail-score'})}}
+											{% endfor %}
+											{% for i in 1.. (5 - trail.score) %}
+												{{ux_icon('material-symbols:star-outline-rounded', {class: 'profile__trail-score'})}}
+											{% endfor %}
+										</div>
+									</div>
 								{% endif %}
 							</div>
 
-							<p class="profile__dog-content">
-								<strong>{{ dog.name }}</strong>
-							</p>
-							<div class="profile__dog-infos">
-								<p class="profile__dog-content">
-									{% if dog.birthDate and dog.age >= 1 %}
-										{{ dog.age }}
-										an{{ dog.age > 1 ? "s" : "" }}
-
-									{% endif %}
-									{% if dog.birthDate and dog.age == 0 and dog.ageM >= 1 %}
-
-										{{ dog.ageM }}
-										mois
-
-									{% endif %}
-
-									{% if dog.birthDate and dog.age > 0 and dog.ageM > 0 %}
-
-										{{ dog.ageM - (dog.age * 12) }}
-										mois
-
-									{% endif %}
-									{% if dog.dogBreed %}
-										<p class="profile__dog-content">{{ dog.dogBreed.nameFr }}</p>
-									{% endif %}
-								</p>
-							</div>
-							{% if dog.identityNumber %}
-								<p class="profile__dog-content">{{ dog.identityNumber }}</p>
-							{% endif %}
-							{% if dog.walkRegistration|length > 0 %}
-								<p class="profile__dog-content">{{ dog.walkRegistration|length }}
-									inscription{{ dog.walkRegistration|length > 1 ? "s" : "" }}
-									à
-									{{ dog.walkRegistration|length > 1 ? "des" : "une" }}
-									balade{{ dog.walkRegistration|length > 1 ? "s" : "" }}</p>
-							{% endif %}
-
-							<div class="profile__dog-wrapper">
-								<a class="profile__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__dog-edit-icon' }) }}</a>
-								<form method="post" action="{{ path('app_dog_inactive', {'id': dog.id}) }}">
-									<button class="js-delete admin__dogs-icon" data-url="{{ path('app_dog_inactive', {'id': dog.id}) }}" data-token="notoken" data-name="le profil de {{ dog.name }}" type="submit">
-										{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}
-									</button>
-								</form>
-							</div>
 						</div>
-					{% endfor %}
-				{% endif %}
+						<div class="profile__trail-wrapper">
 
-			</div>
-		{% elseif app.request.query.get('section') == 'trails' %}
-			<div class="profile__trails">
-				{% if trails %}
-					{% for trail in trails %}
-						<div class="profile__trail-card">
-							{% if trail.photos|length > 0 %}
-								<img class="profile__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
-							{% else %}
-								<img class="profile__trail-photo" src="{{ asset('images/photo-trail-default.jpg') }}" alt="Photo de l'itinéraire {{ trail.name }}">
-							{% endif %}
-							<p class="profile__trail-name">
-								<strong>{{ trail.name }}</strong>
-							</p>
-
-							<div class="profile__trail-description">
-								<div class="profile__trail-item">
-									{{ux_icon('material-symbols:distance-rounded', {class: 'profile__trail-icon'})}}
-									<p class="profile__trail-content">{{ trail.startCity }}
-									</p>
-								</div>
-								<div class="profile__trail-description">
-									<div class="profile__trail-item">
-										{{ux_icon('game-icons:path-distance', {class: 'profile__trail-icon'})}}
-										<p class="profile__trail-content">{{ trail.distance|round }}
-											km{{ trail.distance > 1 ? "s" : "" }}</p>
-									</div>
-									<div class="profile__trail-item">
-										{{ux_icon('mingcute:time-fill', {class: 'profile__trail-icon'})}}
-										<p class="profile__trail-content">{% import 'macros/duration.html.twig' as dur %}
-											{{ dur.minutes(trail.duration) }}</p>
-									</div>
-									<div class="profile__trail-item">
-										{{ux_icon('game-icons:strong', {class: 'profile__trail-icon'})}}
-
-										{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
-										<p class="profile__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
-									</div>
-									{% if trail.score %}
-										<div class="profile__trail-item">
-											{{ux_icon('mdi:like', {class: 'profile__trail-icon'})}}
-											<div class="profile__trail-content">
-
-												{% for i in 1.. trail.score %}
-													{{ux_icon('material-symbols:star-rounded', {class: 'profile__trail-score'})}}
-												{% endfor %}
-												{% for i in 1.. (5 - trail.score) %}
-													{{ux_icon('material-symbols:star-outline-rounded', {class: 'profile__trail-score'})}}
-												{% endfor %}
-											</div>
-										</div>
-									{% endif %}
-								</div>
-
-							</div>
-							<div class="profile__trail-wrapper">
-
-								<a class="profile__trail-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__trail-icon' }) }}</a>
-								<a class="profile__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter</a>
-								<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
-									<input type="hidden" name="_token" value="notoken">
-									<button class="js-delete profile__trail-icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="notoken" data-name="l'itinéraire {{ trail.name }}" type="submit">
-										{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__trail-icon' }) }}
-									</button>
-								</form>
-							</div>
-
-
-						</div>
-					{% endfor %}
-				{% endif %}
-			</div>
-		{% elseif app.request.query.get('section') == 'walks' %}
-			<div class="profile__walks">
-				{% if walks|length > 0 %}
-					{% for walk in walks %}
-
-						<div class="profile__walks-card">
-							<div class="profile__walks-wrapper">
-								<p class="profile__walks-accent">{{ walk.date|format_datetime('medium', 'short', locale: 'fr') }}</p>
-								<a href="{{ path('app_trail_show', {id:walk.trail.id})}}" class="profile__walks-link">
-									<strong>{{ walk.trail.name }}</strong>
-								</a>
-
-								<p class="profile__walks-content">{{ walk.trail.startCity }}</p>
-								<p class="profile__walks-content">{{ walk.walkRegistration|length }}
-									chien{{ walk.walkRegistration|length > 1 ? "s" : "" }}
-									inscrit{{ walk.walkRegistration|length > 1 ? "s" : "" }}</p>
-							</div>
-							<div class="profile__walks-wrapper actions">
-								<a class="profile__walks-icon" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
-								<form method="post" action="{{ path('app_walk_inactive', {'id': walk.id}) }}">
-									<input type="hidden" name="_token" value="notoken">
-									<button class="js-delete profile__walks-icon" data-url="{{ path('app_walk_inactive', {'id': walk.id}) }}" data-token="notoken" data-name="la balade du {{ walk.date|format_datetime('full', 'short', locale: 'fr') }}" type="submit">
-										{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__walks-icon' }) }}
-									</button>
-								</form>
-							</div>
+							<a class="profile__trail-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__trail-icon' }) }}</a>
+							<a class="profile__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter</a>
+							<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
+								<input type="hidden" name="_token" value="notoken">
+								<button class="js-delete profile__trail-icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="notoken" data-name="l'itinéraire {{ trail.name }}" type="submit">
+									{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__trail-icon' }) }}
+								</button>
+							</form>
 						</div>
 
-					{% endfor %}
-				</div>
+
+					</div>
+				{% endfor %}
 			{% else %}
-				<p>Aucune balade prévue</p>
+				<p class="profile__trail empty">Vous n'avez publié aucun itinéraire.</p>
 			{% endif %}
 		</div>
+		
+			{% if walks|length > 0 %}
+			<div id="walks" class="profile__walks hidden">
+				{% for walk in walks %}
+
+					<div class="profile__walks-card">
+						<div class="profile__walks-wrapper">
+							<p class="profile__walks-accent">{{ walk.date|format_datetime('medium', 'short', locale: 'fr') }}</p>
+							<a href="{{ path('app_trail_show', {id:walk.trail.id})}}" class="profile__walks-link">
+								<strong>{{ walk.trail.name }}</strong>
+							</a>
+
+							<p class="profile__walks-content">{{ walk.trail.startCity }}</p>
+							<p class="profile__walks-content">{{ walk.walkRegistration|length }}
+								chien{{ walk.walkRegistration|length > 1 ? "s" : "" }}
+								inscrit{{ walk.walkRegistration|length > 1 ? "s" : "" }}</p>
+						</div>
+						<div class="profile__walks-wrapper actions">
+							<a class="profile__walks-icon" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
+							<form method="post" action="{{ path('app_walk_inactive', {'id': walk.id}) }}">
+								<input type="hidden" name="_token" value="notoken">
+								<button class="js-delete profile__walks-icon" data-url="{{ path('app_walk_inactive', {'id': walk.id}) }}" data-token="notoken" data-name="la balade du {{ walk.date|format_datetime('full', 'short', locale: 'fr') }}" type="submit">
+									{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__walks-icon' }) }}
+								</button>
+							</form>
+						</div>
+					</div>
+
+				{% endfor %}
+			</div>
+		</div>
+	{% else %}
+		<p class="profile__walk empty">Vous n'avez planifié aucune balade.
+		</p>
 	{% endif %}
+
 </section>{% endblock %}

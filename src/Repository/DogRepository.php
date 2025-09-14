@@ -26,7 +26,7 @@ class DogRepository extends ServiceEntityRepository
                 FROM dog d
                 WHERE d.user_id = :user_id
                 AND d.status  = 'Active'
-                AND d.identity_number IS NOT null
+                AND d.identity_number IS NOT NULL
                 AND NOT EXISTS (
                     SELECT 1
                     FROM walk_registration wr

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block title %}Réactiver mon compte
+{% endblock %}
+
+{% block body %}
+	<section class="reactivate">
+		<div class="reactivate__card">
+			<h1 class="reactivate__title">Réactiver votre compte ?</h1>
+			<p class="reactivate__text">
+				Votre compte était désactivé. Souhaitez-vous le réactiver ?<br>
+				<strong>Vos chiens et les balades que vous avez organisées</strong>
+				seront à nouveau visibles.
+			</p>
+
+			<form method="post" action="{{ path('app_account_reactivate') }}" class="reactivate__actions">
+				<input type="hidden" name="_token" value="{{ csrf_token('reactivate') }}">
+				<button type="submit" class="btn btn--primary">Oui, réactiver</button>
+				<a href="{{ path('app_logout') }}" class="btn btn--ghost">Non, plus tard</a>
+			</form>
+		</div>
+	</section>
+
+{% endblock %}

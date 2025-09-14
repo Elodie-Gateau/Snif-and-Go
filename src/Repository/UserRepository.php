@@ -33,20 +33,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+
+    public function reactivate($user): void
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sqlDog = "UPDATE dog  SET status = 'Active' WHERE status = 'Inactive' AND user_id = :user_id;";
+        $sqlWalk = "UPDATE walk SET status = 'Active' WHERE status = 'Inactive' AND user_id = :user_id;";
+
+        $conn->executeQuery($sqlDog, [
+            'user_id' => $user->getId()
+        ]);
+        $conn->executeQuery($sqlWalk, [
+            'user_id' => $user->getId()
+        ]);
+    }
 
     //    public function findOneBySomeField($value): ?User
     //    {

@@ -11,25 +11,25 @@
 		<div class="admin__nav">
 			<ul class="admin__list">
 				<li class="admin__list-item">
-					<a href="{{ path('admin_user_index', {'section': 'users'}) }}" class="admin__list-link">
+					<a href="#users-list" id="btn-users-list" class="admin__list-link">
 						<div class="admin__list-link--container">{{ ux_icon('mynaui:users-solid', {class: 'admin__nav-icon'}) }}
 							{{ activeUsers|length }}</div>
 						Utilisateurs</a>
 				</li>
 				<li class="admin__list-item">
-					<a href="{{ path('admin_user_index', {'section': 'dogs'}) }}" class="admin__list-link">
+					<a href="#dogs-list" id="btn-dogs-list"  class="admin__list-link">
 						<div class="admin__list-link--container">{{ ux_icon('mdi:paw', {class: 'admin__nav-icon'}) }}
 							{{ activeDogs|length }}</div>
 						Chiens</a>
 				</li>
 				<li class="admin__list-item">
-					<a href="{{ path('admin_user_index', {'section': 'trails'}) }}" class="admin__list-link">
+					<a href="#trails-list" id="btn-trails-list"  class="admin__list-link">
 						<div class="admin__list-link--container">{{ ux_icon('streamline:arrow-roadmap', {class: 'admin__nav-icon'}) }}
 							{{ activeTrails|length }}</div>
 						Itinéraires</a>
 				</li>
 				<li class="admin__list-item">
-					<a href="{{ path('admin_user_index', {'section': 'walks'}) }}" class="admin__list-link">
+					<a href="#walks-list" id="btn-walks-list"  class="admin__list-link">
 						<div class="admin__list-link--container">{{ ux_icon('fa7-solid:dog', {class: 'admin__nav-icon'}) }}
 							{{ activeWalks|length }}</div>
 						Balades</a>
@@ -38,8 +38,7 @@
 		</div>
 
 		{# GESTION DES USERS #}
-		{% if app.request.query.get('section') == 'users' or app.request.query.get('section') is null %}
-			<div class="admin__users">
+			<div id="users-list" class="admin__users">
 				<h2 class="admin__users-title">Utilisateurs</h2>
 				<table class="admin__users-table">
 					<thead>
@@ -104,13 +103,14 @@
 			</div>
 
 			{# GESTION DES DOGS #}
-		{% elseif app.request.query.get('section') == 'dogs' %}
-			<div class="admin__dogs">
+		
+			<div  id="dogs-list" class="admin__dogs hidden">
 				<h2 class="admin__dogs-title">Chiens</h2>
 				<table class="admin__dogs-table">
 					<thead>
 						<tr>
 							<th>Nom</th>
+							<th>Propriétaire</th>
 							<th>Race</th>
 							<th>Age</th>
 							<th>Numéro d'identification</th>
@@ -123,6 +123,7 @@
 						{% for dog in dogs %}
 							<tr>
 								<td data-label="Nom">{{ dog.name }}</td>
+								<td data-label="Propriétaire">{{ dog.user.firstname ~' ' ~ dog.user.name ~' ' ~ dog.user.email }}</td>
 								<td data-label="Race">{{ dog.dogBreed.nameFr }}</td>
 								<td data-label="Âge">
 									{% if dog.birthDate and dog.age >= 1 %}
@@ -165,8 +166,9 @@
 			</div>
 
 			{# GESTION DES TRAILS #}
-		{% elseif app.request.query.get('section') == 'trails' %}
-			<div class="admin__trails">
+		
+		
+			<div  id="trails-list" class="admin__trails hidden">
 				<h2 class="admin__trails-title">Itinéraires</h2>
 				<table class="admin__trails-table">
 					<thead>
@@ -232,8 +234,8 @@
 			</div>
 
 			{# GESTION DES WALKS #}
-		{% elseif app.request.query.get('section') == 'walks' %}
-			<div class="admin__walks">
+		
+			<div  id="walks-list" class="admin__walks hidden">
 				<h2 class="admin__walks-title">Balades</h2>
 				<table class="admin__walks-table">
 					<thead>
@@ -272,6 +274,6 @@
 					</tbody>
 				</table>
 			</div>
-		{% endif %}
+
 	</section>
 {% endblock %}
