@@ -13,3 +13,28 @@ if (toggleButton && advancedPanel) {
         }
     });
 }
+
+// const inputSearch = document.getElementById("search-trails-home");
+// const countSearch = document.getElementById("search-result-count");
+// if (inputSearch) {
+//     inputSearch.addEventListener("keyup", function () {
+//         console.log(inputSearch.value);
+//         const query = this.value;
+//         const baseUrl = inputSearch.dataset.url;
+//         const url = `${baseUrl}?q=${encodeURIComponent(query)}`;
+//         if (query.length >= 3) {
+//             fetch(url, { headers: { Accept: "application/json" } })
+//                 .then((res) => res.json())
+//                 .then((results) => {
+//                     const list = document.querySelector(
+//                         ".home-user__trail-search--results"
+//                     );
+//                     list.innerHTML = "";
+//                     countSearch.textContent = `${results.length} itinéraire${
+//                         results.length > 1 ? "s" : ""
+//                     } trouvé${results.length > 1 ? "s" : ""}`;
+//                     console.log(results);
+//                 });
+//         }
+//     });
+// }

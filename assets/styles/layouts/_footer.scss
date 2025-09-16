@@ -4,7 +4,7 @@
 .site-footer {
     width: 100%;
     background-color: var(--background-footer);
-    color: $color-white;
+    color: var(--background);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,12 +19,17 @@
         padding: $size-24 $size-12;
     }
 
+    &__link {
+        color: var(--background);
+    }
+
     &__logo-img {
         width: 5.625rem;
     }
 
     &__legal {
         padding: $size-32 0;
+        color: var(--background);
     }
 }
 

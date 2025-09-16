@@ -165,23 +165,17 @@ final class AdminUserController extends AbstractController
 
     #[Route('/{id}/inactive', name: 'inactive', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function inactive(Request $request, User $user, EntityManagerInterface $em): Response
+    public function inactive(Request $request, User $user, EntityManagerInterface $em,  UserRepository $userRepository): Response
     {
+        $submittedToken = $request->request->get('_token');
+
+        if (!$this->isCsrfTokenValid('inactive' . $user->getId(), $submittedToken)) {
+            throw $this->createAccessDeniedException('CSRF token invalid.');
+        }
+        $userRepository->desactivate($user);
         $user->setStatus('Inactive');
-        $dogs = $user->getDogs();
-        $walks = $user->getWalks();
-        if ($dogs) {
-            foreach ($dogs as $dog) {
-                $dog->setStatus('Inactive');
-            }
-        }
-        if ($walks) {
-            foreach ($walks as $walk) {
-                $walk->setStatus('Inactive');
-            }
-        }
         $em->flush();
-        $this->addFlash('success', sprintf('Votre compte est désactivé.', $user->getEmail()));
+        $this->addFlash('success', 'Votre compte est désactivé.');
 
         if ($this->getUser() && $this->getUser()->getUserIdentifier() === $user->getUserIdentifier()) {
             return $this->redirectToRoute('app_logout');
@@ -191,12 +185,14 @@ final class AdminUserController extends AbstractController
 
     #[Route('/{id}/ban', name: 'ban', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function ban(Request $request, User $user, EntityManagerInterface $em): Response
+    public function ban(Request $request, User $user, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
-        if (!$this->isCsrfTokenValid('ban' . $user->getId(), $request->getPayload()->getString('_token'))) {
+        $submittedToken = $request->request->get('_token');
+
+        if (!$this->isCsrfTokenValid('ban' . $user->getId(), $submittedToken)) {
             throw $this->createAccessDeniedException('CSRF token invalid.');
         }
-
+        $userRepository->desactivate($user);
         $user->setStatus('Banned');
         $em->flush();
         $this->addFlash('success', sprintf('Utilisateur banni.', $user->getEmail()));
@@ -209,12 +205,14 @@ final class AdminUserController extends AbstractController
 
     #[Route('/{id}/unban', name: 'unban', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function unban(Request $request, User $user, EntityManagerInterface $em): Response
+    public function unban(Request $request, User $user, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
-        if (!$this->isCsrfTokenValid('unban' . $user->getId(), $request->getPayload()->getString('_token'))) {
+        $submittedToken = $request->request->get('_token');
+
+        if (!$this->isCsrfTokenValid('unban' . $user->getId(), $submittedToken)) {
             throw $this->createAccessDeniedException('CSRF token invalid.');
         }
-
+        $userRepository->reactivate($user);
         $user->setStatus('Active');
         $em->flush();
         $this->addFlash('success', sprintf('Utilisateur %s réactivé.', $user->getEmail()));

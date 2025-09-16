@@ -15,20 +15,36 @@ use App\Entity\User;
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        if ($user->getStatus() !== 'Inactive') {
+            return $this->redirectToRoute('app_home');
+        }
+
+        if ($request->isMethod('POST')) {
+            if (!$this->isCsrfTokenValid('reactivate', $request->request->get('_token'))) {
+                throw $this->createAccessDeniedException('CSRF invalide.');
+            }
+            $userRepository->reactivate($user);
+            $user->setStatus('Active');
+
+            $em->flush();
+            $this->addFlash('success', 'Votre compte et vos contenus ont été réactivés.');
+            return $this->redirectToRoute('app_home');
+        }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
     }
-
+    #[IsGranted('ROLE_USER')]
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
@@ -51,29 +67,5 @@ class SecurityController extends AbstractController
 
 
         return $this->redirectToRoute('app_home');
-    }
-
-    #[IsGranted('ROLE_USER')]
-    #[Route('/account/reactivate', name: 'app_account_reactivate', methods: ['GET', 'POST'])]
-    public function reactivate(Request $request, EntityManagerInterface $em, UserRepository $userRepository): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        if ($user->getStatus() !== 'Inactive') {
-            return $this->redirectToRoute('app_home');
-        }
-
-        if ($request->isMethod('POST')) {
-            if (!$this->isCsrfTokenValid('reactivate', $request->request->get('_token'))) {
-                throw $this->createAccessDeniedException('CSRF invalide.');
-            }
-            $userRepository->reactivate($user);
-            $user->setStatus('Active');
-
-            $em->flush();
-            $this->addFlash('success', 'Votre compte et vos contenus ont été réactivés.');
-            return $this->redirectToRoute('app_home');
-        }
-        return $this->render('security/reactivate.html.twig');
     }
 }

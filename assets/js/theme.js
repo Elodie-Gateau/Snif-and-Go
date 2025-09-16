@@ -4,6 +4,7 @@ const themeToggleOff = document.getElementById("iconOff");
 const sun = document.getElementById("sun");
 const moon = document.getElementById("moon");
 const html = document.documentElement;
+const badgeWSCarbon = document.getElementById("wcb");
 
 const themeStorage = localStorage.getItem("theme");
 if (themeStorage === "eco") {
@@ -22,6 +23,7 @@ if (themeToggle) {
         themeToggleOff.classList.toggle("hidden", eco);
         sun.classList.toggle("hidden", eco);
         moon.classList.toggle("hidden", !eco);
+        badgeWSCarbon.classList.toggle("wcb-d", !eco);
 
         localStorage.setItem("theme", eco ? "eco" : "default");
     });

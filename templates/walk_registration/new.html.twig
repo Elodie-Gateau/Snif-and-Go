@@ -37,7 +37,7 @@
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Point d'eau</p>
 					{% set waterPointLabels = {'true' : 'Oui', 'false' : 'Non'} %}
-					<p class="walk-register__desc-content">{{ waterPointLabels[walk.trail.waterPoint] }}</p>
+					<p class="walk-register__desc-content">{{ waterPointLabels[walk.trail.waterPoint] ?? 'Non renseigné' }}</p>
 			</div>
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Point de départ</p>

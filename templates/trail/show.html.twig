@@ -100,8 +100,8 @@
 				<div class="trail__wrapper actions">
 					<a class="trail__icon" href="{{ path('app_trail_edit', { 'id': trail.id }) }}">{{ ux_icon('fa:edit', {class: 'trail__icon'}) }}</a>
 					<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
-						<input type="hidden" name="_token" value="notoken">
-						<button class="js-delete trail__icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="notoken" data-name="l'itinéraire {{ trail.name }} }}" type="submit">
+						<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ trail.id) }}">
+						<button class="js-delete trail__icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="notoken" data-name="l'itinéraire {{ trail.name }}" type="submit">
 							{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'trail__icon' }) }}
 						</button>
 					</form>

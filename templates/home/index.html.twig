@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Snif & Go
+{% block title %}Snif &amp;Go
 {% endblock %}
 
 {% block body %}
@@ -16,7 +16,7 @@
 				<div class="home-user__wrapper">
 					<div class="home-user__intro">
 						<div class="home-user__intro-wrapper">
-							<p class="home-user__intro-content">Bienvenue sur votre espace. Ici, vous pouvez accédez à toutes les fonctionnalités de Snif & Go.
+							<p class="home-user__intro-content">Bienvenue sur votre espace. Ici, vous pouvez accédez à toutes les fonctionnalités de Snif &amp;Go.
 							</p>
 							<p class="home-user__intro-content">Bonne balade !</p>
 						</div>
@@ -30,13 +30,13 @@
 						</div>
 
 						{% if dogs|length > 0 %}
-							<div class="home-user__dog-container">
+							<ul role="list" class="home-user__dog-container">
 								{% for dog in dogs %}
-									<div class="home-user__dog--card">
+									<li class="home-user__dog--card">
 										<div class="home-user__dog-photo-container">
 											{% set dogPhotoClass = ['home-user__dog-photo', dog.sex] | join(' ') %}
 											{% if dog.photo %}
-												<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
+												<img loading="lazy" class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
 											{% else %}
 												{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
 											{% endif %}
@@ -49,17 +49,17 @@
 												<p class="home-user__dog-subtitle">{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}
 													Prochaine balade
 													{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}</p>
-												<p class="home-user__dog-content">{{ dogNextWalks[dog.id].walk.date|format_datetime('medium','short', locale='fr')}}
+												<time datetime="{{ dogNextWalks[dog.id].walk.date|date('c') }}" class="home-user__dog-content">{{ dogNextWalks[dog.id].walk.date|format_datetime('medium','short', locale='fr')}}
 													<a class="home-user__dog-link" href="{{ path('app_walk_registration_show', {'id': dogNextWalks[dog.id].id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
-												</p>
+												</time>
 											</div>
 										{% endif %}
 										<div class="home-user__dog-item">
 											<a class="home-user__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'home-user__dog-edit-icon' }) }}</a>
 										</div>
-									</div>
+									</li>
 								{% endfor %}
-							</div>
+							</ul>
 
 						{% else %}
 							<p>Aucun chien n'est encore inscrit</p>
@@ -68,12 +68,12 @@
 				</div>
 				<div class="home-user__walk">
 					<h2 class="home-user__walk-title">Les prochaines balades disponibles</h2>
-					<div class="home-user__walk-container">
+					<ul role="list" class="home-user__walk-container">
 						{% if nextWalks|length > 0 %}
 							{% for walk in nextWalks %}
-								<div class="home-user__walk--card">
+								<li class="home-user__walk--card">
 									<div class="home-user__walk-wrapper">
-										<p class="home-user__walk-accent">{{ walk.date|format_datetime('medium', 'short', locale: 'fr') }}</p>
+										<time datetime="{{ walk.date|date('c') }}" class="home-user__walk-accent">{{ walk.date|format_datetime('medium', 'short', locale: 'fr') }}</p>
 										<div class="home-user__walk-item">
 											<a href="{{ path('app_trail_show', {id:walk.trail.id})}}" class="walk__content">
 												<strong>{{ walk.trail.name }}</strong>
@@ -87,9 +87,9 @@
 											place{{ walk.maxDogs - walk.walkRegistration|length > 1 ? "s" : "" }}
 											restantes</p>
 									</div>
-								</div>
+								</li>
 							{% endfor %}
-						</div>
+						</ul>
 					{% else %}
 						<p>Aucune balade prévue</p>
 					{% endif %}
@@ -108,10 +108,10 @@
 
 			<div class="home-user__trail-search">
 
-				{{ form_start(form, {method: 'get',action: path('app_home'),attr: { class: 'home-user__trail-form', 'data-turbo': 'false' }}) }}
+				{{ form_start(form, {method: 'post',action: path('app_home'),attr: { class: 'home-user__trail-form', 'data-turbo': 'false' }}) }}
 				<div class="home-user__trail-search-bar">
-
-					{{ form_widget(form.search) }}
+					
+					{{ form_widget(form.search, {'id': 'search-trails-home',attr: { 'data-url': path('app_trail_live_search'), 'autocomplete': 'off' }}) }}
 
 					<div class="home-user__trail-search-item">
 						<button class="home-user__trail-search--button">Rechercher</button>
@@ -119,97 +119,103 @@
 						<button class="home-user__trail-search--link" type="button" id="toggle-advanced" aria-expanded="false" aria-controls="trail-advanced">
 							Afficher plus de critères
 						</button>
+						<a class="home-user__trail-link" href="{{ path('app_home') }}">Réinitialiser la recherche</a>
 					</div>
 				</div>
 
 				<div id="trail-advanced" class="home-user__trail-search--advanced hidden">
-					<div class="home-user__trail-search--advanced-item">
-						{{ form_label(form.difficulty)}}
-						{{ form_widget(form.difficulty)}}
-						{% if form_errors(form.difficulty) %}
-							<div class="home-user__trail-search--advanced-error">
-								{{ form_errors(form.ifficulty.difficulty)}}
-							</div>
-						{% endif %}
-					</div>
+					<fieldset aria-describedby="filtres-help">
+						<legend>Filtres avancés</legend>
+						<p id="filtres-help" class="visually-hidden">Choisissez distance, durée et difficulté</p>
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.difficulty)}}
+							{{ form_widget(form.difficulty)}}
+							{% if form_errors(form.difficulty) %}
+								<div class="home-user__trail-search--advanced-error">
+									{{ form_errors(form.difficulty)}}
+								</div>
+							{% endif %}
+						</div>
 
-					<div class="home-user__trail-search--advanced-item">
-						{{ form_label(form.minDistance)}}
-						{{ form_widget(form.minDistance)}}
-						{% if form_errors(form.minDistance) %}
-							<div class="home-user__trail-search--advanced-error">
-								{{ form_errors(form.minDistance)}}
-							</div>
-						{% endif %}
-					</div>
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.minDistance)}}
+							{{ form_widget(form.minDistance)}}
+							{% if form_errors(form.minDistance) %}
+								<div class="home-user__trail-search--advanced-error">
+									{{ form_errors(form.minDistance)}}
+								</div>
+							{% endif %}
+						</div>
 
-					<div class="home-user__trail-search--advanced-item">
-						{{ form_label(form.maxDistance)}}
-						{{ form_widget(form.maxDistance)}}
-						{% if form_errors(form.maxDistance) %}
-							<div class="home-user__trail-search--advanced-error">
-								{{ form_errors(form.maxDistance)}}
-							</div>
-						{% endif %}
-					</div>
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.maxDistance)}}
+							{{ form_widget(form.maxDistance)}}
+							{% if form_errors(form.maxDistance) %}
+								<div class="home-user__trail-search--advanced-error">
+									{{ form_errors(form.maxDistance)}}
+								</div>
+							{% endif %}
+						</div>
 
-					<div class="home-user__trail-search--advanced-item">
-						{{ form_label(form.minDuration)}}
-						{{ form_widget(form.minDuration)}}
-						{% if form_errors(form.minDuration) %}
-							<div class="home-user__trail-search--advanced-error">
-								{{ form_errors(form.minDuration)}}
-							</div>
-						{% endif %}
-					</div>
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.minDuration)}}
+							{{ form_widget(form.minDuration)}}
+							{% if form_errors(form.minDuration) %}
+								<div class="home-user__trail-search--advanced-error">
+									{{ form_errors(form.minDuration)}}
+								</div>
+							{% endif %}
+						</div>
 
-					<div class="home-user__trail-search--advanced-item">
-						{{ form_label(form.maxDuration)}}
-						{{ form_widget(form.maxDuration)}}
-						{% if form_errors(form.maxDuration) %}
-							<div class="home-user__trail-search--advanced-error">
-								{{ form_errors(form.maxDuration)}}
-							</div>
-						{% endif %}
-					</div>
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.maxDuration)}}
+							{{ form_widget(form.maxDuration)}}
+							{% if form_errors(form.maxDuration) %}
+								<div class="home-user__trail-search--advanced-error">
+									{{ form_errors(form.maxDuration)}}
+								</div>
+							{% endif %}
+						</div>
 
-					<div class="home-user__trail-search--advanced-item">
-						{{ form_label(form.minScore)}}
-						{{ form_widget(form.minScore)}}
-						{% if form_errors(form.minScore) %}
-							<div class="home-user__trail-search--advanced-error">
-								{{ form_errors(form.minScore)}}
-							</div>
-						{% endif %}
-					</div>
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.minScore)}}
+							{{ form_widget(form.minScore)}}
+							{% if form_errors(form.minScore) %}
+								<div class="home-user__trail-search--advanced-error">
+									{{ form_errors(form.minScore)}}
+								</div>
+							{% endif %}
+						</div>
 
-					<div class="home-user__trail-search--advanced-item">
-						{{ form_label(form.maxScore)}}
-						{{ form_widget(form.maxScore)}}
-						{% if form_errors(form.maxScore) %}
-							<div class="home-user__trail-search--advanced-error">
-								{{ form_errors(form.maxScore)}}
-							</div>
-						{% endif %}
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.maxScore)}}
+							{{ form_widget(form.maxScore)}}
+							{% if form_errors(form.maxScore) %}
+								<div class="home-user__trail-search--advanced-error">
+									{{ form_errors(form.maxScore)}}
+								</div>
+							{% endif %}
+						</div>
+						<div class="home-user__trail-search--advanced-button">
+							<button class="home-user__button">Rechercher</button>
+						</div>
 					</div>
-					<div class="home-user__trail-search--advanced-button">
-						<button class="home-user__button">Rechercher</button>
-					</div>
-				</div>
-				{{ form_end(form) }}
+					{{ form_end(form) }}
+				</fieldset>
 			</div>
 
 
-			{% if foundTrails is defined and foundTrails|length > 0 %}
-				<div class="home-user__trail-search--results">
+			<p id="search-result-count" role="status" aria-live="polite" class="visually-hidden"></p>
 
+			<ul class="home-user__trail-search--results" role="listbox" aria-label="Résultats de recherche" aria-live="polite" aria-relevant="additions removals">
+				{% if foundTrails is defined and foundTrails|length > 0 %}
 					{% for trail in foundTrails %}
 						{% if trail.status == "Active" %}
-							<div class="home-user__trail-card">
+							<li class="home-user__trail-card">
 								{% if trail.photos|length > 0 %}
-									<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
+									<img loading="lazy" class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
 								{% else %}
-									<img class="home-user__trail-photo" src="{{ asset('images/photo-trail-default.jpg') }}" alt="Photo de l'itinéraire {{ trail.name }}">
+									<img loading="lazy" class="home-user__trail-photo" src="{{ asset('images/photo-trail-default.webp') }}" alt="Photo de l'itinéraire {{ trail.name }}">
 								{% endif %}
 								<p class="home-user__trail-name">
 									<strong>{{ trail.name }}</strong>
@@ -253,21 +259,20 @@
 											</div>
 										{% endif %}
 									</div>
+									<a class="home-user__button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
 
-								</div>
-								<a class="home-user__button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
+								</li>
 
 
-							</div>
-						{% endif %}
-					{% endfor %}
-
+							{% endif %}
+						{% endfor %}
+					
 				{% else %}
 					<p class="home-user__trail-result-info">
 						Aucun itinéraire trouvé, veuillez ajuster vos critères de recherche</p>
-					<a class="home-user__trail-link" href="{{ path('app_home') }}">Réinitialiser la recherche</a>
+					
 				{% endif %}
-
+</ul>
 
 			</div>
 			{% if hasMoreTrails|length > 0 %}
@@ -279,18 +284,18 @@
 	{% else %}
 		<section class="home-guest">
 			<div class="home-guest__hero">
-				<img class="home-guest__hero-img" src="{{ asset('images/hero-picture.jpg') }}" alt="Deux femmes se baladent avec leurs chiens.">
-				<h1 class="home-guest__hero-title">Bienvenue sur Snif & Go</h1>
+				<img loading="lazy" class="home-guest__hero-img" src="{{ asset('images/hero-picture.wepb') }}" alt="Deux femmes se baladent avec leurs chiens.">
+				<h1 class="home-guest__hero-title">Bienvenue sur Snif &amp;Go</h1>
 				<h2 class="home-guest__hero-subtitle">Plus de chiens, plus de fun !</h2>
 			</div>
 
 			<div class="home-guest__intro">
 				<div class="home-guest__intro-container">
-					<img class="home-guest__intro-img" src="{{ asset('images/capture-homelog.png') }}" alt="Capture d'écran du site Snif & Go">
-					<img class="home-guest__intro-img" src="{{ asset('images/capture-home.png') }}" alt="Capture d'écran du site Snif & Go">
+					<img loading="lazy" class="home-guest__intro-img" src="{{ asset('images/capture-homelog.webp') }}" alt="Capture d'écran du site Snif &amp;Go">
+					<img loading="lazy" class="home-guest__intro-img" src="{{ asset('images/capture-home.webp') }}" alt="Capture d'écran du site Snif &amp;Go">
 				</div>
 				<div class="home-guest__intro-description">
-					<p class="home-guest__intro-content">Snif & Go est une plateforme communautaire où chaque utilisateur peut créer un compte, inscrire son chien et participer à des balades organisées par d'autres membres.</p>
+					<p class="home-guest__intro-content">Snif &amp;Go est une plateforme communautaire où chaque utilisateur peut créer un compte, inscrire son chien et participer à des balades organisées par d'autres membres.</p>
 
 					<p class="home-guest__intro-content">
 						<strong>L'idée : transformer la promenade quotidienne en moment de partage et de convivialité.</strong>
@@ -298,10 +303,10 @@
 
 					<p class="home-guest__intro-content">Grâce à une carte collaborative, découvrez et proposez des itinéraires adaptés aux chiens. Chaque balade précise le nombre maximum de chiens autorisés afin de garantir confort et sécurité pour tous.</p>
 
-					<p class="home-guest__intro-content">Plus qu'une application, Snif & Go favorise les rencontres : entre maîtres, entre chiens et avec votre environnement local. Offrez à votre compagnon des sorties enrichissantes, et élargissez votre cercle autour d'une passion commune.</p>
+					<p class="home-guest__intro-content">Plus qu'une application, Snif &amp;Go favorise les rencontres : entre maîtres, entre chiens et avec votre environnement local. Offrez à votre compagnon des sorties enrichissantes, et élargissez votre cercle autour d'une passion commune.</p>
 				</div>
 
-				<img class="home-guest__intro-photo" src="{{ asset('images/photo-intro.jpg') }}" alt="Un homme et une femme se baladent avec leur chien">
+				<img loading="lazy" class="home-guest__intro-photo" src="{{ asset('images/photo-intro.webp') }}" alt="Un homme et une femme se baladent avec leur chien">
 			</div>
 
 			<div class="home-guest__cta">
@@ -309,5 +314,4 @@
 			</div>
 		</section>
 	{% endif %}
-
 {% endblock %}

@@ -97,21 +97,29 @@ final class WalkRegistrationController extends AbstractController
     }
 
     #[Route('/{id}/cancelled', name: 'app_walk_registration_cancelled', methods: ['POST'])]
-    public function inactive(WalkRegistration $walkRegistration, EntityManagerInterface $entityManager): Response
+    public function inactive(Request $request, WalkRegistration $walkRegistration, EntityManagerInterface $entityManager): Response
     {
-        $walkRegistration->setStatus("cancelled");
-        $entityManager->flush();
+        $submittedToken = $request->request->get('_token');
 
-        $this->addFlash('warning', 'Vous êtes désinscrit de cette balade');
+        if ($this->isCsrfTokenValid('cancel' . $walkRegistration->getId(), $submittedToken)) {
+            $walkRegistration->setStatus("cancelled");
+            $entityManager->flush();
+            $this->addFlash('warning', 'Vous êtes désinscrit de cette balade');
+        } else {
+            $this->addFlash('error', 'Jeton CSRF invalide, action annulée.');
+        }
         return $this->redirectToRoute('app_home');
     }
     #[Route('/{id}', name: 'app_walk_registration_delete', methods: ['POST'])]
     public function delete(Request $request, WalkRegistration $walkRegistration, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $walkRegistration->getId(), $request->getPayload()->getString('_token'))) {
+        $submittedToken = $request->request->get('_token');
+        if ($this->isCsrfTokenValid('delete' . $walkRegistration->getId(), $submittedToken)) {
             $entityManager->remove($walkRegistration);
             $entityManager->flush();
             $this->addFlash('warning', "L'inscription est supprimée");
+        } else {
+            $this->addFlash('error', 'Jeton CSRF invalide, suppression annulée.');
         }
 
         return $this->redirectToRoute('app_walk_registration_index', [], Response::HTTP_SEE_OTHER);

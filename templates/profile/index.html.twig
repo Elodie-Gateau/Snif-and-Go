@@ -38,7 +38,8 @@
 			<div class="profile__user-wrapper">
 				<a class="profile__user-icon" href="{{ path('admin_user_edit', {'id': app.user.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__user-icon' }) }}</a>
 				<form method="post" action="{{ path('admin_user_inactive', {'id': app.user.id}) }}">
-					<button class="js-delete profile__user-icon" data-url="{{ path('admin_user_inactive', {'id': app.user.id}) }}" data-token="notoken" data-name="votre compte Snif & Go {{ app.user.firstname }} ? Les balades que vous avez organisé et vos chiens enregistrés seront désactivés. Êtes vous sur.e " type="submit">
+					<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ app.user.id) }}">
+					<button class="js-delete profile__user-icon" data-url="{{ path('admin_user_inactive', {'id': app.user.id}) }}" data-token="{{ csrf_token('inactive' ~ app.user.id) }}" data-name="votre compte Snif & Go {{ app.user.firstname }} ? Les balades que vous avez organisées et vos chiens enregistrés seront désactivés. Êtes-vous sûr·e ?" type="submit">
 						{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__user-icon' }) }}
 					</button>
 				</form>
@@ -122,7 +123,8 @@
 						<div class="profile__dog-wrapper">
 							<a class="profile__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__dog-edit-icon' }) }}</a>
 							<form method="post" action="{{ path('app_dog_inactive', {'id': dog.id}) }}">
-								<button class="js-delete admin__dogs-icon" data-url="{{ path('app_dog_inactive', {'id': dog.id}) }}" data-token="notoken" data-name="le profil de {{ dog.name }}" type="submit">
+								<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ dog.id) }}">
+								<button class="js-delete admin__dogs-icon" data-url="{{ path('app_dog_inactive', {'id': dog.id}) }}" data-token="{{ csrf_token('inactive' ~ dog.id) }}" data-name="le profil de {{ dog.name }}" type="submit">
 									{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}
 								</button>
 							</form>
@@ -193,8 +195,8 @@
 							<a class="profile__trail-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__trail-icon' }) }}</a>
 							<a class="profile__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter</a>
 							<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
-								<input type="hidden" name="_token" value="notoken">
-								<button class="js-delete profile__trail-icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="notoken" data-name="l'itinéraire {{ trail.name }}" type="submit">
+								<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ trail.id) }}">
+								<button class="js-delete profile__trail-icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="{{ csrf_token('inactive' ~ trail.id) }}" data-name="l'itinéraire {{ trail.name }}" type="submit">
 									{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__trail-icon' }) }}
 								</button>
 							</form>
@@ -207,8 +209,8 @@
 				<p class="profile__trail empty">Vous n'avez publié aucun itinéraire.</p>
 			{% endif %}
 		</div>
-		
-			{% if walks|length > 0 %}
+
+		{% if walks|length > 0 %}
 			<div id="walks" class="profile__walks hidden">
 				{% for walk in walks %}
 
@@ -227,8 +229,8 @@
 						<div class="profile__walks-wrapper actions">
 							<a class="profile__walks-icon" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
 							<form method="post" action="{{ path('app_walk_inactive', {'id': walk.id}) }}">
-								<input type="hidden" name="_token" value="notoken">
-								<button class="js-delete profile__walks-icon" data-url="{{ path('app_walk_inactive', {'id': walk.id}) }}" data-token="notoken" data-name="la balade du {{ walk.date|format_datetime('full', 'short', locale: 'fr') }}" type="submit">
+								<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ walk.id) }}">
+								<button class="js-delete profile__walks-icon" data-url="{{ path('app_walk_inactive', {'id': walk.id}) }}" data-token="{{ csrf_token('inactive' ~ walk.id) }}" data-name="la balade du {{ walk.date|format_datetime('full', 'short', locale: 'fr') }}" type="submit">
 									{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__walks-icon' }) }}
 								</button>
 							</form>

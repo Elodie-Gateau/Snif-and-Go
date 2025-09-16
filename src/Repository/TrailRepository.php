@@ -28,8 +28,8 @@ class TrailRepository extends ServiceEntityRepository
             $term = '%' . strtolower(str_replace(['-', ' ', '_', '.'], '', trim($criteria['search']))) . '%';
             $queryBuilder
                 ->andWhere('trail.nameSearch LIKE :term 
-                 OR trail.startCitySearch LIKE :term 
-                 OR trail.endCitySearch LIKE :term')
+                OR trail.startCitySearch LIKE :term 
+                OR trail.endCitySearch LIKE :term')
                 ->setParameter('term', $term);
         }
 

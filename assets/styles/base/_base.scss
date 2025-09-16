@@ -36,11 +36,17 @@ li {
 
 a {
     text-decoration: none;
-    color: inherit;
+    color: var(--text);
+    cursor: pointer;
 }
 
 a:hover {
     color: var(--text);
+}
+
+button {
+    border: 0;
+    background-color: transparent;
 }
 
 .site-header__toggle {

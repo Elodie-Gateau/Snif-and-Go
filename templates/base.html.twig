@@ -26,7 +26,7 @@
 		{% block header %}
 			{% include 'layout/header.html.twig' %}
 		{% endblock %}
-		<main>
+		<main id="contenu">
 			{% block flash %}
 				<div class="flash">
 					{% for label, messages in app.flashes %}

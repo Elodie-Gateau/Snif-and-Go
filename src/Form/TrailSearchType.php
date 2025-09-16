@@ -69,8 +69,10 @@ final class TrailSearchType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'method' => 'GET',
-            'csrf_protection' => false,
+            'method' => 'POST',
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id'   => 'search',
             'required' => false,
 
         ]);

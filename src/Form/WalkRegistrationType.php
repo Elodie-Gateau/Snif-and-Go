@@ -33,7 +33,10 @@ class WalkRegistrationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => WalkRegistration::class,
-            'dogs' => []
+            'dogs' => [],
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id'   => 'walk_registration_form',
         ]);
     }
 }

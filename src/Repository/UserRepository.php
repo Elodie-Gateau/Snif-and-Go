@@ -34,18 +34,44 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
 
+    public function desactivate($user): void
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->beginTransaction();
+        try {
+            $conn->executeStatement(
+                "UPDATE dog  SET status = 'Inactive' WHERE status = 'Active' AND user_id = :user_id;",
+                ["user_id" => $user->getId()]
+            );
+            $conn->executeStatement(
+                "UPDATE walk SET status = 'Inactive' WHERE status = 'Active' AND user_id = :user_id;",
+                ["user_id" => $user->getId()]
+            );
+            $conn->commit();
+        } catch (\Throwable $e) {
+            $conn->rollBack();
+            throw $e;
+        }
+    }
     public function reactivate($user): void
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sqlDog = "UPDATE dog  SET status = 'Active' WHERE status = 'Inactive' AND user_id = :user_id;";
-        $sqlWalk = "UPDATE walk SET status = 'Active' WHERE status = 'Inactive' AND user_id = :user_id;";
+        $conn->beginTransaction();
 
-        $conn->executeQuery($sqlDog, [
-            'user_id' => $user->getId()
-        ]);
-        $conn->executeQuery($sqlWalk, [
-            'user_id' => $user->getId()
-        ]);
+        try {
+            $conn->executeStatement(
+                "UPDATE dog  SET status = 'Active' WHERE status = 'Inactive' AND user_id = :user_id;",
+                ["user_id" => $user->getId()]
+            );
+            $conn->executeStatement(
+                "UPDATE walk SET status = 'Active' WHERE status = 'Inactive' AND user_id = :user_id;",
+                ["user_id" => $user->getId()]
+            );
+            $conn->commit();
+        } catch (\Throwable $e) {
+            $conn->rollBack();
+            throw $e;
+        }
     }
 
     //    public function findOneBySomeField($value): ?User

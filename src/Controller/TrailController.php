@@ -21,6 +21,8 @@ use App\Service\DistanceService;
 use App\Service\GpxService;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 use Symfony\Component\Validator\Constraints\File as FileConstraint;
 use Symfony\Component\Validator\Constraints\All;
@@ -231,7 +233,7 @@ final class TrailController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'app_trail_show', methods: ['GET', 'POST'])]
+    #[Route('/{id<\d+>}', name: 'app_trail_show', methods: ['GET', 'POST'])]
     public function show(
         Request $request,
         Trail $trail,
@@ -315,12 +317,19 @@ final class TrailController extends AbstractController
     }
 
     #[Route('/{id}/inactive', name: 'app_trail_inactive', methods: ['POST'])]
-    public function inactive(Trail $trail, EntityManagerInterface $entityManager): Response
+    public function inactive(Request $request, Trail $trail, EntityManagerInterface $entityManager): Response
     {
-        $trail->setStatus("Inactive");
-        $entityManager->flush();
+        $submittedToken = $request->request->get('_token');
 
-        $this->addFlash('warning', 'Votre itinéraire a été supprimé');
+        if ($this->isCsrfTokenValid('inactive' . $trail->getId(), $submittedToken)) {
+            $trail->setStatus("Inactive");
+            $entityManager->flush();
+
+            $this->addFlash('warning', 'Votre itinéraire a été supprimé');
+        } else {
+            $this->addFlash('error', 'Jeton CSRF invalide, action annulée.');
+        }
+
         return $this->redirectToRoute('app_home');
     }
     #[IsGranted('ROLE_ADMIN')]
@@ -330,8 +339,37 @@ final class TrailController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $trail->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($trail);
             $entityManager->flush();
+
+            $this->addFlash('warning', "L'itinéraire a été supprimé");
+        } else {
+            $this->addFlash('error', 'Jeton CSRF invalide, action annulée.');
         }
-        $this->addFlash('warning', "L'itinéraire a été supprimé");
+
         return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/live-search', name: 'app_trail_live_search', methods: ['GET'])]
+    public function liveSearch(Request $request, TrailRepository $trailRepository): JsonResponse
+    {
+        $query = $request->query->get('q', '');
+        if (mb_strlen($query) < 3) {
+            return $this->json([]);
+        }
+        $criteria['search'] = $query;
+        $out = $trailRepository->search($criteria);
+        $results = [];
+        foreach ($out as $trail) {
+            $results[] = [
+                'id'           => $trail->getId(),
+                'name'         => $trail->getName(),
+                'startCity'    => $trail->getStartCity(),
+                'distance'     => $trail->getDistance(),
+                'duration'     => $trail->getDuration(),
+                'difficulty' => $trail->getDifficulty(),
+                'photo'        => (count($trail->getPhotos()) > 0) ? $trail->getPhotos()[0]->getName() : null,
+                'url'          => $this->generateUrl('app_trail_show', ['id' => $trail->getId()]),
+            ];
+        }
+        return $this->json($results);
     }
 }

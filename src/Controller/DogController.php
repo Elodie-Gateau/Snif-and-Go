@@ -91,21 +91,32 @@ final class DogController extends AbstractController
     #[Route('/{id}/inactive', name: 'app_dog_inactive', methods: ['POST'])]
     public function inactive(Request $request, Dog $dog, EntityManagerInterface $entityManager): Response
     {
-        $dog->setStatus("Inactive");
-        $entityManager->flush();
+        $submittedToken = $request->request->get('_token');
 
-        $this->addFlash('warning', 'Le profil de ce chien est supprimé');
+        if ($this->isCsrfTokenValid('inactive' . $dog->getId(), $submittedToken)) {
+            $dog->setStatus("Inactive");
+            $entityManager->flush();
+
+            $this->addFlash('warning', 'Le profil de ce chien est supprimé');
+        } else {
+            $this->addFlash('error', 'Jeton CSRF invalide, action annulée.');
+        }
         return $this->redirectToRoute('app_profile');
     }
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'app_dog_delete', methods: ['POST'])]
     public function delete(Request $request, Dog $dog, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $dog->getId(), $request->getPayload()->getString('_token'))) {
+        $submittedToken = $request->request->get('_token');
+        if ($this->isCsrfTokenValid('delete' . $dog->getId(), $submittedToken)) {
             $entityManager->remove($dog);
             $entityManager->flush();
             $this->addFlash('warning', 'Le profil de ce chien est supprimé');
+        } else {
+            $this->addFlash('error', 'Jeton CSRF invalide, suppression annulée.');
         }
+
 
         return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
     }

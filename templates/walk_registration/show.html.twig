@@ -1,10 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription de {{ wr.dog.name }}{% endblock %}
+{% block title %}Inscription de
+	{{ wr.dog.name }}
+{% endblock %}
 
 {% block body %}
 	<section class="walk-register">
-		<h1 class="walk-register__title">Inscription de {{wr.dog.name }}</h1>
+		<h1 class="walk-register__title">Inscription de
+			{{wr.dog.name }}</h1>
 
 		<div class="walk-register__desc">
 			<h2 class="walk-register__subtitle">Balade du
@@ -27,10 +30,11 @@
 			<div class="walk-register__desc-item">
 				<p class="walk-register__desc-title">Difficulté</p>
 				<p class="walk-register__desc-content">{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
-                        {{ difficultyLabels[wr.walk.trail.difficulty] ?? 'Non défini' }}</p>
+					{{ difficultyLabels[wr.walk.trail.difficulty] ?? 'Non défini' }}</p>
 			</div>
 			<div class="walk-register__desc-item">
-				<p class="walk-register__desc-title">Point d'eau</p>	{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
+				<p class="walk-register__desc-title">Point d'eau</p>
+				{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
 				<p class="trail__desc-content">{{ waterPointLabels[wr.walk.trail.waterPoint] ?? "Inconnu" }}</p>
 			</div>
 			<div class="walk-register__desc-item">
@@ -61,7 +65,7 @@
 						{% for register in validRegisters %}
 							<div class="walk-register__desc-container">
 								{% set dogPhotoClass = ['walk-register__dog-photo', register.dog.sex] | join(' ') %}
-									{% if register.dog.photo %}
+								{% if register.dog.photo %}
 									<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ register.dog.photo)}}">
 								{% else %}
 									{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
@@ -76,16 +80,17 @@
 				</div>
 			</div>
 
-    			{% if app.user == wr.dog.user %}
+			{% if app.user == wr.dog.user %}
 				<div class="walk-register__wrapper actions">
 					<form method="post" action="{{ path('app_walk_registration_cancelled', {'id': wr.id}) }}">
-						<input type="hidden" name="_token" value="notoken">
+						<input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ wr.id) }}">
 						<button class="js-delete walk-register__button" data-url="{{ path('app_walk_registration_cancelled', {'id': wr.id}) }}" data-token="notoken" data-name="l'inscription de {{ wr.dog.name }} " type="submit">
-							Annuler l'inscription de {{ wr.dog.name }}
+							Annuler l'inscription de
+							{{ wr.dog.name }}
 						</button>
 					</form>
 				</div>
 			{% endif %}
-	<a class="walk-register__back" href="{{ path('app_home') }}">Retour</a>
-    </section>
-{% endblock %}
+			<a class="walk-register__back" href="{{ path('app_home') }}">Retour</a>
+		</section>
+	{% endblock %}

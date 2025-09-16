@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home', methods: ['GET'])]
+    #[Route('/', name: 'app_home', methods: ['GET', 'POST'])]
     public function index(
         WalkRepository $walkRepository,
         DogRepository $dogRepository,
@@ -54,16 +54,24 @@ final class HomeController extends AbstractController
         $searchForm = $this->createForm(TrailSearchType::class);
         $searchForm->handleRequest($request);
 
-        $criteria = $searchForm->getData() ?? [];
 
-        $foundTrails = [];
-        if (
-            !empty($criteria['search']) || !empty($criteria['difficulty'])
-            || !empty($criteria['minDistance']) || !empty($criteria['maxDistance'])
-            || !empty($criteria['minDuration']) || !empty($criteria['maxDuration'])
-            || !empty($criteria['minScore']) || !empty($criteria['maxScore'])
-        ) {
-            $foundTrails = $trailRepository->search($criteria);
+        $hasMoreTrails = false;
+        $criteria = $searchForm->getData() ?? [];
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+
+            $foundTrails = [];
+            $criteria = $searchForm->getData() ?? [];
+            if (
+                !empty($criteria['search']) || !empty($criteria['difficulty'])
+                || !empty($criteria['minDistance']) || !empty($criteria['maxDistance'])
+                || !empty($criteria['minDuration']) || !empty($criteria['maxDuration'])
+                || !empty($criteria['minScore']) || !empty($criteria['maxScore'])
+            ) {
+
+                $foundTrails = $trailRepository->search($criteria);
+                $limitTrail = 7;
+                $hasMoreTrails = count($foundTrails) > $limitTrail;
+            }
         } else {
             $limitTrail = 7;
             $foundTrails = $trailRepository->findAllLimit($limitTrail + 1);
