@@ -47,6 +47,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 "UPDATE walk SET status = 'Inactive' WHERE status = 'Active' AND user_id = :user_id;",
                 ["user_id" => $user->getId()]
             );
+
+            $conn->executeStatement(
+                "UPDATE walk_registration wr
+                    JOIN dog d ON d.id = wr.dog_id
+                    SET wr.status = 'Cancelled'
+                    WHERE d.user_id = :user_id
+                    AND wr.status = 'Active';",
+                ['user_id' => $user->getId()]
+            );
             $conn->commit();
         } catch (\Throwable $e) {
             $conn->rollBack();
