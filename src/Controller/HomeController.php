@@ -27,7 +27,19 @@ final class HomeController extends AbstractController
 
         $limit = 3;
         $nextWalks = $walkRepository->findNext($limit + 1);
-        $hasMore = count($nextWalks) > $limit;
+        if ($nextWalks && !empty($nextWalks)) {
+            $spotsByWalk = [];
+            foreach ($nextWalks as $walk) {
+                $validRegisters = $walkRegistrationRepository->findValidRegisters($walk);
+                if ($validRegisters) {
+                    $countValidRegisters = count($validRegisters);
+                } else {
+                    $countValidRegisters = 0;
+                }
+                $spotsByWalk[$walk->getId()] = ($walk->getMaxDogs() - $countValidRegisters);
+            }
+        }
+        $hasMoreWalks = count($nextWalks) > $limit;
         $currentUser = $this->getUser();
 
         if ($currentUser) {
@@ -49,7 +61,7 @@ final class HomeController extends AbstractController
             $dogs = [];
             $dogNextWalks = [];
         }
-
+        $hasMoreDogs = count($dogs) > $limit;
 
         $searchForm = $this->createForm(TrailSearchType::class);
         $searchForm->handleRequest($request);
@@ -81,7 +93,9 @@ final class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'nextWalks'   => $nextWalks,
-            'hasMore' => $hasMore,
+            'spotsByWalk' => $spotsByWalk,
+            'hasMoreWalks' => $hasMoreWalks,
+            'hasMoreDogs' => $hasMoreDogs,
             'dogs'        => $dogs,
             'dogNextWalks' => $dogNextWalks,
             'form'        => $searchForm->createView(),

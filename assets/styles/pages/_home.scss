@@ -2,16 +2,20 @@
 @use "../utils/breakpoints" as *;
 
 .home-guest {
+    padding: $size-40 0;
+
     &__hero {
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: $size-28;
-        padding-bottom: $size-32;
+        border-radius: $size-10 $size-10 0 0;
+        background: var(--background-secondary);
     }
     &__hero-img {
         width: 100%;
+        border-radius: $size-10;
     }
 
     &__hero-subtitle {
@@ -23,6 +27,8 @@
         flex-direction: column;
         width: 100%;
         padding: $size-12 $size-24;
+        background: var(--background-secondary);
+        border-radius: 0 0 $size-10 $size-10;
     }
     &__intro-description {
         display: contents;
@@ -80,13 +86,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: $size-20;
+        gap: $size-30;
     }
     &__wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: $size-20;
+        gap: $size-30;
     }
 
     &__intro {
@@ -97,9 +103,10 @@
         justify-content: flex-end;
         border-radius: $size-10;
 
-        .home-user__intro-wrapper {
+        &-wrapper {
             width: 40%;
-            background-color: rgba($color-white, 0.85);
+            background: var(--background);
+            opacity: 0.85;
             padding: $size-16;
             text-align: center;
         }
@@ -126,10 +133,14 @@
         gap: $size-10;
     }
 
+    &__walk-content {
+        color: var(--text);
+    }
+
     &__dog {
         background: var(--background-secondary);
         border-radius: $size-10;
-        padding: $size-40 $size-20;
+        padding: $size-30 $size-20;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -157,23 +168,18 @@
         font-weight: 800;
     }
 
-    &__dog-item {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        align-self: flex-end;
-    }
-
     &__dog-infos {
         text-align: center;
         display: flex;
         flex-direction: column;
-        gap: $size-10;
     }
 
     &__dog-subtitle {
         color: var(--accent);
         font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: $size-4;
     }
 
     &__dog-icon {
@@ -200,7 +206,7 @@
     }
     &__trail-search {
         width: 100%;
-        background: var(--background);
+        background: var(--background-tertiary);
         padding: $size-20 $size-10;
         border-radius: $size-10;
     }
@@ -224,6 +230,10 @@
         cursor: pointer;
         font-weight: 600;
         color: var(--accent);
+    }
+    &__trail-reset {
+        font-weight: 600;
+        color: var(--text);
     }
 
     &__trail-search--advanced-button {
@@ -278,14 +288,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: $size-20;
+            gap: $size-30;
         }
         &__intro {
-            width: 50%;
+            width: 80%;
 
-            .home-user__intro-wrapper {
+            &-wrapper {
                 width: 40%;
-                padding: $size-26 $size-16;
+                height: 100%;
+                padding: $size-96 $size-16;
             }
         }
 
@@ -295,12 +306,13 @@
 
         &__walk-container {
             padding: $size-20 0;
+            gap: $size-20;
         }
 
         &__walk-wrapper:nth-child(1) {
             display: flex;
             flex-direction: row;
-            // flex: 1;
+            align-items: center;
             justify-content: flex-start;
             gap: $size-24;
         }
@@ -396,6 +408,11 @@
 
         &__intro {
             width: 100%;
+
+            &-wrapper {
+                padding: $size-30 $size-14;
+                width: 50%;
+            }
         }
 
         &__dog {
@@ -406,7 +423,7 @@
                 width: 100%;
                 justify-content: center;
                 flex-direction: column;
-                align-items: center;
+                align-items: flex-end;
                 gap: $size-10;
             }
 
@@ -494,99 +511,5 @@
                 gap: $size-8;
             }
         }
-        // display: flex;
-        // flex-direction: column;
-        // align-items: center;
-        // padding: $size-20 0;
-        // width: 100%;
-        // gap: $size-20;
-
-        // &__intro {
-        //     background: center/cover no-repeat
-        //         url("../images/photo-accueil-user.webp");
-        //     width: 100%;
-        //     display: flex;
-        //     justify-content: flex-end;
-        //     border-radius: $size-10;
-
-        //     .home-user__intro-wrapper {
-        //         width: 40%;
-        //         background-color: rgba($color-white, 0.85);
-        //         padding: $size-16;
-        //         text-align: center;
-        //     }
-        // }
-
-        // &__walk {
-        //     background: var(--background-secondary);
-        //     border-radius: $size-10;
-        //     padding: $size-30 $size-10;
-        //     width: 100%;
-        // }
-
-        // &__walk-title {
-        //     padding: $size-20 $size-10;
-        // }
-
-        // &__walk-container {
-        //     display: flex;
-        //     flex-direction: column;
-        //     gap: $size-10;
-        // }
-
-        // &__dog {
-        //     background: var(--background-secondary);
-        //     border-radius: $size-10;
-        //     padding: $size-40 $size-20;
-        //     width: 100%;
-        //     display: flex;
-        //     flex-direction: column;
-        //     gap: $size-20;
-        //     align-items: center;
-        // }
-
-        // &__dog-container {
-        //     display: flex;
-        //     flex-direction: column;
-        //     align-items: center;
-
-        //     gap: $size-20;
-        // }
-
-        // &__dog-wrapper {
-        //     display: flex;
-        //     width: 100%;
-        //     justify-content: space-between;
-        //     align-items: center;
-        //     padding: $size-10;
-        // }
-
-        // &__dog-name {
-        //     font-weight: 800;
-        // }
-
-        // &__dog-item {
-        //     display: flex;
-        //     width: 65%;
-        //     justify-content: space-between;
-        //     align-self: flex-end;
-        // }
-
-        // &__dog-infos {
-        //     text-align: center;
-        //     display: flex;
-        //     flex-direction: column;
-        //     gap: $size-10;
-        // }
-
-        // &__dog-subtitle {
-        //     color: var(--accent);
-        //     font-weight: 600;
-        // }
-
-        // &__dog-icon {
-        //     width: $size-16;
-        //     color: inherit;
-        // }
     }
 }

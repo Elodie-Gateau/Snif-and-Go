@@ -50,6 +50,7 @@
     border: 1px solid $border-color;
     border-radius: $size-6;
     background-color: $bg-color;
+    color: var(--text);
 }
 
 @mixin form-multiselect($border-color, $bg-color, $padding: $size-10) {
@@ -63,9 +64,6 @@
 }
 
 @mixin form-checkbox($size, $accent, $bg, $border-color) {
-    // -moz-appearance: none;
-    // -webkit-appearance: none;
-    // -o-appearance: none;
     width: $size;
     height: $size;
     accent-color: $accent;
@@ -97,7 +95,7 @@
     justify-content: $justify;
     align-items: center;
     border-radius: $size-10;
-    box-shadow: 0 5px 8px $color-gray-175;
+    box-shadow: 0 5px 8px var(--shadow);
     gap: $gap;
 }
 

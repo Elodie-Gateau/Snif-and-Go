@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Dog;
+use App\Entity\User;
 use App\Form\DogType;
 use App\Repository\DogRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,6 +29,11 @@ final class DogController extends AbstractController
     #[Route('/new', name: 'app_dog_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
+        $user = $this->getUser();
+        if ($user instanceof User && count($user->getDogs()) > 10) {
+            $this->addFlash('notice', 'Vous avez atteint la limite de 10 chiens.');
+            return $this->redirectToRoute('app_home');
+        }
         $dog = new Dog();
         $dog->setUser($this->getUser());
         $form = $this->createForm(DogType::class, $dog);

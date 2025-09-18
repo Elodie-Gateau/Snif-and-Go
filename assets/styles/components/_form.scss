@@ -42,6 +42,9 @@
     width: auto;
 }
 
+input::placeholder {
+    color: var(--text);
+}
 .add-trail__form-input {
     @include form-input(var(--border-color), var(--background-input));
     width: 100%;

@@ -1,57 +1,59 @@
 <header role="banner" class="site-header">
-	<div class="site-header__brand">
-		<div class="site-header__logo">
-			<a aria-label="Accueil Snif &amp; Go" class="site-header__logo" href="{{ path('app_home') }}">
-				<img class="site-header__logo-img-inline" src="{{ asset('images/logos/logoRVB-inline.webp') }}" alt="Logo de Snif &amp; Go">
-				<img class="site-header__logo-img-block" src="{{ asset('images/logos/logoRVB.webp') }}" alt="Logo de Snif &amp; Go">
-			</a>
-		</div>
-		<div class="site-header__wrapper" aria-hidden="true">
-			<p class="site-header__tagline">Plus on est de chiens,</p>
-			<p class="site-header__tagline-end">plus on rit !</p>
-		</div>
+	<div class="site-header__banner">
+		{# <div class="site-header__brand"> #}
+			<div class="site-header__logo">
+				<a aria-label="Accueil Snif &amp; Go" class="site-header__logo" href="{{ path('app_home') }}">
+					<img class="site-header__logo-img-inline" src="{{ asset('images/logos/logoRVB-inline.webp') }}" alt="Logo de Snif &amp; Go">
+					<img class="site-header__logo-img-block" src="{{ asset('images/logos/logoRVB.webp') }}" alt="Logo de Snif &amp; Go">
+				</a>
+			</div>
+			<div class="site-header__wrapper" aria-hidden="true">
+				<p class="site-header__tagline">Plus on est de chiens,</p>
+				<p class="site-header__tagline-end">plus on rit !</p>
+			</div>
 
-	</div>
-	<div class="site-header__container">
-		<button type="button" id="btn-burger" class="site-header__burger" aria-label="Ouvrir le menu" aria-controls="site-nav" aria-expanded="false">{{ ux_icon('pajamas:hamburger', {class:'site-header__burger'}) }}</button>
-		<nav id="site-nav" class="site-header__nav hidden" aria-label="Navigation principale">
-			<ul class="site-header__menu" role="list">
-				<li class="site-header__item">
-					<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_home' ? 'selected' }}" href="{{ path('app_home') }}">Accueil</a>
-				</li>
-				{% if is_granted('ROLE_USER') %}
+		{# </div> #}
+		{# <div class="site-header__container"> #}
+			<button type="button" id="btn-burger" class="site-header__burger" aria-label="Ouvrir le menu" aria-controls="site-nav" aria-expanded="false">{{ ux_icon('pajamas:hamburger', {class:'site-header__burger'}) }}</button>
+			<nav id="site-nav" class="site-header__nav hidden" aria-label="Navigation principale">
+				<ul class="site-header__menu" role="list">
 					<li class="site-header__item">
-						<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_profile' ? 'selected' }}" href="{{ path('app_profile', {'id': app.user.id}) }}">Mon profil</a>
+						<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_home' ? 'selected' }}" href="{{ path('app_home') }}">Accueil</a>
 					</li>
-					{% if is_granted('ROLE_ADMIN') %}
+					{% if is_granted('ROLE_USER') %}
 						<li class="site-header__item">
-							<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_user_index' ? 'selected' }}" href="{{ path('admin_user_index') }}">Espace Administrateur</a>
+							<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_profile' ? 'selected' }}" href="{{ path('app_profile', {'id': app.user.id}) }}">Mon profil</a>
+						</li>
+						{% if is_granted('ROLE_ADMIN') %}
+							<li class="site-header__item">
+								<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_user_index' ? 'selected' }}" href="{{ path('admin_user_index') }}">Espace Administrateur</a>
+							</li>
+						{% endif %}
+						<li class="site-header__item">
+							<a class="site-header__link" href="{{ path('app_logout') }}">Déconnexion</a>
+						</li>
+
+					{% else %}
+						<li class="site-header__item">
+							<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_login' ? 'selected' }}" href="{{ path('app_login') }}">Se connecter</a>
+						</li>
+						<li class="site-header__item">
+							<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_register' ? 'selected' }}" href="{{ path('app_register') }}">S'inscrire</a>
 						</li>
 					{% endif %}
-					<li class="site-header__item">
-						<a class="site-header__link" href="{{ path('app_logout') }}">Déconnexion</a>
-					</li>
-
-				{% else %}
-					<li class="site-header__item">
-						<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_login' ? 'selected' }}" href="{{ path('app_login') }}">Se connecter</a>
-					</li>
-					<li class="site-header__item">
-						<a class="site-header__link {{ app.request.attributes.get('_route') == 'app_register' ? 'selected' }}" href="{{ path('app_register') }}">S'inscrire</a>
-					</li>
-				{% endif %}
-			</ul>
-		</nav>
-		<div id="themeToggle" class="site-header__item">
-			<button type="button" id="theme-toggle" class="site-header__toggle" aria-label="Changer de thème" aria-pressed="false">
-				{{ ux_icon('mynaui:sun-solid', { class: 'theme-toggle__content-icon', id: 'sun', 'aria-hidden':'true'  })  }}
-				{{ ux_icon('mynaui:moon-solid', { class: 'theme-toggle__content-icon hidden', id: 'moon', 'aria-hidden':'true'  })  }}
-				<div id="themeToggle" class="site-header__toggle">
-					{{ ux_icon('fa:toggle-on', { class: 'theme-toggle__icon-on hidden', id: 'iconOn', 'aria-hidden':'true'  }) }}
-					{{ ux_icon('fa:toggle-off', { class: 'theme-toggle__icon-off', id: 'iconOff', 'aria-hidden':'true'  }) }}
-				</div>
-			</button>
-		</div>
+				</ul>
+			</nav>
+			<div id="themeToggle" class="site-header__item">
+				<button type="button" id="theme-toggle" class="site-header__toggle" aria-label="Changer de thème" aria-pressed="false">
+					{{ ux_icon('mynaui:sun-solid', { class: 'theme-toggle__content-icon', id: 'sun', 'aria-hidden':'true'  })  }}
+					{{ ux_icon('mynaui:moon-solid', { class: 'theme-toggle__content-icon hidden', id: 'moon', 'aria-hidden':'true'  })  }}
+					<div id="themeToggle" class="site-header__toggle">
+						{{ ux_icon('fa:toggle-on', { class: 'theme-toggle__icon-on hidden', id: 'iconOn', 'aria-hidden':'true'  }) }}
+						{{ ux_icon('fa:toggle-off', { class: 'theme-toggle__icon-off', id: 'iconOff', 'aria-hidden':'true'  }) }}
+					</div>
+				</button>
+			</div>
+		{# </div> #}
 	</div>
 
 

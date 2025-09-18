@@ -4,27 +4,27 @@
 
 .home-user {
     &__walk--card {
-        @include card(100%, row, space-between, 0);
+        @include card(100%, row, space-between, $size-10);
         padding: $size-10;
 
         .home-user__walk-wrapper {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             gap: $size-10;
         }
 
         .home-user__walk-accent {
-            color: $color-accent;
+            color: var(--accent);
             font-weight: 600;
             text-align: center;
         }
     }
 
     &__dog--card {
-        @include card(85%, column, space-between, $size-20);
-        padding: $size-20 $size-30;
+        @include card(85%, column, space-between, 0);
+        padding: $size-20 $size-20;
     }
 
     &__trail-card {
@@ -45,6 +45,11 @@
     }
 
     &__trail-item {
+        @include card-item($size-10);
+    }
+    &__dog-item {
+        justify-content: end;
+        width: 100%;
         @include card-item($size-10);
     }
 

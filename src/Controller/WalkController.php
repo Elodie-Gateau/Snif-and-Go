@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Walk;
+use App\Entity\User;
 use App\Form\WalkType;
 use App\Repository\TrailRepository;
 use App\Repository\WalkRepository;
@@ -29,6 +30,10 @@ final class WalkController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, TrailRepository $trailRepository): Response
     {
         $user = $this->getUser();
+        if (!$user instanceof User  || $user->getDogs()->isEmpty()) {
+            $this->addFlash('notice', 'Vous devez ajouter au moins un chien avant de planifier une balade.');
+            return $this->redirectToRoute('app_home');
+        }
         $trail = null;
         $walk = new Walk();
         $trailId = $request->query->getInt('trailId', 0);
@@ -36,7 +41,13 @@ final class WalkController extends AbstractController
             $trail = $trailRepository->find($trailId);
             if ($trail) {
                 $walk->setTrail($trail);
+            } else {
+                $this->addFlash('warning', "Aucun itinéraire ne correspond pour cette balade");
+                return $this->redirectToRoute('app_home');
             }
+        } else {
+            $this->addFlash('warning', "Vous n'avez choisi aucun itinéraire pour votre balade");
+            return $this->redirectToRoute('app_home');
         }
 
         $walk->setUser($user);

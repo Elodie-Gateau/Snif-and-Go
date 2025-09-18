@@ -43,13 +43,17 @@ final class WalkRegistrationController extends AbstractController
 
         $validRegisters = $walkRegistrationRepository->findValidRegisters($walk);
 
-
-        $form = $this->createForm(
-            WalkRegistrationType::class,
-            $walkRegistration,
-            ['dogs' => $availableDogs]
-        );
-        $form->handleRequest($request);
+        if ($walk->getMaxDogs() - count($validRegisters) > 0) {
+            $form = $this->createForm(
+                WalkRegistrationType::class,
+                $walkRegistration,
+                ['dogs' => $availableDogs]
+            );
+            $form->handleRequest($request);
+        } else {
+            $this->addFlash('notice', "Cette balade n'a plus de places disponibles");
+            return $this->redirectToRoute('app_home');
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($walkRegistration);

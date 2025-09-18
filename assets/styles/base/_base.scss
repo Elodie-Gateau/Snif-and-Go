@@ -9,6 +9,7 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
     min-height: 100vh;
 }
 
@@ -49,14 +50,14 @@ button {
     background-color: transparent;
 }
 
-.site-header__toggle {
-    cursor: pointer;
-
-    color: var(--title);
-}
-
 @media (min-width: $md) {
     main {
         padding: $size-20;
+    }
+}
+
+@media (min-width: $lg) {
+    main {
+        max-width: 800px;
     }
 }

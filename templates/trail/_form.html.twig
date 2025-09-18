@@ -146,6 +146,13 @@
 
 	{{ form_rest(form) }}
 
-	<button class="add-trail__form-submit">{{ button_label|default("Ajouter l'itinéraire") }}</button>
+{% if noDogs %}
+  <p class="form-hint">
+    Vous devez <a href="{{ path('app_dog_new') }}">ajouter au moins un chien</a>
+    avant de créer un itinéraire.
+  </p>
+{% endif %}
+
+	<button class="add-trail__form-submit" {% if noDogs %}disabled aria-disabled="true" {% endif %}>{{ button_label|default("Ajouter l'itinéraire") }}</button>
 
 	{{ form_end(form) }}

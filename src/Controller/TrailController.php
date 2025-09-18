@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Trail;
 use App\Entity\Photo;
+use App\Entity\User;
 use App\Form\TrailType;
 use App\Repository\TrailRepository;
 use App\Repository\DogRepository;
@@ -101,14 +102,17 @@ final class TrailController extends AbstractController
         GeocodingService $geocoding,
         DistanceService $distanceService,
         GpxService $gpx,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
     ): Response {
 
         $user = $this->getUser();
+
+        if (!$user instanceof User  || $user->getDogs()->isEmpty()) {
+            $this->addFlash('notice', 'Vous devez ajouter au moins un chien avant de créer un itinéraire.');
+            return $this->redirectToRoute('app_home');
+        }
         $trail = new Trail();
         $trail->setUser($user);
-
-
 
         $form = $this->createForm(TrailType::class, $trail)->handleRequest($request);
 

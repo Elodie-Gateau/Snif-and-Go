@@ -63,6 +63,7 @@ class Walk
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+
     public function __construct()
     {
         $this->walk_registration = new ArrayCollection();

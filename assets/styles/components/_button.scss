@@ -3,8 +3,6 @@
 .cta__button,
 .register__form-submit,
 .login__form-submit,
-.home-user__button,
-.home-user__button,
 .home-user__trail-search--button,
 .home-user__button,
 .walk-register__button,
@@ -19,7 +17,8 @@
 .trails-search--button,
 .trails-button,
 .walks__button,
-.modal__button-cancel {
+.modal__button-cancel,
+.home-guest__cta-button {
     @include button(
         var(--background-button),
         var(--background-button-hover),
@@ -27,7 +26,8 @@
     );
 }
 
-.modal__button {
+.modal__button,
+.disable {
     @include button(
         var(--background-secondary),
         var(--background-button-hover),
