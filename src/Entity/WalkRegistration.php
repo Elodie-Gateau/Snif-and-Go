@@ -23,12 +23,12 @@ class WalkRegistration
     private ?\DateTime $date_registration = null;
 
     #[ORM\ManyToOne(inversedBy: 'walk_registration')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Assert\NotNull]
     private ?Dog $dog = null;
 
     #[ORM\ManyToOne(inversedBy: 'walk_registration')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Assert\NotNull]
     private ?Walk $walk = null;
 

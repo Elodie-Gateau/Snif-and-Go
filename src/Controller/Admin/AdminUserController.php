@@ -116,7 +116,7 @@ final class AdminUserController extends AbstractController
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager, DeletedUserProvider $deletedUserProvider): Response
+    public function delete(Request $request, UserRepository $userRepository, User $user, EntityManagerInterface $entityManager, DeletedUserProvider $deletedUserProvider): Response
     {
         if (!$this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('CSRF token invalid.');
@@ -128,36 +128,26 @@ final class AdminUserController extends AbstractController
             return $this->redirectToRoute('admin_user_index');
         }
 
-        $dogs = $user->getDogs();
         $trails = $user->getTrails();
-        $walks = $user->getWalks();
         $photos = $user->getPhotos();
 
-        if ($dogs) {
-            foreach ($dogs as $dog) {
-                $dog->setStatus('Inactive');
-                $dog->setUser($deletedUser);
-            }
-        }
+
         if ($trails) {
             foreach ($trails as $trail) {
                 $trail->setUser($deletedUser);
             }
         }
-        if ($walks) {
-            foreach ($walks as $walk) {
-                $walk->setStatus('Inactive');
-                $walk->setUser($deletedUser);
-            }
-        }
+
         if ($photos) {
             foreach ($photos as $photo) {
                 $photo->setUser($deletedUser);
             }
         }
-        $entityManager->flush();
+
+        $userRepository->delete($user);
         $entityManager->remove($user);
         $entityManager->flush();
+
 
         $this->addFlash('success', 'Utilisateur supprimé, contenus ré-attribués.');
         return $this->redirectToRoute('admin_user_index');
