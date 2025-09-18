@@ -6,8 +6,8 @@
     @include infos-main($size-30);
 
     &__user {
-        @include infos-desc;
         width: 100%;
+        @include infos-desc;
 
         &-item {
             @include infos-item;

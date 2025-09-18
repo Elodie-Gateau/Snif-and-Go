@@ -1,6 +1,5 @@
-@use "../utils/mixins" as *;
 @use "../utils/variables" as *;
-
+@use "../utils/mixins" as *;
 .cta__button,
 .register__form-submit,
 .login__form-submit,
@@ -26,7 +25,6 @@
         var(--background-button-hover),
         var(--text-button)
     );
-    align-self: center;
 }
 
 .modal__button {
@@ -35,7 +33,6 @@
         var(--background-button-hover),
         var(--text)
     );
-    align-self: center;
 }
 
 .trail__form-submit {
