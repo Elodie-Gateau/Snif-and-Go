@@ -116,38 +116,48 @@ final class AdminUserController extends AbstractController
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, UserRepository $userRepository, User $user, EntityManagerInterface $entityManager, DeletedUserProvider $deletedUserProvider): Response
-    {
+    public function delete(
+        Request $request,
+        UserRepository $userRepository,
+        User $user,
+        EntityManagerInterface $entityManager,
+        DeletedUserProvider $deletedUserProvider
+    ): Response {
+        // Vérification du Csrf Token
         if (!$this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('CSRF token invalid.');
         }
+        // Récupération du compte spécial de réaffectation des données
         $deletedUser = $deletedUserProvider->get();
 
+        // Ce compte spécial ne peut pas être supprimé
         if ($user->getId() === $deletedUser->getId()) {
             $this->addFlash('warning', 'Ce compte spécial ne peut pas être supprimé.');
             return $this->redirectToRoute('admin_user_index');
         }
 
+        // Récupération des trails et photos du user à supprimer
         $trails = $user->getTrails();
         $photos = $user->getPhotos();
 
-
+        // Affectation des données au compte Deleted User
         if ($trails) {
             foreach ($trails as $trail) {
                 $trail->setUser($deletedUser);
             }
         }
-
         if ($photos) {
             foreach ($photos as $photo) {
                 $photo->setUser($deletedUser);
             }
         }
 
+        // Suppression des autres données (dogs, walks et walks registration)
         $userRepository->delete($user);
+
+        // Suppresion du user
         $entityManager->remove($user);
         $entityManager->flush();
-
 
         $this->addFlash('success', 'Utilisateur supprimé, contenus ré-attribués.');
         return $this->redirectToRoute('admin_user_index');

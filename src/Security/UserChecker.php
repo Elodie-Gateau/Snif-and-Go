@@ -20,10 +20,6 @@ final class UserChecker implements UserCheckerInterface
         if ($status === 'Banned') {
             throw new CustomUserMessageAccountStatusException('Votre compte a été banni.');
         }
-
-        // if ($status === 'Inactive') {
-        //     throw new CustomUserMessageAccountStatusException('Your account is inactive.');
-        // }
     }
 
     public function checkPostAuth(UserInterface $user): void

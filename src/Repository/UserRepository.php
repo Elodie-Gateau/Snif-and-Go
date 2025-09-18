@@ -49,20 +49,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             );
 
             $conn->executeStatement(
-                "UPDATE walk_registration wr
-                    JOIN dog d ON d.id = wr.dog_id
-                    SET wr.status = 'Cancelled'
-                    WHERE d.user_id = :user_id
-                    AND wr.status = 'Active';",
+                "UPDATE walk_registration wr JOIN dog d ON d.id = wr.dog_id SET wr.status = 'Cancelled' 
+                WHERE d.user_id = :user_id AND wr.status = 'Active';",
                 ['user_id' => $user->getId()]
             );
 
             $conn->executeStatement(
-                "UPDATE walk_registration wr
-                    JOIN walk w ON walk.id = wr.walk_id
-                    SET wr.status = 'Cancelled'
-                    WHERE w.user_id = :user_id
-                    AND wr.status = 'Active';",
+                "UPDATE walk_registration wr JOIN walk w ON walk.id = wr.walk_id SET wr.status = 'Cancelled' 
+                WHERE w.user_id = :user_id AND wr.status = 'Active';",
                 ['user_id' => $user->getId()]
             );
             $conn->commit();
