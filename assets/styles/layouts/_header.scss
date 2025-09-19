@@ -1,5 +1,15 @@
 @use "../utils/variables" as *;
 @use "../utils/breakpoints" as *;
+html.eco .site-header__logo-img-block {
+    display: none;
+}
+html.eco .site-header__logo-img-block.eco {
+    display: block;
+    width: $size-72;
+}
+html.eco .site-header__logo-img-inline {
+    display: none;
+}
 
 .site-header {
     height: $size-96;
@@ -39,9 +49,17 @@
     &__logo-img-inline {
         display: none;
     }
+
     &__logo-img-block {
         display: block;
         width: $size-72;
+    }
+    &__logo-img-inline.eco {
+        display: none;
+    }
+
+    &__logo-img-block.eco {
+        display: none;
     }
 
     &__wrapper {
@@ -186,6 +204,14 @@
     }
 }
 @media (min-width: $lg) {
+    html.eco .site-header__logo-img-inline.eco {
+        display: block;
+        height: $size-64;
+    }
+    html.eco .site-header__logo-img-block.eco {
+        display: none;
+        width: $size-72;
+    }
     .site-header {
         height: 9rem;
         display: flex;

@@ -1,13 +1,15 @@
 @font-face {
     font-family: "Fredoka";
-    src: url("../fonts/Fredoka/Fredoka-VariableFont_wdth,wght.ttf")
+    src: url("../fonts/Fredoka/Fredoka-VariableFont_wdth,wght.woff2")
         format("truetype-variations");
     font-weight: 100 900;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Inter";
-    src: url("../fonts/Inter/Inter-VariableFont_opsz,wght.ttf")
+    src: url("../fonts/Inter/Inter-VariableFont_opsz,wght.woff2")
         format("truetype-variations");
     font-weight: 100 900;
+    font-display: swap;
 }

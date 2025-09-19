@@ -15,6 +15,12 @@
 			<div class="home-user__container">
 				<div class="home-user__wrapper">
 					<div class="home-user__intro">
+						<img class="home-user__intro-bg" src="{{ asset('images/photo-accueil-user.webp') }}" 
+						
+						width="360" height="240" 
+						fetchpriority="high" 
+						decoding="async" 
+						alt="Image d'un jeune chien qui sourit" aria-hidden="true">
 						<div class="home-user__intro-wrapper">
 							<p class="home-user__intro-content">Bienvenue sur votre espace. Ici, vous pouvez accédez à toutes les fonctionnalités de Snif&nbsp;&amp;&nbsp;Go.
 							</p>
@@ -39,7 +45,12 @@
 										<div class="home-user__dog-photo-container">
 											{% set dogPhotoClass = ['home-user__dog-photo', dog.sex] | join(' ') %}
 											{% if dog.photo %}
-												<img loading="lazy" class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}" alt = "Portrait de {{ dog.name }}">
+												<img loading="lazy" 
+												decoding="async"
+												class="{{ dogPhotoClass }}"
+												width="320" height="320"
+												src="{{ asset('uploads/images/' ~ dog.photo)}}" 
+												alt="Portrait de {{ dog.name }}">
 											{% else %}
 												{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
 											{% endif %}
@@ -88,7 +99,8 @@
 										{% set spots = spotsByWalk[walk.id]  %}
 										<a class="home-user__button {{ spots > 0 ? " " : " disable" }}" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ spots > 0 ? "S'inscrire" : "Complet" }}</a>
 
-										<p class="home-user__walk-accent">{{ spots }} place{{ spots > 1 ? "s" : "" }}
+										<p class="home-user__walk-accent">{{ spots }}
+											place{{ spots > 1 ? "s" : "" }}
 											restante{{ spots > 1 ? "s" : "" }}
 										</p>
 									</div>
@@ -111,8 +123,10 @@
 				<a class="home-user__button" href="{{ path('app_trail_new') }}">Ajouter un itinéraire</a>
 			</div>
 
-			<div class="home-user__trail-search">
+			<div
+				class="home-user__trail-search">
 
+				{# Formulaire de recherche de trail #}
 				{{ form_start(form, {method: 'post',action: path('app_home'),attr: { class: 'home-user__trail-form', 'data-turbo': 'false' }}) }}
 				<div class="home-user__trail-search-bar">
 
@@ -128,6 +142,7 @@
 					</div>
 				</div>
 
+				{# Filtres de recherche avancés #}
 				<div id="trail-advanced" class="home-user__trail-search--advanced hidden">
 					<fieldset aria-describedby="filtres-help">
 						<legend>Filtres avancés</legend>
@@ -181,7 +196,7 @@
 								</div>
 							{% endif %}
 						</div>
-
+						{# 
 						<div class="home-user__trail-search--advanced-item">
 							{{ form_label(form.minScore)}}
 							{{ form_widget(form.minScore)}}
@@ -200,7 +215,7 @@
 									{{ form_errors(form.maxScore)}}
 								</div>
 							{% endif %}
-						</div>
+						</div> #}
 						<div class="home-user__trail-search--advanced-button">
 							<button class="home-user__button">Rechercher</button>
 						</div>
@@ -209,18 +224,24 @@
 				</fieldset>
 			</div>
 
+			{# Compteur de résultats #}
+			{# <p id="search-result-count" role="status" aria-live="polite" class="visually-hidden"></p> #}
 
-			<p id="search-result-count" role="status" aria-live="polite" class="visually-hidden"></p>
-
-			<ul class="home-user__trail-search--results" role="list" aria-label="Résultats de recherche" aria-relevant="additions removals">
-				{% if foundTrails is defined and foundTrails|length > 0 %}
+			{# Résultats #}
+				<ul class="home-user__trail-search--results" role="list" aria-label="Résultats de recherche" aria-relevant="additions removals"> {% if foundTrails is defined and foundTrails|length > 0 %}
 					{% for trail in foundTrails %}
 						{% if trail.status == "Active" %}
 							<li class="home-user__trail-card">
 								{% if trail.photos|length > 0 %}
-									<img loading="lazy" class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
+									<img loading="lazy" 
+									decoding="async" 
+									width="480" 
+									height="320" 
+									class="home-user__trail-photo" 
+									src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" 
+									alt="Photo de l'itinéraire {{ trail.name }}">
 								{% else %}
-									<img loading="lazy" class="home-user__trail-photo" src="{{ asset('images/photo-trail-default.webp') }}" alt="Photo de l'itinéraire {{ trail.name }}">
+									<img loading="lazy" decoding="async" width = "480" height="320" class="home-user__trail-photo" src="{{ asset('images/photo-trail-default.webp') }}" alt="Photo d'une carte routière'">
 								{% endif %}
 								<p class="home-user__trail-name">
 									<strong>{{ trail.name }}</strong>
@@ -289,15 +310,28 @@
 	{% else %}
 		<section class="home-guest">
 			<div class="home-guest__hero">
-				<img loading="lazy" class="home-guest__hero-img" src="{{ asset('images/hero-picture.webp') }}" alt="Deux femmes se baladent avec leurs chiens.">
+				<img class="home-guest__hero-img" src="{{ asset('images/hero-picture.webp') }}" 
+				width="1280" 
+				height="720" 
+				fetchpriority="high" 
+				decoding="async" 
+				alt="Deux femmes se baladent avec leurs chiens.">
 				<h1 class="home-guest__hero-title">Bienvenue sur Snif &amp;Go</h1>
 				<h2 class="home-guest__hero-subtitle">Plus de chiens, plus de fun !</h2>
 			</div>
 
 			<div class="home-guest__intro">
 				<div class="home-guest__intro-container">
-					<img loading="lazy" class="home-guest__intro-img" src="{{ asset('images/capture-homelog.webp') }}" alt="Capture d'écran du site Snif &amp;Go">
-					<img loading="lazy" class="home-guest__intro-img" src="{{ asset('images/capture-home.webp') }}" alt="Capture d'écran du site Snif &amp;Go">
+					<img loading="lazy" decoding="async"
+						class="home-guest__intro-img"
+						src="{{ asset('images/capture-homelog.webp') }}"
+						width="640" height="400"
+						alt="Capture d'écran du site Snif &amp;Go">
+					<img loading="lazy" decoding="async"
+						class="home-guest__intro-img"
+						src="{{ asset('images/capture-home.webp') }}"
+						width="640" height="400"
+						alt="Capture d'écran du site Snif &amp;Go">	
 				</div>
 				<div class="home-guest__intro-description">
 					<p class="home-guest__intro-content">Snif &amp;Go est une plateforme communautaire où chaque utilisateur peut créer un compte, inscrire son chien et participer à des balades organisées par d'autres membres.</p>

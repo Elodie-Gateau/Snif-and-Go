@@ -49,6 +49,7 @@ button {
     border: 0;
     background-color: transparent;
 }
+
 :where(a, button, input, select, textarea) {
     outline: none;
 }

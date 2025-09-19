@@ -4,8 +4,6 @@ const gpxSection = document.querySelector("[data-section='gpx']");
 const manualSection = document.querySelector("[data-section='manual']");
 
 if (inputModeSelectGpx || inputModeSelectManuel) {
-    console.log("toggleSections init");
-
     inputModeSelectGpx.addEventListener("click", () => {
         gpxSection.classList.remove("hidden");
         manualSection.classList.add("hidden");
@@ -15,6 +13,4 @@ if (inputModeSelectGpx || inputModeSelectManuel) {
         gpxSection.classList.add("hidden");
         manualSection.classList.remove("hidden");
     });
-} else {
-    console.log("Aucun input trouvé mais newTrail.js bien chargé");
 }

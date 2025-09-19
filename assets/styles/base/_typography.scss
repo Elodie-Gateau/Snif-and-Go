@@ -2,37 +2,33 @@
 @use "../utils/breakpoints" as *;
 
 body {
-    font-family: "Inter", sans-serif;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
     font-size: $size-14;
     line-height: 1.6;
 }
-
 h1,
 h2 {
-    font-family: "Fredoka", sans-serif;
+    font-family: "Fredoka", system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
     font-weight: 700;
     line-height: 1.2;
 }
-
 h1 {
     font-size: $size-32;
     text-align: center;
 }
-
 h2 {
     font-size: $size-24;
     text-align: center;
 }
-
 @media (min-width: $md) {
     body {
         font-size: $size-16;
     }
-
     h1 {
         font-size: $size-40;
     }
-
     h2 {
         font-size: $size-32;
     }
@@ -41,7 +37,6 @@ h2 {
     h1 {
         font-size: $size-48;
     }
-
     h2 {
         font-size: $size-36;
     }

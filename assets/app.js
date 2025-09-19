@@ -18,12 +18,9 @@ function init() {
     if (start || end) {
         try {
             initCityAutocomplete();
-            console.log("[cities] init ok");
         } catch (e) {
             console.error("[cities] init failed:", e);
         }
-    } else {
-        console.log("[cities] no form on page");
     }
 }
 

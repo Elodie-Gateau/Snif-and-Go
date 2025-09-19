@@ -2,8 +2,6 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import { French } from "flatpickr/dist/l10n/fr.js";
 
-console.log("[flatpickr] module loaded");
-
 const sel = ".add-walk__form-input-date";
 const inputs = document.querySelectorAll(sel);
 

@@ -53,17 +53,17 @@ final class TrailSearchType extends AbstractType
                 'label' => 'Durée de la balade maximale (en minutes)',
                 'label_attr' => ['class' => 'home-user__trail--search-label'],
                 'attr' => ['class' => 'home-user__trail--search-input']
-            ])
-            ->add('minScore', IntegerType::class, [
-                'label' => 'Score minimum',
-                'label_attr' => ['class' => 'home-user__trail--search-label'],
-                'attr' => ['class' => 'home-user__trail--search-input']
-            ])
-            ->add('maxScore', IntegerType::class, [
-                'label' => 'Score maximum',
-                'label_attr' => ['class' => 'home-user__trail--search-label'],
-                'attr' => ['class' => 'home-user__trail--search-input']
             ]);
+        // ->add('minScore', IntegerType::class, [
+        //     'label' => 'Score minimum',
+        //     'label_attr' => ['class' => 'home-user__trail--search-label'],
+        //     'attr' => ['class' => 'home-user__trail--search-input']
+        // ])
+        // ->add('maxScore', IntegerType::class, [
+        //     'label' => 'Score maximum',
+        //     'label_attr' => ['class' => 'home-user__trail--search-label'],
+        //     'attr' => ['class' => 'home-user__trail--search-input']
+        // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

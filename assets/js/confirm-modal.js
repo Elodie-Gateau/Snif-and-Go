@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!btn) return;
 
         e.preventDefault();
-        console.log(btn);
         // Récupère les données
         const url = btn.dataset.url;
         const token = btn.dataset.token;
