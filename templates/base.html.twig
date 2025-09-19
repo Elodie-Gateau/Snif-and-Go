@@ -7,11 +7,14 @@
 			{% block title %}Welcome!
 			{% endblock %}
 		</title>
+		{% block meta_description %}
+			<meta name="description" content="Snif &amp; Go : trouvez et partagez des itinéraires de promenade pour chiens, près de chez vous. Recherchez par distance, durée et accessibilité.">
+		{% endblock %}
 		<link rel="icon" type="image/png" href="{{ asset('icons/image.png') }}">
 		{% block stylesheets %}
 			<link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
-			
-			<scriptsrc="https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js" defer ></script>
+
+			<scriptsrc="https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js" defer></script>
 		{% endblock %}
 
 		{% block javascripts %}
@@ -23,16 +26,16 @@
 	</head>
 	<body>
 
-	{# Skip link #}
-	<a class="skip-link" href="#contenu">Aller au contenu</a>
-		
-	{# Header #}
-	{% block header %}
-		{% include 'layout/header.html.twig' %}
-	{% endblock %}
+		{# Skip link #}
+		<a class="skip-link" href="#contenu">Aller au contenu</a>
 
-	{# Main #}
-	<main id="contenu" tabindex="-1">
+		{# Header #}
+		{% block header %}
+			{% include 'layout/header.html.twig' %}
+		{% endblock %}
+
+		{# Main #}
+		<main id="contenu" tabindex="-1">
 			{% block flash %}
 				<div class="flash">
 					{% for label, messages in app.flashes %}
@@ -45,16 +48,16 @@
 				</div>
 			{% endblock %}
 			{% block body %}{% endblock %}
-	</main>
+		</main>
 
-	{# Footer #}
-	{% block footer %}
-		{% include 'layout/footer.html.twig' %}
-	{% endblock %}
+		{# Footer #}
+		{% block footer %}
+			{% include 'layout/footer.html.twig' %}
+		{% endblock %}
 
-	{# Modale #}
-	{% block modals %}
-		{% include 'components/confirm_modal.html.twig' %}
-	{% endblock %}
+		{# Modale #}
+		{% block modals %}
+			{% include 'components/confirm_modal.html.twig' %}
+		{% endblock %}
 	</body>
 </html>
