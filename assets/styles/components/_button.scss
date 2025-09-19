@@ -1,24 +1,6 @@
 @use "../utils/variables" as *;
 @use "../utils/mixins" as *;
-.cta__button,
-.register__form-submit,
-.login__form-submit,
-.home-user__trail-search--button,
-.home-user__button,
-.walk-register__button,
-.add-dog__form-submit,
-.add-trail__form-submit,
-.trail__button,
-.trail__form-submit,
-.next-walks__button,
-.add-walk__form-submit,
-.profile__button,
-.profile__trail-button,
-.trails-search--button,
-.trails-button,
-.walks__button,
-.modal__button-cancel,
-.home-guest__cta-button {
+.btn {
     @include button(
         var(--background-button),
         var(--background-button-hover),
@@ -26,7 +8,6 @@
     );
 }
 
-.modal__button,
 .disable {
     @include button(
         var(--background-secondary),
@@ -35,17 +16,6 @@
     );
 }
 
-.trail__form-submit {
-    @include button(
-        $color-accent,
-        var(--background-button-hover),
-        var(--text-button)
-    );
-}
-
-.trail__button-delete,
-.profile__trail-button-delete,
-.profile__dog-button-delete,
-.edit-dog__button-delete {
+.del {
     @include delete-button(var(--background-button));
 }

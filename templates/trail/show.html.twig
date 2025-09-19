@@ -95,7 +95,7 @@
 					{{ form_errors(form.photoFiles) }}
 				</div>
 
-				<button type="submit" class="trail__form-submit">Valider</button>
+				<button type="submit" class="trail__form-submit btn">Valider</button>
 
 				{{ form_end(form) }}
 			</div>
@@ -111,7 +111,7 @@
 				</div>
 			{% endif %}
 			{% if not nextWalks %}
-				<a class="next-walks__button" href="{{ path('app_walk_new', { trailId: trail.id }) }}">Programmer une balade</a>
+				<a class="next-walks__button btn" href="{{ path('app_walk_new', { trailId: trail.id }) }}">Programmer une balade</a>
 			{% endif %}
 
 		</div>
@@ -120,7 +120,7 @@
 	{% if nextWalks and nextWalks|length > 0 %}
 		<section class="next-walks">
 			<h1 class="next-walks__title">Les balades à venir</h1>
-			<a class="next-walks__button" href="{{ path('app_walk_new', { trailId: trail.id }) }}">Programmer une balade</a>
+			<a class="next-walks__ btn" href="{{ path('app_walk_new', { trailId: trail.id }) }}">Programmer une balade</a>
 			<div class="next-walks__wrapper">
 				{% for walk in nextWalks %}
 
@@ -131,7 +131,7 @@
 							place{{ walk.maxDogs - walk.walkRegistration|length > 1 ? "s" : "" }}
 							restantes</p>
 
-						<a href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}" class="next-walks__button">S'inscrire</a>
+						<a href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}" class="next-walks__button btn">S'inscrire</a>
 					</div>
 				{% endfor %}
 			</div>
@@ -140,13 +140,13 @@
 	<section class="trail__actions">
 		{% if app.user and app.user == trail.user and not nextWalks and nextWalks|length == 0 %}
 			<div class="trail__actions-wrapper">
-				<a class="trail__button" href="{{ path('app_trail_edit', {'id': trail.id}) }}">Modifier</a>
+				<a class="trail__button btn" href="{{ path('app_trail_edit', {'id': trail.id}) }}">Modifier</a>
 				<form method="post" class="trail__form-delete" action="{{ path('app_trail_inactive', { 'id': trail.id }) }}">
-					<button type="submit" class="trail__button-delete">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'trail__icon'}) }}</button>
+					<button type="submit" class="trail__button-delete del">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'trail__icon'}) }}</button>
 				</form>
 			</div>
 		{% endif %}
-		<a class="trail__back" href="{{ path('app_trail_index') }}">Retour</a>
+		<a class="trail__back back" href="{{ path('app_trail_index') }}">Retour</a>
 	</section>
 
 {% endblock %}

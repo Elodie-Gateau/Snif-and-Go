@@ -13,10 +13,10 @@
 
 
 		<div class="edit-dog__wrapper">
-			<a class="edit-dog__back" href="{{ path('app_home') }}">Retour</a>
+			<a class="edit-dog__back back" href="{{ path('app_home') }}">Retour</a>
 			<form method="post" class="edit-dog__form-delete" action="{{ path('app_dog_inactive', { 'id': dog.id }) }}">
 				<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ dog.id) }}">
-				<button type="submit" class="edit-dog__button-delete">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__dog-delete-icon'}) }}</button>
+				<button type="submit" class="edit-dog__button-delete del">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'profile__dog-delete-icon'}) }}</button>
 			</form>
 		</div>
 	</section>

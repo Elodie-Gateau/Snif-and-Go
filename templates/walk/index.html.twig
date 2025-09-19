@@ -21,7 +21,7 @@
 							<p class="walks__content">{{ walk.trail.startCity }}</p>
 						</div>
 						<div class="walks__wrapper">
-							<a class="walks__button" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">S'inscrire</a>
+							<a class="walks__button btn" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">S'inscrire</a>
 							<p class="walks__accent">{{ availableSeats }}
 								place{{ availableSeats > 1 ? "s" : "" }}
 								restante{{ availableSeats > 1 ? "s" : "" }}</p>

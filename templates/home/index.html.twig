@@ -32,7 +32,7 @@
 					<div class="home-user__dog">
 						<div class="home-user__dog-wrapper">
 							<h2 class="home-user__dog-title">Mes chiens</h2>
-							<a class="home-user__button" href="{{ path('app_dog_new') }}">Ajouter</a>
+							<a class="home-user__button btn" href="{{ path('app_dog_new') }}">Ajouter</a>
 						</div>
 
 						{% if dogs|length > 0 %}
@@ -73,7 +73,7 @@
 								{% endfor %}
 							</ul>
 							{% if hasMoreDogs %}
-								<a class="home-user__button" href="{{ path('app_profile') }}">Voir plus</a>
+								<a class="home-user__button btn" href="{{ path('app_profile') }}">Voir plus</a>
 							{% endif %}
 						{% else %}
 							<p>Aucun chien n'est encore inscrit</p>
@@ -97,7 +97,7 @@
 									</div>
 									<div class="home-user__walk-wrapper">
 										{% set spots = spotsByWalk[walk.id]  %}
-										<a class="home-user__button {{ spots > 0 ? " " : " disable" }}" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ spots > 0 ? "S'inscrire" : "Complet" }}</a>
+										<a class="home-user__button {{ spots > 0 ? " btn" : " disable btn" }}" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ spots > 0 ? "S'inscrire" : "Complet" }}</a>
 
 										<p class="home-user__walk-accent">{{ spots }}
 											place{{ spots > 1 ? "s" : "" }}
@@ -112,7 +112,7 @@
 					{% endif %}
 
 					{% if hasMoreWalks %}
-						<a class="home-user__button" href="{{ path('app_walk_index') }}">Voir plus</a>
+						<a class="home-user__button btn" href="{{ path('app_walk_index') }}">Voir plus</a>
 					{% endif %}
 				</div>
 			</div>
@@ -120,7 +120,7 @@
 		<div class="home-user__trail">
 			<div class="home-user__trail-wrapper">
 				<h2 class="home-user__trail-title">Rechercher une balade</h2>
-				<a class="home-user__button" href="{{ path('app_trail_new') }}">Ajouter un itinéraire</a>
+				<a class="home-user__button btn" href="{{ path('app_trail_new') }}">Ajouter un itinéraire</a>
 			</div>
 
 			<div
@@ -133,7 +133,7 @@
 					{{ form_widget(form.search, {'id': 'search-trails-home',attr: { 'data-url': path('app_trail_live_search'), 'autocomplete': 'off' }}) }}
 
 					<div class="home-user__trail-search-item">
-						<button class="home-user__trail-search--button">Rechercher</button>
+						<button class="home-user__trail-search--button btn">Rechercher</button>
 
 						<button class="home-user__trail-search--link" type="button" id="toggle-advanced" aria-expanded="false" aria-controls="trail-advanced">
 							Afficher plus de critères
@@ -217,7 +217,7 @@
 							{% endif %}
 						</div> #}
 						<div class="home-user__trail-search--advanced-button">
-							<button class="home-user__button">Rechercher</button>
+							<button class="home-user__button btn">Rechercher</button>
 						</div>
 					</div>
 					{{ form_end(form) }}
@@ -285,7 +285,7 @@
 											</div>
 										{% endif %}
 									</div>
-									<a class="home-user__button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
+									<a class="home-user__button btn" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
 
 								</li>
 
@@ -302,7 +302,7 @@
 
 			</div>
 			{% if hasMoreTrails|length > 0 %}
-				<a class="home-user__button" href="{{ path('app_trail_index') }}">Voir plus</a>
+				<a class="home-user__button btn" href="{{ path('app_trail_index') }}">Voir plus</a>
 			{% endif %}
 		</section>
 
@@ -349,7 +349,7 @@
 			</div>
 
 			<div class="home-guest__cta">
-				<a class="home-guest__cta-button" href="{{ path('app_register') }}">Créer mon compte</a>
+				<a class="home-guest__cta-button btn" href="{{ path('app_register') }}">Créer mon compte</a>
 			</div>
 		</section>
 	{% endif %}

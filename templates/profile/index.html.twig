@@ -124,8 +124,8 @@
 							<a class="profile__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__dog-edit-icon' }) }}</a>
 							<form method="post" action="{{ path('app_dog_inactive', {'id': dog.id}) }}">
 								<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ dog.id) }}">
-								<button class="js-delete admin__dogs-icon" data-url="{{ path('app_dog_inactive', {'id': dog.id}) }}" data-token="{{ csrf_token('inactive' ~ dog.id) }}" data-name="le profil de {{ dog.name }}" type="submit">
-									{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__users-icon' }) }}
+								<button class="js-delete profile__dogs-icon" data-url="{{ path('app_dog_inactive', {'id': dog.id}) }}" data-token="{{ csrf_token('inactive' ~ dog.id) }}" data-name="le profil de {{ dog.name }}" type="submit">
+									{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__dogs-icon' }) }}
 								</button>
 							</form>
 						</div>
@@ -193,7 +193,7 @@
 						<div class="profile__trail-wrapper">
 
 							<a class="profile__trail-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__trail-icon' }) }}</a>
-							<a class="profile__trail-button" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter</a>
+							<a class="profile__trail-button btn" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter</a>
 							<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
 								<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ trail.id) }}">
 								<button class="js-delete profile__trail-icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="{{ csrf_token('inactive' ~ trail.id) }}" data-name="l'itinéraire {{ trail.name }}" type="submit">
