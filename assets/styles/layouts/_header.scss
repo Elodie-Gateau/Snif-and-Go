@@ -21,6 +21,21 @@
         grid-column: 1 / 3;
         grid-row: 1 / 3;
     }
+    &__logo > a {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 8px;
+        padding-bottom: $size-10;
+    }
+    &__logo > a:focus-visible {
+        outline: var(--focus-ring);
+        box-shadow: var(--focus-shadow);
+        outline-offset: 4px;
+    }
+    &__logo > a:focus-visible {
+        padding: 0;
+    }
+
     &__logo-img-inline {
         display: none;
     }
@@ -43,12 +58,12 @@
         font-family: "Fredoka";
         font-weight: 600;
         font-size: 1rem;
-        color: $color-secondary;
+        color: var(--title);
         text-align: center;
     }
 
     &__tagline-end {
-        color: $color-accent;
+        color: var(--accent);
     }
 
     &__container {
@@ -208,7 +223,7 @@
             grid-column: 1 / 3;
             grid-row: 1 / 3;
             align-self: start;
-            padding-top: $size-20;
+            padding-top: $size-10;
         }
         &__logo-img-inline {
             display: block;

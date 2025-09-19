@@ -34,12 +34,12 @@
 								{% for dog in dogs %}
 									<li class="home-user__dog--card">
 										<div class="home-user__dog-item">
-											<a class="home-user__dog-edit-icon" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'home-user__dog-edit-icon' }) }}</a>
+											<a class="home-user__dog-edit-icon" aria-label="Modifier {{ dog.name }}" href="{{ path('app_dog_edit', {'id': dog.id}) }}">{{ ux_icon('fa:edit',{ class: 'home-user__dog-edit-icon' }) }}</a>
 										</div>
 										<div class="home-user__dog-photo-container">
 											{% set dogPhotoClass = ['home-user__dog-photo', dog.sex] | join(' ') %}
 											{% if dog.photo %}
-												<img loading="lazy" class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}">
+												<img loading="lazy" class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ dog.photo)}}" alt = "Portrait de {{ dog.name }}">
 											{% else %}
 												{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
 											{% endif %}
@@ -53,7 +53,7 @@
 													Prochaine balade
 													{{ux_icon('fa6-solid:paw', {class: 'home-user__dog-icon'})}}</p>
 												<time datetime="{{ dogNextWalks[dog.id].walk.date|date('c') }}" class="home-user__dog-content">{{ dogNextWalks[dog.id].walk.date|format_datetime('medium','short', locale='fr')}}
-													<a class="home-user__dog-link" href="{{ path('app_walk_registration_show', {'id': dogNextWalks[dog.id].id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
+													<a class="home-user__dog-link" aria-label="Voir la balade de {{ dog.name }}" href="{{ path('app_walk_registration_show', {'id': dogNextWalks[dog.id].id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
 												</time>
 											</div>
 										{% endif %}
@@ -124,7 +124,7 @@
 						<button class="home-user__trail-search--link" type="button" id="toggle-advanced" aria-expanded="false" aria-controls="trail-advanced">
 							Afficher plus de critères
 						</button>
-						<a class="home-user__trail-reset" href="{{ path('app_home') }}">{{ ux_icon('system-uicons:reset', {class:'home-user__trail-icon'}) }}</a>
+						<a class="home-user__trail-reset" aria-label="Réinitialiser la recherche" href="{{ path('app_home') }}">{{ ux_icon('system-uicons:reset', {class:'home-user__trail-icon'}) }}</a>
 					</div>
 				</div>
 
@@ -212,7 +212,7 @@
 
 			<p id="search-result-count" role="status" aria-live="polite" class="visually-hidden"></p>
 
-			<ul class="home-user__trail-search--results" role="listbox" aria-label="Résultats de recherche" aria-live="polite" aria-relevant="additions removals">
+			<ul class="home-user__trail-search--results" role="list" aria-label="Résultats de recherche" aria-relevant="additions removals">
 				{% if foundTrails is defined and foundTrails|length > 0 %}
 					{% for trail in foundTrails %}
 						{% if trail.status == "Active" %}
@@ -273,8 +273,8 @@
 						{% endfor %}
 
 					{% else %}
-						<p class="home-user__trail-result-info">
-							Aucun itinéraire trouvé, veuillez ajuster vos critères de recherche</p>
+						<li class="home-user__trail-result-info">
+							Aucun itinéraire trouvé, veuillez ajuster vos critères de recherche</li>
 
 					{% endif %}
 				</ul>

@@ -22,11 +22,18 @@
 		{% endblock %}
 
 	</head>
-	<body data-turbo="false">
-		{% block header %}
-			{% include 'layout/header.html.twig' %}
-		{% endblock %}
-		<main id="contenu">
+	<body>
+
+	{# Skip link #}
+	<a class="skip-link" href="#contenu">Aller au contenu</a>
+		
+	{# Header #}
+	{% block header %}
+		{% include 'layout/header.html.twig' %}
+	{% endblock %}
+
+	{# Main #}
+	<main id="contenu" tabindex="-1">
 			{% block flash %}
 				<div class="flash">
 					{% for label, messages in app.flashes %}
@@ -39,12 +46,16 @@
 				</div>
 			{% endblock %}
 			{% block body %}{% endblock %}
-		</main>
-		{% block footer %}
-			{% include 'layout/footer.html.twig' %}
-		{% endblock %}
-		{% block modals %}
-			{% include 'components/confirm_modal.html.twig' %}
-		{% endblock %}
+	</main>
+
+	{# Footer #}
+	{% block footer %}
+		{% include 'layout/footer.html.twig' %}
+	{% endblock %}
+
+	{# Modale #}
+	{% block modals %}
+		{% include 'components/confirm_modal.html.twig' %}
+	{% endblock %}
 	</body>
 </html>

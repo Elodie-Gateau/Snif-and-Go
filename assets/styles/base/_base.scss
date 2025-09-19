@@ -49,7 +49,39 @@ button {
     border: 0;
     background-color: transparent;
 }
+:where(a, button, input, select, textarea) {
+    outline: none;
+}
 
+:where(a, button, input, select, textarea):focus-visible {
+    outline: var(--focus-ring);
+    box-shadow: var(--focus-shadow);
+    border-radius: 6px;
+    padding: $size-10;
+}
+
+a:focus-visible {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+}
+.skip-link {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--background-button);
+    color: var(--text-button);
+    border-radius: 0.5rem;
+    z-index: 1000;
+    transform: translateY(-150%);
+    transition: transform 0.15s ease;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 2px solid var(--text-button);
+    box-shadow: 0 0 0 4px var(--shadow);
+}
 @media (min-width: $md) {
     main {
         padding: $size-20;

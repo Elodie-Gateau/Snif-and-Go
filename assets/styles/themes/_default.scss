@@ -34,4 +34,6 @@
     --ban-bg: #{$color-ban-bg};
     --toggle-off: #{$color-gray-200};
     --shadow: #{$color-gray-200};
+    --focus-ring: 2px solid #{$color-focus-ring};
+    --focus-shadow: 0 0 0 4px #{$color-focus-shadow};
 }
