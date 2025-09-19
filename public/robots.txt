@@ -2,11 +2,6 @@
 
 User-agent: *
 
-Allow: /$
-Allow: /login
-Allow: /register
-Allow: /mentions-legales
-
 Disallow: /profile
 Disallow: /admin
 Disallow: /new
@@ -14,6 +9,6 @@ Disallow: /edit
 Disallow: /dog
 Disallow: /walk
 Disallow: /trail
-Disallow: /*?
+
 
 Sitemap: http://http://dev02.arinfo.ovh/sitemap.xml
