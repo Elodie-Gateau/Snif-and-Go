@@ -144,7 +144,7 @@
 						{% if trail.photos|length > 0 %}
 							<img class="profile__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
 						{% else %}
-							<img class="profile__trail-photo" src="{{ asset('images/photo-trail-default.jpg') }}" alt="Photo de l'itinéraire {{ trail.name }}">
+							<img class="profile__trail-photo" src="{{ asset('images/photo-trail-default.webp') }}" alt="Photo de l'itinéraire {{ trail.name }}">
 						{% endif %}
 						<p class="profile__trail-name">
 							<strong>{{ trail.name }}</strong>
