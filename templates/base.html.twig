@@ -4,17 +4,18 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>
-			{% block title %}Welcome!
-			{% endblock %}
+			{% block title %}Snif &amp; Go{% endblock %}
 		</title>
 		{% block meta_description %}
-			<meta name="description" content="Snif &amp; Go : trouvez et partagez des itinéraires de promenade pour chiens, près de chez vous. Recherchez par distance, durée et accessibilité.">
+			<meta name="description" content="Snif &amp; Go : 
+			trouvez et partagez des itinéraires de promenade pour chiens, près de chez vous. 
+			Inscrivez-vous avec vos chiens pour des rendez-vous à ne pas manquer !">
 		{% endblock %}
 		<link rel="icon" type="image/png" href="{{ asset('icons/image.png') }}">
 		{% block stylesheets %}
 			<link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
 
-			<scriptsrc="https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js" defer></script>
+			<script src="https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js" defer></script>
 		{% endblock %}
 
 		{% block javascripts %}

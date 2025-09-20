@@ -15,19 +15,19 @@
 			<div class="home-user__container">
 				<div class="home-user__wrapper">
 					<div class="home-user__intro">
-						<img class="home-user__intro-bg" src="{{ asset('images/photo-accueil-user.webp') }}" 
-						
-						width="360" height="240" 
-						fetchpriority="high" 
-						decoding="async" 
-						alt="Image d'un jeune chien qui sourit" aria-hidden="true">
+						<img class="home-user__intro-bg" 
+							src="{{ asset('images/photo-accueil-user.webp') }}" 
+							width="360" height="240" 
+							fetchpriority="high" 
+							decoding="async" 
+							alt="Image d'un jeune chien qui sourit" 
+							aria-hidden="true">
 						<div class="home-user__intro-wrapper">
 							<p class="home-user__intro-content">Bienvenue sur votre espace. Ici, vous pouvez accédez à toutes les fonctionnalités de Snif&nbsp;&amp;&nbsp;Go.
 							</p>
 							<p class="home-user__intro-content">Bonne balade&nbsp;!</p>
 						</div>
 					</div>
-
 
 					<div class="home-user__dog">
 						<div class="home-user__dog-wrapper">
@@ -45,12 +45,13 @@
 										<div class="home-user__dog-photo-container">
 											{% set dogPhotoClass = ['home-user__dog-photo', dog.sex] | join(' ') %}
 											{% if dog.photo %}
-												<img loading="lazy" 
-												decoding="async"
-												class="{{ dogPhotoClass }}"
-												width="320" height="320"
-												src="{{ asset('uploads/images/' ~ dog.photo)}}" 
-												alt="Portrait de {{ dog.name }}">
+												<img 
+													loading="lazy" 
+													decoding="async"
+													class="{{ dogPhotoClass }}"
+													width="320" height="320"
+													src="{{ asset('uploads/images/' ~ dog.photo)}}" 
+													alt="Portrait de {{ dog.name }}">
 											{% else %}
 												{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
 											{% endif %}
@@ -235,13 +236,13 @@
 								{% if trail.photos|length > 0 %}
 									<img loading="lazy" 
 									decoding="async" 
-									width="480" 
-									height="320" 
+									width="275" 
+									height="160" 
 									class="home-user__trail-photo" 
 									src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" 
 									alt="Photo de l'itinéraire {{ trail.name }}">
 								{% else %}
-									<img loading="lazy" decoding="async" width = "480" height="320" class="home-user__trail-photo" src="{{ asset('images/photo-trail-default.webp') }}" alt="Photo d'une carte routière'">
+									<img loading="lazy" decoding="async" width = "275" height="160" class="home-user__trail-photo" src="{{ asset('images/photo-trail-default.webp') }}" alt="Photo d'une carte routière'">
 								{% endif %}
 								<p class="home-user__trail-name">
 									<strong>{{ trail.name }}</strong>
