@@ -130,7 +130,7 @@ final class TrailController extends AbstractController
                     $photo->setName($newFilename);
                     try {
                         $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
-                        $publicId = $basenameNoExt;
+                        $publicId = 'snifandgo/uploads/' . $basenameNoExt;
                         $result = $cloudinary->uploadApi()->upload(
                             $this->getParameter('images_directory') . '/' . $newFilename,
                             [
