@@ -15,7 +15,6 @@ final class GpxService
         if (!$xml) {
             return null;
         }
-
         // Si le fichier existe, on déclare un namespace
         $xml->registerXPathNamespace('gpx', 'http://www.topografix.com/GPX/1/1');
 
@@ -29,7 +28,6 @@ final class GpxService
         if (!$points || count($points) < 2) {
             return null;
         }
-
         // On récupère le premier et dernier point et leurs coordonnées
         $first = $points[0];
         $last = $points[count($points) - 1];
@@ -40,9 +38,8 @@ final class GpxService
         $endLon   = (float) $last['lon'];
 
         // On essaye de calculer la distance avec la méthode OSRM
+        $distanceOsrm = null;
         $route = $this->distanceService->osrmFootRoute($startLat, $startLon, $endLat, $endLon);
-
-
         if ($route) {
             $distanceOsrm = $route['distance_m'];
         }
@@ -61,13 +58,13 @@ final class GpxService
             $prevLat = $lat;
             $prevLon = $lon;
         }
-
+        // On retient la méthode la plus cohérente : celle qui a la plus grande distance enregistrée
         if ($distanceOsrm > $distanceHav) {
             $distance = $distanceOsrm;
         } else {
             $distance = $distanceHav;
         }
-
+        // On applique l'estimation de la durée à partir de la distance
         $duration = ($this->distanceService->estimateMinutesFromKm($distance / 1000)) * 60;
 
         return [
