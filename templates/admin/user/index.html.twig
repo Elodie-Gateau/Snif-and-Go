@@ -40,7 +40,7 @@
 			</ul>
 		</div>
 
-		{# GESTION DES USERS #}
+			{# GESTION DES USERS #}
 			<div id="users-list" class="admin__users">
 				<h2 class="admin__users-title">Utilisateurs</h2>
 				<table class="admin__users-table">
@@ -168,7 +168,7 @@
 				</table>
 			</div>
 
-			{# GESTION DES TRAILS #}
+		{# GESTION DES TRAILS #}
 		
 		
 			<div  id="trails-list" class="admin__trails hidden">
@@ -222,12 +222,16 @@
 								<td data-label="Actions">
 									<div class="admin__trails-wrapper">
 										<a class="admin__trails-icon" href="{{ path('app_trail_edit', {'id': trail.id}) }}">{{ ux_icon('fa:edit',{ class: 'admin__trails-edit-icon' }) }}</a>
-										<form method="post" action="{{ path('app_trail_delete', {'id': trail.id}) }}">
-											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trail.id) }}">
-											<button class="js-delete admin__trails-icon" data-url="{{ path('app_trail_delete', {'id': trail.id}) }}" data-token="{{ csrf_token('delete' ~ trail.id) }}" data-name="{{ trail.name }}" type="submit">
-												{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-icon' }) }}
-											</button>
-										</form>
+					<form method="post" action="{{ path('app_trail_delete', {'id': trail.id}) }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trail.id) }}">
+						<button class="js-delete admin__trails-icon" 
+							data-url="{{ path('app_trail_delete', {'id': trail.id}) }}" 
+							data-token="{{ csrf_token('delete' ~ trail.id) }}" 
+							data-name="{{ trail.name }}" 
+							type="submit">
+							{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'admin__trails-icon' }) }}
+						</button>
+					</form>
 									</div>
 								</td>
 							</tr>

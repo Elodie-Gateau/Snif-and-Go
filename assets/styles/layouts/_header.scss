@@ -97,8 +97,9 @@ html.eco .site-header__logo-img-inline {
         position: absolute;
         top: 5rem;
         right: 0;
-        padding: $size-12;
+        padding: $size-16;
         border-radius: 0 0 0 $size-10;
+        background: var(--background-secondary);
     }
 
     &__menu {

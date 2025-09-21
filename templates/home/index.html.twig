@@ -322,9 +322,8 @@
 	{% else %}
 		<section class="home-guest">
 			<div class="home-guest__hero">
-				<img class="home-guest__hero-img" src="{{ asset('images/hero-picture.webp') }}" 
-				width="1280" 
-				height="720" 
+				<img class="home-guest__hero photo" src="{{ asset('images/hero-picture.webp') }}" 
+
 				fetchpriority="high" 
 				decoding="async" 
 				alt="Deux femmes se baladent avec leurs chiens.">
@@ -337,17 +336,16 @@
 					<img loading="lazy" decoding="async"
 						class="home-guest__intro-img"
 						src="{{ asset('images/capture-homelog.webp') }}"
-						width="640" height="400"
+						
 						alt="Capture d'écran du site Snif &amp;Go">
 					<img loading="lazy" decoding="async"
 						class="home-guest__intro-img"
 						src="{{ asset('images/capture-home.webp') }}"
-						width="640" height="400"
+						
 						alt="Capture d'écran du site Snif &amp;Go">	
 				</div>
-				<div class="home-guest__intro-description">
+				{# <div class="home-guest__intro-description"> #}
 					<p class="home-guest__intro-content">Snif &amp;Go est une plateforme communautaire où chaque utilisateur peut créer un compte, inscrire son chien et participer à des balades organisées par d'autres membres.</p>
-
 					<p class="home-guest__intro-content">
 						<strong>L'idée : transformer la promenade quotidienne en moment de partage et de convivialité.</strong>
 					</p>
@@ -357,8 +355,8 @@
 					<p class="home-guest__intro-content">Plus qu'une application, Snif &amp;Go favorise les rencontres : entre maîtres, entre chiens et avec votre environnement local. Offrez à votre compagnon des sorties enrichissantes, et élargissez votre cercle autour d'une passion commune.</p>
 				</div>
 
-				<img loading="lazy" class="home-guest__intro-photo" src="{{ asset('images/photo-intro.webp') }}" alt="Un homme et une femme se baladent avec leur chien">
-			</div>
+				<img loading="lazy" class="home-guest__intro photo" src="{{ asset('images/photo-intro.webp') }}" alt="Un homme et une femme se baladent avec leur chien">
+			{# </div> #}
 
 			<div class="home-guest__cta">
 				<a class="home-guest__cta-button btn" href="{{ path('app_register') }}">Créer mon compte</a>

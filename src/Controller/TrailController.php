@@ -398,12 +398,10 @@ final class TrailController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $trail->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($trail);
             $entityManager->flush();
-
             $this->addFlash('warning', "L'itinéraire a été supprimé");
         } else {
             $this->addFlash('error', 'Jeton CSRF invalide, action annulée.');
         }
-
         return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
