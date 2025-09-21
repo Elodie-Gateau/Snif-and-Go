@@ -1,9 +1,13 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-	<script src="https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js" defer></script>
 {% endblock %}
+{% block page_scripts %}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer data-turbo-track="reload"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js" defer data-turbo-track="reload"></script>
+	<script src="{{ asset('js/trail-map.js') }}" defer data-turbo-track="reload"></script>
+{% endblock %}
+
 {% block title %}Itinéraire
 {% endblock %}
 

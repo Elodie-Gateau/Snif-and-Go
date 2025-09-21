@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block page_scripts %}
+	<script src="{{ asset('js/trail-search.js') }}" defer data-turbo-track="reload"></script>
+{% endblock %}
+
+
 {% block title %}Snif &amp;Go
 {% endblock %}
 

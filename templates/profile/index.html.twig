@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block page_scripts %}
+	<script src="{{ asset('js/profile.js') }}" defer data-turbo-track="reload"></script>
+{% endblock %}
+
 {% block title %}Mon profil
 {% endblock %}
 
