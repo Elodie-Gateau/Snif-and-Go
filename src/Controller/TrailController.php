@@ -267,7 +267,8 @@ final class TrailController extends AbstractController
         Trail $trail,
         EntityManagerInterface $em,
         SluggerInterface $slugger,
-        WalkRepository $walkRepository
+        WalkRepository $walkRepository,
+        Cloudinary $cloudinary
     ): Response {
         $nextWalks = $walkRepository->findNextByTrail(10, $trail);
 
@@ -306,6 +307,28 @@ final class TrailController extends AbstractController
 
                 $photo = new Photo();
                 $photo->setName($filename);
+                try {
+                    $basenameNoExt = pathinfo($filename, PATHINFO_FILENAME);
+                    $publicId = $basenameNoExt;
+                    $result = $cloudinary->uploadApi()->upload(
+                        $this->getParameter('images_directory') . '/' . $filename,
+                        [
+                            'public_id'       => $publicId,
+                            'overwrite'       => false,
+                            'resource_type'   => 'image',
+                            'format'        => 'webp',
+                            'width'         => 300,
+                            'height'        => 160,
+                            'crop'          => 'fit',
+                            'quality'       => 80
+                        ]
+                    );
+
+                    $photo->setCdnLink($result['public_id'] ?? $publicId);
+                } catch (\Throwable $e) {
+
+                    $this->addFlash('notice', "Votre photo est enregistrée");
+                }
                 $photo->setUser($this->getUser());
                 $photo->setTrail($trail);
 

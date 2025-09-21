@@ -17,10 +17,10 @@
 		<h1 class="trail__title">{{ trail.name }}</h1>
 
 		<div class="trail__desc">
-			{% if trail.photos and trail.photos|length > 0 %}
-				<div class="trail__desc-item">
-					<img class="home-user__trail-photo" src="{{ asset('uploads/images/' ~ trail.photos[0].name) }}" alt="Photo de l'itinéraire {{ trail.name }}">
-				</div>
+			{% if trail.photos|length > 0 %}
+				<img class="profile__trail-photo" {% if trail.photos[0].cdnLink %} src="https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto,c_fill,w_275,h_160/{{trail.photos[0].cdnLink}}" {% else %} src="{{ asset('uploads/images/' ~ trail.photos[0].name)}}" {% endif %} alt="Photo de l'itinéraire {{ trail.name }}">
+			{% else %}
+				<img class="profile__trail-photo" src="{{ asset('images/photo-trail-default.webp') }}" alt="Photo de l'itinéraire {{ trail.name }}">
 			{% endif %}
 
 
