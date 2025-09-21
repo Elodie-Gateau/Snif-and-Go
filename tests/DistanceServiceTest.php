@@ -35,7 +35,8 @@ final class DistanceServiceTest extends TestCase
     public function testEstimateMinutesFromKmFail()
     {
         $svc = $this->makeService();
-        $minutes = $svc->estimateMinutesFromKm(9.0, 0);
-        $this->assertSame(120, $minutes);
+        $this->expectException(\InvalidArgumentException::class);
+        $svc->estimateMinutesFromKm(9.0, 0);  // vitesse = 0 -> doit lever une exception
+
     }
 }
