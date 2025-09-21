@@ -50,17 +50,15 @@
 										<div class="home-user__dog-photo-container">
 											{% set dogPhotoClass = ['home-user__dog-photo', dog.sex] | join(' ') %}
 											{% if dog.photo %}
-												<img 
-													loading="lazy"
+												<img loading="lazy"
 													class="{{ dogPhotoClass }}"
-													width="320" height="320"
-													
+													alt="Portrait de {{ dog.name }}"												
 													{% if dog.cdnLink %}
 													src="https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto,c_fill,w_275,h_160/{{dog.cdnLink}}"
 													{% else %}
 													src="{{ asset('uploads/images/' ~ dog.photo)}}"
 													{% endif %}
-													alt="Portrait de {{ dog.name }}">
+													>
 											{% else %}
 												{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
 											{% endif %}

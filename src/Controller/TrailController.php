@@ -118,19 +118,27 @@ final class TrailController extends AbstractController
 
         $form = $this->createForm(TrailType::class, $trail)->handleRequest($request);
 
+        // Si le formumaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-
+            // Si des images sont chargées
             if ($images = $form->get('photoFiles')->getData()) {
                 foreach ($images as $image) {
+                    // Pour chaque image récupère le nom du fichier, l'assainit et construit un nom unique de fichier
                     $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                     $safeFilename = $slugger->slug($originalFilename);
                     $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
+                    // Déplace l'image dans le dossier d'upload
                     $image->move($this->getParameter('images_directory'), $newFilename);
+                    // Création d'une entité Photo
                     $photo = new Photo;
                     $photo->setName($newFilename);
+
                     try {
+                        // Récupère le nom du fichier sans extention
                         $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
+                        // Construit le lien sans extension demandé par Cloudinary
                         $publicId = 'snifandgo/uploads/' . $basenameNoExt;
+                        // Applique les modifications et enregistre dans le cloud Cloudinary l'image
                         $result = $cloudinary->uploadApi()->upload(
                             $this->getParameter('images_directory') . '/' . $newFilename,
                             [
@@ -144,7 +152,7 @@ final class TrailController extends AbstractController
                                 'quality'       => 80
                             ]
                         );
-
+                        // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
                         $photo->setCdnLink($result['public_id'] ?? $publicId);
                     } catch (\Throwable $e) {
 
@@ -309,7 +317,7 @@ final class TrailController extends AbstractController
                 $photo->setName($filename);
                 try {
                     $basenameNoExt = pathinfo($filename, PATHINFO_FILENAME);
-                    $publicId = $basenameNoExt;
+                    $publicId =  'snifandgo/uploads/' . $basenameNoExt;
                     $result = $cloudinary->uploadApi()->upload(
                         $this->getParameter('images_directory') . '/' . $filename,
                         [
