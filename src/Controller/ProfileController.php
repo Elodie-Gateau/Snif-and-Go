@@ -33,7 +33,7 @@ final class ProfileController extends AbstractController
                 $dogs[] = $oneDog;
             }
         }
-        $now = new DateTime('now');
+
 
         $allWalks = $user->getWalks();
         $walks = [];

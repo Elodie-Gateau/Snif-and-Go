@@ -31,18 +31,24 @@ h2 {
     padding: $size-20 0;
 }
 
+h3 {
+    padding: $size-20 0 $size-10 0;
+    color: var(--accent);
+}
+
 li {
     list-style: none;
 }
 
 a {
     text-decoration: none;
-    color: var(--text);
+    color: inherit;
     cursor: pointer;
+    font-weight: 600;
 }
 
 a:hover {
-    color: var(--text);
+    color: var(--accent);
 }
 
 button {

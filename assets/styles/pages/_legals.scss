@@ -2,43 +2,26 @@
 @use "../utils/breakpoints" as *;
 
 .legal {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 1.25rem;
-}
-.legal__header h1 {
-    margin: 0 0 0.25rem;
-}
-.legal__intro {
-    margin: 0 0 1rem;
-}
-.legal__nav ul {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 0.75rem;
-    padding: 0;
-    margin: 0 0 1rem;
-    list-style: none;
+    flex-direction: column;
+    align-items: center;
+    gap: $size-20;
+    padding: $size-10;
+
+    &__article {
+        width: 100%;
+        padding: $size-20 $size-10;
+        background: var(--background-secondary);
+        border-radius: $size-10;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        padding: $size-10 0;
+
+        p:nth-child(1) {
+            font-weight: 600;
+        }
+    }
 }
-.legal__nav a {
-    text-decoration: underline;
-}
-.legal__section {
-    margin: 2rem 0;
-}
-.legal__dl {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 0.5rem 1rem;
-}
-.legal__dl dt {
-    font-weight: 600;
-}
-.legal__dl dd {
-    margin: 0;
-}
-// @media (max-width: 640px) {
-//     .legal__dl {
-//         grid-template-columns: 1fr;
-//     }
-// }
