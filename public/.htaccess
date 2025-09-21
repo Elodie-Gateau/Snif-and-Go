@@ -1,21 +1,40 @@
+# --- Activer mod_rewrite
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 1) Si le fichier demandé existe (image, css, js, font, etc.), le servir directement
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # 2) Sinon, on passe au front controller Symfony
+  RewriteRule ^ index.php [L]
+</IfModule>
+
+# --- Expirations par type (ok en .htaccess)
 <IfModule mod_expires.c>
   ExpiresActive On
+  ExpiresByType image/avif "access plus 1 year"
   ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/png  "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/gif  "access plus 1 month"
   ExpiresByType font/woff2 "access plus 1 year"
-  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/css   "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
 </IfModule>
 
+# --- En-têtes Cache-Control (seulement ce qui est autorisé en .htaccess)
 <IfModule mod_headers.c>
-  # fichiers hashés (Encore) : cache long + immutable
-  <FilesMatch "\-[A-Za-z0-9]{8,}\.(?:css|js|woff2|webp)$">
+  # a) Fichiers hashés (Encore) : cache très long + immutable
+  <FilesMatch "\-[A-Za-z0-9]{8,}\.(?:css|js|woff2|webp|avif)$">
     Header unset Cache-Control
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 
-  # images éditoriales (non hashées)
-  <LocationMatch "^/uploads/|^/assets/images/">
+  # b) Images "éditoriales" non hashées (uploads + assets/images)
+  #    NB: <LocationMatch> est interdit ici, on passe par FilesMatch sur extensions
+  <FilesMatch "\.(?:avif|webp|jpe?g|png|gif)$">
     Header unset Cache-Control
     Header set Cache-Control "public, max-age=2592000"
-  </LocationMatch>
+  </FilesMatch>
 </IfModule>
