@@ -6,6 +6,7 @@ use App\Entity\Trail;
 use App\Entity\Photo;
 use App\Entity\User;
 use App\Form\TrailType;
+use Cloudinary\Cloudinary;
 use App\Repository\TrailRepository;
 use App\Repository\DogRepository;
 use App\Repository\WalkRegistrationRepository;
@@ -103,6 +104,7 @@ final class TrailController extends AbstractController
         DistanceService $distanceService,
         GpxService $gpx,
         SluggerInterface $slugger,
+        Cloudinary $cloudinary
     ): Response {
 
         $user = $this->getUser();
@@ -126,6 +128,28 @@ final class TrailController extends AbstractController
                     $image->move($this->getParameter('images_directory'), $newFilename);
                     $photo = new Photo;
                     $photo->setName($newFilename);
+                    try {
+                        $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
+                        $publicId = $basenameNoExt;
+                        $result = $cloudinary->uploadApi()->upload(
+                            $this->getParameter('images_directory') . '/' . $newFilename,
+                            [
+                                'public_id'       => $publicId,
+                                'overwrite'       => false,
+                                'resource_type'   => 'image',
+                                'format'        => 'webp',
+                                'width'         => 300,
+                                'height'        => 160,
+                                'crop'          => 'fit',
+                                'quality'       => 80
+                            ]
+                        );
+
+                        $photo->setCdnLink($result['public_id'] ?? $publicId);
+                    } catch (\Throwable $e) {
+
+                        $this->addFlash('notice', "Votre photo est enregistrée");
+                    }
                     $photo->setUser($this->getUser());
                     $photo->setTrail($trail);
                     $trail->addPhoto($photo);

@@ -45,6 +45,9 @@ class Photo
     )]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cdnLink = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +109,18 @@ class Photo
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCdnLink(): ?string
+    {
+        return $this->cdnLink;
+    }
+
+    public function setCdnLink(?string $cdnLink): static
+    {
+        $this->cdnLink = $cdnLink;
 
         return $this;
     }

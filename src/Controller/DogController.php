@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Dog;
 use App\Entity\User;
+use Cloudinary\Cloudinary;
 use App\Form\DogType;
 use App\Repository\DogRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,7 +28,7 @@ final class DogController extends AbstractController
     }
 
     #[Route('/new', name: 'app_dog_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(Cloudinary $cloudinary, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $user = $this->getUser();
         if ($user instanceof User && count($user->getDogs()) > 10) {
@@ -54,6 +55,29 @@ final class DogController extends AbstractController
                     $newFilename
                 );
                 $dog->setPhoto($newFilename);
+
+                try {
+                    $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
+                    $publicId = 'snifandgo/uploads/' . $basenameNoExt;
+                    $result = $cloudinary->uploadApi()->upload(
+                        $this->getParameter('images_directory') . '/' . $newFilename,
+                        [
+                            'public_id'       => $publicId,
+                            'overwrite'       => false,
+                            'resource_type'   => 'image',
+                            'format'        => 'webp',
+                            'width'         => 190,
+                            'height'        => 200,
+                            'crop'          => 'fit',
+                            'quality'       => 80
+                        ]
+                    );
+
+                    $dog->setCdnLink($result['public_id'] ?? $publicId);
+                } catch (\Throwable $e) {
+
+                    $this->addFlash('notice', "Votre photo est enregistrée");
+                }
             }
             $entityManager->persist($dog);
             $entityManager->flush();

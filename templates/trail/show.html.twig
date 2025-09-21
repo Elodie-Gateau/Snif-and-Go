@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 {% endblock %}
 {% block page_scripts %}
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer data-turbo-track="reload"></script>
-  <script src="https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js" defer data-turbo-track="reload"></script>
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer data-turbo-track="reload"></script>
+	<script src="https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js" defer data-turbo-track="reload"></script>
 	<script src="{{ asset('js/trail-map.js') }}" defer data-turbo-track="reload"></script>
 {% endblock %}
 
@@ -109,7 +110,7 @@
 					<a class="trail__icon" href="{{ path('app_trail_edit', { 'id': trail.id }) }}">{{ ux_icon('fa:edit', {class: 'trail__icon'}) }}</a>
 					<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
 						<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ trail.id) }}">
-						<button class="js-delete trail__icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="notoken" data-name="l'itinéraire {{ trail.name }}" type="submit">
+						<button class="js-delete trail__icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="{{ csrf_token('inactive' ~ trail.id) }}" data-name="l'itinéraire {{ trail.name }}" type="submit">
 							{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'trail__icon' }) }}
 						</button>
 					</form>
@@ -147,7 +148,8 @@
 			<div class="trail__actions-wrapper">
 				<a class="trail__button btn" href="{{ path('app_trail_edit', {'id': trail.id}) }}">Modifier</a>
 				<form method="post" class="trail__form-delete" action="{{ path('app_trail_inactive', { 'id': trail.id }) }}">
-					<button type="submit" class="trail__button-delete del">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'trail__icon'}) }}</button>
+					<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ trail.id) }}">
+					<button class="js-delete profile__trail-icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="{{ csrf_token('inactive' ~ trail.id) }}" data-name="l'itinéraire {{ trail.name }}" type="submit">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'trail__icon'}) }}</button>
 				</form>
 			</div>
 		{% endif %}

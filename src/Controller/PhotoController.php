@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Photo;
 use App\Form\PhotoType;
+use Cloudinary\Cloudinary;
 use App\Repository\PhotoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +27,7 @@ final class PhotoController extends AbstractController
     }
 
     #[Route('/new', name: 'app_photo_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, Cloudinary $cloudinary): Response
     {
         $photo = new Photo();
         $form = $this->createForm(PhotoType::class, $photo);
@@ -44,6 +45,29 @@ final class PhotoController extends AbstractController
                     $newFilename
                 );
                 $photo->setName($newFilename);
+
+                try {
+                    $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
+                    $publicId = 'snifandgo/uploads/' . $basenameNoExt;
+                    $result = $cloudinary->uploadApi()->upload(
+                        $this->getParameter('images_directory') . '/' . $newFilename,
+                        [
+                            'public_id'       => $publicId,
+                            'overwrite'       => false,
+                            'resource_type'   => 'image',
+                            'format'        => 'webp',
+                            'width'         => 300,
+                            'height'        => 160,
+                            'crop'          => 'fit',
+                            'quality'       => 80
+                        ]
+                    );
+
+                    $photo->setCdnLink($result['public_id'] ?? $publicId);
+                } catch (\Throwable $e) {
+
+                    $this->addFlash('notice', "Votre photo est enregistrée");
+                }
             }
             $entityManager->persist($photo);
             $entityManager->flush();

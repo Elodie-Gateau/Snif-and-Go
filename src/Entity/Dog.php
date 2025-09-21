@@ -73,6 +73,9 @@ class Dog
     #[Assert\Choice(choices: ['Active', 'Inactive'])]
     private ?string $status = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cdnLink = null;
+
     public function __construct()
     {
         $this->walk_registration = new ArrayCollection();
@@ -234,6 +237,18 @@ class Dog
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCdnLink(): ?string
+    {
+        return $this->cdnLink;
+    }
+
+    public function setCdnLink(?string $cdnLink): static
+    {
+        $this->cdnLink = $cdnLink;
 
         return $this;
     }
