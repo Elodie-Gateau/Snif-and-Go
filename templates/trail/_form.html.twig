@@ -153,6 +153,6 @@
   </p>
 {% endif %}
 
-	<button class="add-trail__form-submit" {% if app.user.dogs is null %}disabled aria-disabled="true" {% endif %}>{{ button_label|default("Ajouter l'itinéraire") }}</button>
+	<button class="add-trail__form-submit btn" {% if app.user.dogs is null %}disabled aria-disabled="true" {% endif %}>{{ button_label|default("Ajouter l'itinéraire") }}</button>
 
 	{{ form_end(form) }}
