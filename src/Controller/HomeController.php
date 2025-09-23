@@ -27,8 +27,9 @@ final class HomeController extends AbstractController
 
         $limit = 3;
         $nextWalks = $walkRepository->findNext($limit + 1);
+        $spotsByWalk = [];
         if ($nextWalks && !empty($nextWalks)) {
-            $spotsByWalk = [];
+            // $spotsByWalk = [];
             foreach ($nextWalks as $walk) {
                 $validRegisters = $walkRegistrationRepository->findValidRegisters($walk);
                 if ($validRegisters) {
