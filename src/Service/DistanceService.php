@@ -21,6 +21,9 @@ final class DistanceService
         // On envoie la requête à l'API OSRM sans géométrie détaillé, ni plusieurs routes ni de liste détaillée d'instructions
         $data = $this->http->request('GET', $url, [
             'query' => ['overview' => 'false', 'alternatives' => 'false', 'steps' => 'false'],
+            'timeout'      => 4.0,  // temps max d’inactivité (lecture)
+            'max_duration' => 6.0,  // durée totale max de la requête
+            'headers'      => ['User-Agent' => 'snif-and-go/1.0'],
         ])->toArray(false); #On converti les données JSON récupérées en tableau PHP
 
         $route = $data['routes'][0] ?? null;
