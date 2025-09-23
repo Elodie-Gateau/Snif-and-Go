@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+
 
 final class DistanceService
 {
@@ -19,20 +21,29 @@ final class DistanceService
             $lat2
         );
         // On envoie la requête à l'API OSRM sans géométrie détaillé, ni plusieurs routes ni de liste détaillée d'instructions
-        $data = $this->http->request('GET', $url, [
-            'query' => ['overview' => 'false', 'alternatives' => 'false', 'steps' => 'false'],
-            'timeout'      => 4.0,  // temps max d’inactivité (lecture)
-            'max_duration' => 6.0,  // durée totale max de la requête
-            'headers'      => ['User-Agent' => 'snif-and-go/1.0'],
-        ])->toArray(false); #On converti les données JSON récupérées en tableau PHP
+        try {
+            $data = $this->http->request('GET', $url, [
+                'query' => ['overview' => 'false', 'alternatives' => 'false', 'steps' => 'false'],
+                'timeout'      => 4.0,  // temps max d’inactivité (lecture)
+                'max_duration' => 6.0,  // durée totale max de la requête
+                'headers'      => ['User-Agent' => 'snif-and-go/1.0'],
+            ])->toArray(false); #On converti les données JSON récupérées en tableau PHP
 
-        $route = $data['routes'][0] ?? null;
-        if (!$route) return null;
+            $route = $data['routes'][0] ?? null;
+            if (!$route) return null;
 
-        return [
-            'distance_m' => (int) round($route['distance'] ?? 0),
-            // 'duration_s' => (int) round($route['duration'] ?? 0),
-        ];
+            return [
+                'distance_m' => (int) round($route['distance'] ?? 0),
+                // 'duration_s' => (int) round($route['duration'] ?? 0),
+            ];
+        } catch (TransportExceptionInterface $e) {
+
+            return [
+                'distance_m' => $this->haversine($lat1, $lon1, $lat2, $lon2),
+                'source'     => 'haversine',
+                'note'       => 'OSRM indisponible (timeout)',
+            ];
+        }
     }
 
     public function haversine(float $lat1, float $lon1, float $lat2, float $lon2): int
