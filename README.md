@@ -1,7 +1,6 @@
 ![Symfony](https://img.shields.io/badge/Symfony-7.3-blue)
 ![PHP](https://img.shields.io/badge/PHP-8.4-blueviolet)
 ![MySQL](https://img.shields.io/badge/DB-MySQL-orange)
-![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-deployed-success)
 
 # Snif & Go 🐾
