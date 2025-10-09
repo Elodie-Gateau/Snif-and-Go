@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrailRepository::class)]
-#[UniqueEntity(fields: ['user', 'name'], message: "Vous avez déjà créé un itinéraire avec ce nom.")]
+#[UniqueEntity(fields: ['user', 'name','status'], message: "Vous avez déjà créé un itinéraire avec ce nom.")]
 class Trail
 {
     #[ORM\Id]

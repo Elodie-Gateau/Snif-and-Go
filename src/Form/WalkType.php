@@ -23,10 +23,10 @@ class WalkType extends AbstractType
             ->add('date', DateTimeType::class, [
                 'label' => 'Date et heure de la balade :',
                 'attr' => [
-                    'class' => 'add-walk__form-input-date',
+                    'class' => 'add-walk form__input',
                     'placeholder' => 'Choisissez une date'
                 ],
-                'label_attr' => ['class' => 'add-walk__form-label-date'],
+                'label_attr' => ['class' => 'add-walk form__label'],
                 'widget' => 'single_text',
                 'html5' => false,
                 'constraints' => [
@@ -40,10 +40,10 @@ class WalkType extends AbstractType
                 'choices' => array_combine(range(2, 10), range(2, 10)),
                 'data' => 5,
                 'attr' => [
-                    'class' => 'add-walk__form-input-number',
+                    'class' => 'add-walk form__input',
                 ],
                 'label' => 'Nombre maximum de chiens autorisés pendant la balade :',
-                'label_attr' => ['class' => 'add-walk__form-label-number'],
+                'label_attr' => ['class' => 'add-walk form__label'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez renseigner un nombre de chiens',

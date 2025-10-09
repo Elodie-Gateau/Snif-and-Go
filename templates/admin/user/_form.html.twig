@@ -1,58 +1,56 @@
+<div class="user-edit__form form">
 {{ form_start(form) }}
 {% if form_errors(form) %}
-  <div class="form__global-errors">
-    {{ form_errors(form) }}
-  </div>
+    <div class="form__global-errors">
+        {{ form_errors(form) }}
+    </div>
 {% endif %}
-    <div class="user__edit">
 
-		{{ form_label(form.email) }}
-		{{ form_widget(form.email) }}
-		{% if form_errors(form.email) %}
-			<div class="user__form-error">
-				{{ form_errors(form.email)}}
-			</div>
-		{% endif %}
-	</div>
-    <div class="user__edit">
+<div class="user-edit__item item">
+    {{ form_label(form.title) }}
+    {{ form_widget(form.title) }}
+    
+</div>
+<div class="user-edit__item item">
+    {{ form_label(form.name) }}
+    {{ form_widget(form.name) }}
+    {% if form_errors(form.name) %}
+        <div class="user__form-error">
+            {{ form_errors(form.name) }}
+        </div>
+    {% endif %}
+</div>
+<div class="user-edit__item item">
+    {{ form_label(form.firstname) }}
+    {{ form_widget(form.firstname) }}
+    {% if form_errors(form.firstname) %}
+        <div class="user__form-error">
+            {{ form_errors(form.firstname) }}
+        </div>
+    {% endif %}
+</div>
+<div class="user-edit__item item">
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email) }}
+    {% if form_errors(form.email) %}
+        <div class="user__form-error">
+            {{ form_errors(form.email) }}
+        </div>
+    {% endif %}
+</div>
+{# <div class="user-edit__item item">
+    {{ form_label(form.password) }}
+    {{ form_widget(form.password) }}
+    {% if form_errors(form.password) %}
+        <div class="user__form-error">
+            {{ form_errors(form.password) }}
+        </div>
+    {% endif %}
+</div> #}
+<div class="user-edit__wrapper actions">
+    <button class="user-edit__btn btn">{{ button_label|default('Enregistrer') }}</button>
+    <a class="user=edit__btn back" href="{{ path('app_profile') }}">Retour</a>
+</div>
 
-		{{ form_label(form.name) }}
-		{{ form_widget(form.name) }}
-		{% if form_errors(form.name) %}
-			<div class="user__form-error">
-				{{ form_errors(form.name)}}
-			</div>
-		{% endif %}
-	</div>
-    <div class="user__edit">
-
-		{{ form_label(form.firstname) }}
-		{{ form_widget(form.firstname) }}
-		{% if form_errors(form.firstname) %}
-			<div class="user__form-error">
-				{{ form_errors(form.firstname)}}
-			</div>
-		{% endif %}
-	</div>
-    <div class="user__edit">
-
-		{{ form_label(form.title) }}
-		{{ form_widget(form.title) }}
-		{% if form_errors(form.title) %}
-			<div class="user__form-error">
-				{{ form_errors(form.title)}}
-			</div>
-		{% endif %}
-	</div>
-    <div class="user__edit">
-
-		{{ form_label(form.password) }}
-		{{ form_widget(form.password) }}
-		{% if form_errors(form.password) %}
-			<div class="user__form-error">
-				{{ form_errors(form.password)}}
-			</div>
-		{% endif %}
-	</div>
-    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
+</div>

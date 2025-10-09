@@ -8,6 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Form\ChangePasswordType;
 
 final class ProfileController extends AbstractController
 {
@@ -60,6 +64,42 @@ final class ProfileController extends AbstractController
             'walkRegistrations' => $walkRegistrations
         ]);
     }
+     #[Route('/profile/change-password', name: 'profile_change-password')]
+    #[IsGranted('ROLE_USER')]
+    public function changePassword( Request $request,
+        UserPasswordHasherInterface $hasher,
+        EntityManagerInterface $em): Response {
+
+ /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        $form = $this->createForm(ChangePasswordType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $current = $form->get('currentPassword')->getData();
+            $new     = $form->get('plainPassword')->getData();
+
+             if (!$hasher->isPasswordValid($user, $current)) {
+                $form->get('currentPassword')->addError(new \Symfony\Component\Form\FormError('Mot de passe actuel invalide.'));
+            }
+
+            if ($form->isValid()) {
+                $user->setPassword($hasher->hashPassword($user, $new));
+                $em->flush();
+
+                $this->addFlash('success', 'Mot de passe mis à jour.');
+                return $this->redirectToRoute('app_profile');
+            }
+        }
+
+        return $this->render('profile/changePassword.html.twig', [
+            'form' => $form->createView(),
+        ]);
+        }
+    
+
+
 
     #[Route('/profile/download-data', name: 'profile_download_data')]
     #[IsGranted('ROLE_USER')]

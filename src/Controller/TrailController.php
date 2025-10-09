@@ -141,22 +141,27 @@ final class TrailController extends AbstractController
                         // Applique les modifications et enregistre dans le cloud Cloudinary l'image
                         $result = $cloudinary->uploadApi()->upload(
                             $this->getParameter('images_directory') . '/' . $newFilename,
-                            [
-                                'public_id'       => $publicId,
-                                'overwrite'       => false,
-                                'resource_type'   => 'image',
-                                'format'        => 'webp',
-                                'width'         => 300,
-                                'height'        => 160,
-                                'crop'          => 'fit',
-                                'quality'       => 80
-                            ]
-                        );
-                        // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
-                        $photo->setCdnLink($result['public_id'] ?? $publicId);
+                           [
+                            'public_id'       => $publicId,
+                            'overwrite'       => false,
+                            'resource_type'   => 'image',
+                            'eager' => [[
+                                'width' => 300,
+                                'height' => 160,
+                                'crop' => 'fit',
+                                'quality' => 'auto:good',
+                                'fetch_format' => 'webp',
+                            ]],
+                        ]
+                    );
+                      // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
+                    $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
+                    $photo->setCdnLink($transformed);
+                      
+
                     } catch (\Throwable $e) {
 
-                        $this->addFlash('notice', "Votre photo est enregistrée");
+                          $this->addFlash('error', 'Échec Cloudinary : '.$e->getMessage());
                     }
                     $photo->setUser($this->getUser());
                     $photo->setTrail($trail);
@@ -309,47 +314,52 @@ final class TrailController extends AbstractController
             foreach ($images as $image) {
                 $original = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 $safe = $slugger->slug($original);
-                $filename = $safe . '-' . uniqid() . '.' . $image->guessExtension();
+                $newFilename = $safe . '-' . uniqid() . '.' . $image->guessExtension();
 
-                $image->move($this->getParameter('images_directory'), $filename);
+                $image->move($this->getParameter('images_directory'), $newFilename);
 
                 $photo = new Photo();
-                $photo->setName($filename);
-                try {
-                    $basenameNoExt = pathinfo($filename, PATHINFO_FILENAME);
-                    $publicId =  'snifandgo/uploads/' . $basenameNoExt;
-                    $result = $cloudinary->uploadApi()->upload(
-                        $this->getParameter('images_directory') . '/' . $filename,
-                        [
+                $photo->setName($newFilename);
+ try {
+                        // Récupère le nom du fichier sans extention
+                        $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
+                        // Construit le lien sans extension demandé par Cloudinary
+                        $publicId = 'snifandgo/uploads/' . $basenameNoExt;
+                        // Applique les modifications et enregistre dans le cloud Cloudinary l'image
+                        $result = $cloudinary->uploadApi()->upload(
+                            $this->getParameter('images_directory') . '/' . $newFilename,
+                           [
                             'public_id'       => $publicId,
                             'overwrite'       => false,
                             'resource_type'   => 'image',
-                            'format'        => 'webp',
-                            'width'         => 300,
-                            'height'        => 160,
-                            'crop'          => 'fit',
-                            'quality'       => 80
+                            'eager' => [[
+                                'width' => 300,
+                                'height' => 160,
+                                'crop' => 'fit',
+                                'quality' => 'auto:good',
+                                'fetch_format' => 'webp',
+                            ]],
                         ]
                     );
+                      // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
+                    $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
+                    $photo->setCdnLink($transformed);
+                      
 
-                    $photo->setCdnLink($result['public_id'] ?? $publicId);
-                } catch (\Throwable $e) {
+                    } catch (\Throwable $e) {
 
-                    $this->addFlash('notice', "Votre photo est enregistrée");
-                }
-                $photo->setUser($this->getUser());
-                $photo->setTrail($trail);
-
-                $trail->addPhoto($photo);
-                $em->persist($photo);
-            }
+                          $this->addFlash('error', 'Échec Cloudinary : '.$e->getMessage());
+                    }
+                    $photo->setUser($this->getUser());
+                    $photo->setTrail($trail);
+                    $trail->addPhoto($photo);
 
             $em->flush();
 
             $this->addFlash('success', 'Photos ajoutées avec succès');
             return $this->redirectToRoute('app_trail_show', ['id' => $trail->getId()]);
         }
-
+    }
         return $this->render('trail/show.html.twig', [
             'trail' => $trail,
             'form'  => $form->createView(),

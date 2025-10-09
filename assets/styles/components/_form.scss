@@ -2,27 +2,38 @@
 @use "../utils/mixins" as *;
 @use "../utils/breakpoints" as *;
 
-.add-walk_form {
-    // background: var(--background-tertiary);
+.form {
+    background: var(--background-tertiary);
     width: 100%;
     padding: $size-20 $size-10;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: $size-30;
-}
+    border-radius: $size-10;
 
-.register__form-item,
-.login__form-item,
-.add-dog__item,
-.add-trail__form-item,
-.add-walk__form-item {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: $size-20 0 $size-10 0;
-    gap: $size-10;
+    &__item {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: $size-20 0 $size-10 0;
+        gap: $size-10;
+    }
+
+    &__input {
+        @include form-input(var(--border-color), var(--background-input));
+        width: auto;
+    }
+
+    &__checkbox {
+        @include form-checkbox(
+            $size-20,
+            $color-secondary,
+            var(--background-input),
+            var(--border-color)
+        );
+    }
 }
 
 .home-user__trail-search--advanced-item {
@@ -32,48 +43,15 @@
     padding: $size-10 0;
 }
 
-.register__form-input,
-.login__form-input,
-.home-user__trail--search-input,
-.add-dog__form-input,
-.add-walk__form-input,
-.add-walk__form-input-date {
-    @include form-input(var(--border-color), var(--background-input));
-    width: auto;
-}
-
 input::placeholder {
     color: var(--text);
-}
-.add-trail__form-input {
-    @include form-input(var(--border-color), var(--background-input));
-    width: 100%;
-}
-
-#dog_birth_date_day,
-#dog_birth_date_month,
-#dog_birth_date_year {
-    @include form-input(
-        var(--border-color),
-        var(--background-input),
-        $padding: $size-6
-    );
-    width: auto;
-}
-
-.register__form-checkbox {
-    @include form-checkbox(
-        $size-20,
-        $color-secondary,
-        var(--background-input),
-        var(--border-color)
-    );
 }
 
 .register__form-label,
 .login__form-label,
 .home-user__trail--search-label,
-.add-dog__form-label {
+.add-dog__form-label,
+.label {
     @include form-label(var(--text), 45%);
 }
 

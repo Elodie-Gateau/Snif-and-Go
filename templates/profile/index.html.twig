@@ -38,6 +38,10 @@
 				<p class="profile__user-subtitle">Adresse email</p>
 				<p class="profile__user-content">{{ app.user.email }}</p>
 			</div>
+			<div class="profile__user-item">
+				<a class="profile__user-link" href="{{ path('profile_change-password') }}">Modifier mon mot de passe</a>
+
+			</div>
 
 			<div class="profile__user-wrapper">
 				<a class="profile__user-icon" href="{{ path('admin_user_edit', {'id': app.user.id}) }}">{{ ux_icon('fa:edit',{ class: 'profile__user-icon' }) }}</a>

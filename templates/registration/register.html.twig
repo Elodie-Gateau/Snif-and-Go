@@ -8,10 +8,10 @@
 		<h1 class="register__title">Créer un compte</h1>
 
 		{{ form_errors(registrationForm) }}
-		<div class="register__form">
+		<div class="register form">
 			{{ form_start(registrationForm) }}
 
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.title) }}
 				{{ form_widget(registrationForm.title) }}
 				{% if form_errors(registrationForm.title) %}
@@ -21,7 +21,7 @@
 				{% endif %}
 			</div>
 
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.name) }}
 				{{ form_widget(registrationForm.name) }}
 				{% if form_errors(registrationForm.name) %}
@@ -30,7 +30,7 @@
 					</div>
 				{% endif %}
 			</div>
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.firstname) }}
 				{{ form_widget(registrationForm.firstname) }}
 				{% if form_errors(registrationForm.firstname) %}
@@ -39,7 +39,7 @@
 					</div>
 				{% endif %}
 			</div>
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.email) }}
 				{{ form_widget(registrationForm.email) }}
 				{% if form_errors(registrationForm.email) %}
@@ -49,7 +49,7 @@
 				{% endif %}
 			</div>
 
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.plainPassword) }}
 				{{ form_widget(registrationForm.plainPassword) }}
 				{% if form_errors(registrationForm.plainPassword) %}

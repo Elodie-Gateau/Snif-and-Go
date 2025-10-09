@@ -39,7 +39,7 @@ class DogType extends AbstractType
             ->add('birth_date', DateType::class, [
                 'widget' => 'choice',
                 'years' => range(date('Y') - 30, date('Y')),
-                'attr' => ['class' => 'add-dog__form-dateselect'],
+                'attr' => ['class' => 'add-dog__form__input'],
                 'label' => 'Date de naissance :',
                 'label_attr' => ['class' => 'add-dog__form-label'],
             ])
