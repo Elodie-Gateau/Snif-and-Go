@@ -20,21 +20,20 @@ final class DistanceService
             $lon2,
             $lat2
         );
-        // On envoie la requête à l'API OSRM sans géométrie détaillé, ni plusieurs routes ni de liste détaillée d'instructions
+        // On envoie la requête à l'API OSRM 
         try {
             $data = $this->http->request('GET', $url, [
                 'query' => ['overview' => 'false', 'alternatives' => 'false', 'steps' => 'false'],
-                'timeout'      => 4.0,  // temps max d’inactivité (lecture)
-                'max_duration' => 6.0,  // durée totale max de la requête
+                'timeout'      => 4.0,
+                'max_duration' => 6.0,
                 'headers'      => ['User-Agent' => 'snif-and-go/1.0'],
-            ])->toArray(false); #On converti les données JSON récupérées en tableau PHP
+            ])->toArray(false);
 
             $route = $data['routes'][0] ?? null;
             if (!$route) return null;
 
             return [
                 'distance_m' => (int) round($route['distance'] ?? 0),
-                // 'duration_s' => (int) round($route['duration'] ?? 0),
             ];
         } catch (TransportExceptionInterface $e) {
 
