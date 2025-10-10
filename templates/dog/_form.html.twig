@@ -1,61 +1,61 @@
-	{{ form_start(form,{ attr: { class: 'add-dog__form' } }) }}
+	{{ form_start(form,{ attr: { class: 'add-dog form' } }) }}
 
-	<div class="add-dog__item">
+	<div class="add-dog form__item">
 
 		{{ form_label(form.name) }}
 		{{ form_widget(form.name) }}
 		{% if form_errors(form.name) %}
-			<div class="add-dog__form-error">
+			<div class="add-dog form__error">
 				{{ form_errors(form.name)}}
 			</div>
 		{% endif %}
 	</div>
-	<div class="add-dog__item">
+	<div class="add-dog form__item">
 
 		{{ form_label(form.birth_date) }}
 		{{ form_widget(form.birth_date) }}
 		{% if form_errors(form.birth_date) %}
-			<div class="add-dog__form-error">
+			<div class="add-dog form__error">
 				{{ form_errors(form.birth_date)}}
 			</div>
 		{% endif %}
 	</div>
-	<div class="add-dog__item">
+	<div class="add-dog form__item">
 
 		{{ form_label(form.sex) }}
 		{{ form_widget(form.sex) }}
 		{% if form_errors(form.sex) %}
-			<div class="add-dog__form-error">
+			<div class="add-dog form__error">
 				{{ form_errors(form.sex)}}
 			</div>
 		{% endif %}
 	</div>
-	<div class="add-dog__item">
+	<div class="add-dog form__item">
 
 		{{ form_label(form.dogBreed) }}
 		{{ form_widget(form.dogBreed) }}
 		{% if form_errors(form.dogBreed) %}
-			<div class="add-dog__form-error">
+			<div class="add-dog form__error">
 				{{ form_errors(form.dogBreed)}}
 			</div>
 		{% endif %}
 	</div>
-	<div class="add-dog__item">
+	<div class="add-dog form__item">
 
 		{{ form_label(form.identity_number) }}
 		{{ form_widget(form.identity_number) }}
 		{% if form_errors(form.identity_number) %}
-			<div class="add-dog__form-error">
+			<div class="add-dog form__error">
 				{{ form_errors(form.identity_number)}}
 			</div>
 		{% endif %}
 	</div>
-	<div class="add-dog__item">
+	<div class="add-dog form__item">
 
 		{{ form_label(form.photo) }}
 		{{ form_widget(form.photo) }}
 		{% if form_errors(form.photo) %}
-			<div class="add-dog__form-error">
+			<div class="add-dog form__error">
 				{{ form_errors(form.photo)}}
 			</div>
 		{% endif %}

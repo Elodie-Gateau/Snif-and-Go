@@ -18,6 +18,12 @@ main {
     padding: $size-10;
 }
 
+section {
+    background-color: var(--background-secondary);
+    border-radius: $size-10;
+    padding: $size-10;
+}
+
 h1,
 h2 {
     color: var(--title);

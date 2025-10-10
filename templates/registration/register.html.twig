@@ -8,52 +8,52 @@
 		<h1 class="register__title">Créer un compte</h1>
 
 		{{ form_errors(registrationForm) }}
-		<div class="register__form">
+		<div class="register form">
 			{{ form_start(registrationForm) }}
 
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.title) }}
 				{{ form_widget(registrationForm.title) }}
 				{% if form_errors(registrationForm.title) %}
-					<div class="register__form-error">
+					<div class="register form__error">
 						{{ form_errors(registrationForm.title) }}
 					</div>
 				{% endif %}
 			</div>
 
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.name) }}
 				{{ form_widget(registrationForm.name) }}
 				{% if form_errors(registrationForm.name) %}
-					<div class="register__form-error">
+					<div class="register form__error">
 						{{ form_errors(registrationForm.name) }}
 					</div>
 				{% endif %}
 			</div>
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.firstname) }}
 				{{ form_widget(registrationForm.firstname) }}
 				{% if form_errors(registrationForm.firstname) %}
-					<div class="register__form-error">
+					<div class="register form__error">
 						{{ form_errors(registrationForm.firstname) }}
 					</div>
 				{% endif %}
 			</div>
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.email) }}
 				{{ form_widget(registrationForm.email) }}
 				{% if form_errors(registrationForm.email) %}
-					<div class="register__form-error">
+					<div class="register form__error">
 						{{ form_errors(registrationForm.email) }}
 					</div>
 				{% endif %}
 			</div>
 
-			<div class="register__form-item">
+			<div class="register form__item">
 				{{ form_label(registrationForm.plainPassword) }}
 				{{ form_widget(registrationForm.plainPassword) }}
 				{% if form_errors(registrationForm.plainPassword) %}
-					<div class="register__form-error">
+					<div class="register form__error">
 						{{ form_errors(registrationForm.plainPassword) }}
 					</div>
 				{% endif %}
@@ -65,7 +65,7 @@
 				</label>
 				{{ form_widget(registrationForm.agreeTerms) }}
 				{% if form_errors(registrationForm.agreeTerms) %}
-					<div class="register__form-error">
+					<div class="register form__error">
 						{{ form_errors(registrationForm.agreeTerms) }}
 					</div>
 				{% endif %}

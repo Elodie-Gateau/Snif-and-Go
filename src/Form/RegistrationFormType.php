@@ -29,9 +29,9 @@ class RegistrationFormType extends AbstractType
                     'Madame' => 'Mme',
                     'Monsieur' => 'M'
                 ],
-                'attr' => ['class' => 'register__form-input'],
+                'attr' => ['class' => 'register form__input'],
                 'label' => 'Civilité :',
-                'label_attr' => ['class' => 'register__form-label'],
+                'label_attr' => ['class' => 'register form__label'],
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez choisir une civilité",
@@ -41,9 +41,9 @@ class RegistrationFormType extends AbstractType
             // CHAMP : NOM
 
             ->add('name', null, [
-                'attr' => ['class' => 'register__form-input'],
+                'attr' => ['class' => 'register form__input'],
                 'label' => 'Nom :',
-                'label_attr' => ['class' => 'register__form-label'],
+                'label_attr' => ['class' => 'register form__label'],
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez saisir un nom",
@@ -61,9 +61,9 @@ class RegistrationFormType extends AbstractType
             // CHAMP : PRÉNOM
 
             ->add('firstname', null, [
-                'attr' => ['class' => 'register__form-input'],
+                'attr' => ['class' => 'register form__input'],
                 'label' => 'Prenom :',
-                'label_attr' => ['class' => 'register__form-label'],
+                'label_attr' => ['class' => 'register form__label'],
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez saisir un prénom",
@@ -81,9 +81,9 @@ class RegistrationFormType extends AbstractType
             // CHAMP : ADRESSE MAIL
 
             ->add('email', EmailType::class, [
-                'attr' => ['class' => 'register__form-input'],
+                'attr' => ['class' => 'register form__input'],
                 'label' => 'Email :',
-                'label_attr' => ['class' => 'register__form-label'],
+                'label_attr' => ['class' => 'register form__label'],
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez saisir une adresse mail",
@@ -119,9 +119,9 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Votre mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un caractère spécial.',
                     ]),
                 ],
-                'attr' => ['class' => 'register__form-input'],
+                'attr' => ['class' => 'register form__input'],
                 'label' => 'Mot de passe :',
-                'label_attr' => ['class' => 'register__form-label']
+                'label_attr' => ['class' => 'register form__label']
             ])
 
             // CHAMP : ACCEPTER LES CONDITIONS D'UTILISATION
@@ -134,8 +134,8 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
                 'label' => "J'accepte les conditions d'utilisation et la politique de confidentialité : ",
-                'label_attr' => ['class' => 'register__form-label'],
-                'attr' => ['class' => 'register__form-checkbox'],
+                'label_attr' => ['class' => 'register form__label'],
+                'attr' => ['class' => 'register form__checkbox'],
             ])
         ;
     }

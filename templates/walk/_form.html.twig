@@ -1,4 +1,4 @@
-{{ form_start(form, { attr: { class: 'add-walk_form' } }) }}
+{{ form_start(form, { attr: { class: 'add-walk form' } }) }}
 {% if form_errors(form) %}
 	<div class="form__global-errors">
 		{{ form_errors(form) }}
@@ -6,20 +6,20 @@
 {% endif %}
 
 <div class="add-walk__form-wrapper">
-	<div class="add-walk__form-item">
+	<div class="add-walk form__item">
 		{{ form_label(form.date) }}
 		{{ form_widget(form.date) }}
-		<div class="add-walk__form_error">
+		<div class="add-walk form__error">
 			{% if form_errors(form.date) %}
 				{{ form_errors(form.date) }}
 			{% endif %}
 		</div>
 	</div>
 
-	<div class="add-walk__form-item">
+	<div class="add-walk form__item">
 		{{ form_label(form.max_dogs) }}
 		{{ form_widget(form.max_dogs) }}
-		<div class="add-walk__form_error">
+		<div class="add-walk form__error">
 			{% if form_errors(form.max_dogs) %}
 				{{ form_errors(form.max_dogs) }}
 			{% endif %}

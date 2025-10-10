@@ -19,5 +19,21 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
-# iOS file
+# Dépendances
+node_modules/
+
+# Builds / caches
+dist/
+build/
+.cache/
+vendor/ # si tu ne veux pas versionner composer (souvent on le garde, mais à toi de voir)
+
+# Uploads
+public/uploads/
+public/uploads/gpx/
+
+# OS/IDE
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/

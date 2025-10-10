@@ -55,19 +55,20 @@ final class PhotoController extends AbstractController
                             'public_id'       => $publicId,
                             'overwrite'       => false,
                             'resource_type'   => 'image',
-                            'format'        => 'webp',
-                            'width'         => 300,
-                            'height'        => 160,
-                            'crop'          => 'fit',
-                            'quality'       => 80
+                            'eager' => [[
+                                'width' => 300,
+                                'height' => 160,
+                                'crop' => 'fit',
+                                'quality' => 'auto:good',
+                                'fetch_format' => 'webp',
+                            ]],
                         ]
                     );
-
-                    $photo->setCdnLink($result['public_id'] ?? $publicId);
+                    $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
+                    $photo->setCdnLink($transformed);
                 } catch (\Throwable $e) {
-
-                    $this->addFlash('notice', "Votre photo est enregistrée");
-                }
+                     $this->addFlash('error', 'Échec Cloudinary : '.$e->getMessage());
+                   }
             }
             $entityManager->persist($photo);
             $entityManager->flush();

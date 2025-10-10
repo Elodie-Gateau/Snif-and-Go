@@ -16,18 +16,18 @@ final class TrailSearchType extends AbstractType
         $builder
             ->add('search', TextType::class, [
                 'label' => false,
-                'label_attr' => ['class' => 'home-user__trail--search-label'],
+                'label_attr' => ['class' => 'home-user__trail--search form__label'],
                 'attr' => [
                     'placeholder' => 'Saisir une ville ou un nom d\'itinéraire',
-                    'class' => 'home-user__trail--search-input'
+                    'class' => 'home-user__trail--search form__input'
                 ],
             ])
 
             ->add('difficulty', ChoiceType::class, [
                 'label' => 'Niveau de difficulté',
-                'label_attr' => ['class' => 'home-user__trail--search-label'],
+                'label_attr' => ['class' => 'home-user__trail--search form__label'],
                 'placeholder' => 'Toutes difficultés',
-                'attr' => ['class' => 'home-user__trail--search-input'],
+                'attr' => ['class' => 'home-user__trail--search form__input'],
                 'choices' => [
                     'Facile' => 'easy',
                     'Moyen' => 'medium',
@@ -36,23 +36,23 @@ final class TrailSearchType extends AbstractType
             ])
             ->add('minDistance', IntegerType::class, [
                 'label' => 'Distance minimum (en km)',
-                'label_attr' => ['class' => 'home-user__trail--search-label'],
-                'attr' => ['class' => 'home-user__trail--search-input']
+                'label_attr' => ['class' => 'home-user__trail--search form__label'],
+                'attr' => ['class' => 'home-user__trail--search form__input']
             ])
             ->add('maxDistance', IntegerType::class, [
                 'label' => 'Distance maximum (en km)',
-                'label_attr' => ['class' => 'home-user__trail--search-label'],
-                'attr' => ['class' => 'home-user__trail--search-input']
+                'label_attr' => ['class' => 'home-user__trail--search form__label'],
+                'attr' => ['class' => 'home-user__trail--search form__input']
             ])
             ->add('minDuration', IntegerType::class, [
                 'label' => 'Durée de la balade minimale (en minutes)',
-                'label_attr' => ['class' => 'home-user__trail--search-label'],
-                'attr' => ['class' => 'home-user__trail--search-input']
+                'label_attr' => ['class' => 'home-user__trail--search form__label'],
+                'attr' => ['class' => 'home-user__trail--search form__input']
             ])
             ->add('maxDuration', IntegerType::class, [
                 'label' => 'Durée de la balade maximale (en minutes)',
-                'label_attr' => ['class' => 'home-user__trail--search-label'],
-                'attr' => ['class' => 'home-user__trail--search-input']
+                'label_attr' => ['class' => 'home-user__trail--search form__label'],
+                'attr' => ['class' => 'home-user__trail--search form__input']
             ]);
         // ->add('minScore', IntegerType::class, [
         //     'label' => 'Score minimum',

@@ -14,12 +14,12 @@ function postalToCity(postalInputId, cityInputId, cityDatalistId) {
         fetch(
             `https://geo.api.gouv.fr/communes?codePostal=${code}&fields=nom&format=json`
         )
-            .then((response) => {
+            .then(response => {
                 if (!response.ok)
                     throw new Error(`Erreur API : ${response.status}`);
                 return response.json();
             })
-            .then((data) => {
+            .then(data => {
                 cityDatalist.innerHTML = "";
 
                 if (data.length === 0) {
@@ -29,19 +29,21 @@ function postalToCity(postalInputId, cityInputId, cityDatalistId) {
                     return;
                 }
 
-                data.forEach((city) => {
+                data.forEach(city => {
                     const option = document.createElement("option");
                     option.value = city.nom;
                     cityDatalist.appendChild(option);
                 });
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error("Erreur lors de l'appel API :", error);
             });
     });
 }
 
-export function initCityAutocomplete() {
+function initCityAutocomplete() {
     postalToCity("trail_startCode", "trail_startCity", "start-city-list");
     postalToCity("trail_endCode", "trail_endCity", "end-city-list");
 }
+
+initCityAutocomplete();

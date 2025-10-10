@@ -98,12 +98,15 @@ final class AdminUserController extends AbstractController
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             if ($this->isGranted('ROLE_ADMIN')) {
+                                $this->addFlash('success', 'Informations mises à jour.');
                 return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
             } else {
+                                $this->addFlash('success', 'Vos informations sont mises à jour.');
                 return $this->redirectToRoute('app_profile', [], Response::HTTP_SEE_OTHER);
             }
         }
