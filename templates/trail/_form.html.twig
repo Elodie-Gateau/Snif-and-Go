@@ -9,7 +9,7 @@
 <div class="add-trail form__item">
 	{{ form_label(form.name) }}
 	{{ form_widget(form.name) }}
-	<div class="add-trail__form_error">
+	<div class="add-trail form__error">
 		{% if form_errors(form.name) %}
 			{{ form_errors(form.name) }}
 		{% endif %}
@@ -19,7 +19,7 @@
 <div class="add-trail form__item">
 	{{ form_label(form.inputMode) }}
 	{{ form_widget(form.inputMode) }}
-	<div class="add-trail__form_error">
+	<div class="add-trail form__error">
 		{% if form_errors(form.inputMode) %}
 			{{ form_errors(form.inputMode) }}
 		{% endif %}
@@ -30,7 +30,7 @@
 
 	{{ form_label(form.gpxFile) }}
 	{{ form_widget(form.gpxFile) }}
-	<div class="add-trail__form_error">
+	<div class="add-trail form__error">
 		{% if form_errors(form.gpxFile) %}
 			{{ form_errors(form.gpxFile) }}
 		{% endif %}
@@ -43,7 +43,7 @@
 		<div class="add-trail form__item">
 			{{ form_label(form.startAddress) }}
 			{{ form_widget(form.startAddress) }}
-			<div class="add-trail__form_error">
+			<div class="add-trail form__error">
 				{% if form_errors(form.startAddress) %}
 					{{ form_errors(form.startAddress) }}
 
@@ -54,7 +54,7 @@
 		<div class="add-trail form__item">
 			{{ form_label(form.startCode) }}
 			{{ form_widget(form.startCode, { attr: { id: 'trail_startCode' } }) }}
-			<div class="add-trail__form_error">
+			<div class="add-trail form__error">
 				{% if form_errors(form.startCode) %}
 					{{ form_errors(form.startCode) }}
 
@@ -66,7 +66,7 @@
 			{{ form_label(form.startCity) }}
 			{{ form_widget(form.startCity, { attr: { id: 'trail_startCity', list: 'start-city-list', autocomplete: 'address-level2' } }) }}
 			<datalist id="start-city-list"></datalist>
-			<div class="add-trail__form_error">
+			<div class="add-trail form__error">
 				{% if form_errors(form.startCity) %}
 					{{ form_errors(form.startCity) }}
 
@@ -78,7 +78,7 @@
 			<div class="add-trail form__item">
 				{{ form_label(form.endAddress) }}
 				{{ form_widget(form.endAddress) }}
-				<div class="add-trail__form_error">
+				<div class="add-trail form__error">
 					{% if form_errors(form.endAddress) %}
 						{{ form_errors(form.endAddress) }}
 
@@ -89,7 +89,7 @@
 			<div class="add-trail form__item">
 				{{ form_label(form.endCode) }}
 				{{ form_widget(form.endCode, { attr: { id: 'trail_endCode', inputmode: 'numeric', maxlength: 5, pattern: '\\d{5}' } }) }}
-				<div class="add-trail__form_error">
+				<div class="add-trail form__error">
 					{% if form_errors(form.endCode) %}
 						{{ form_errors(form.endCode) }}
 
@@ -101,7 +101,7 @@
 				{{ form_label(form.endCity) }}
 				{{ form_widget(form.endCity, { attr: { id: 'trail_endCity', list: 'end-city-list', autocomplete: 'address-level2' } }) }}
 				<datalist id="end-city-list"></datalist>
-				<div class="add-trail__form_error">
+				<div class="add-trail form__error">
 					{% if form_errors(form.endCity) %}
 						{{ form_errors(form.endCity) }}
 

@@ -22,9 +22,9 @@ class DogType extends AbstractType
     {
         $builder
             ->add('name', null, [
-                'attr' => ['class' => 'add-dog__form-input'],
+                'attr' => ['class' => 'add-dog form__input'],
                 'label' => 'Nom du chien :',
-                'label_attr' => ['class' => 'add-dog__form-label'],
+                'label_attr' => ['class' => 'add-dog form__label'],
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez saisir un nom",
@@ -39,9 +39,9 @@ class DogType extends AbstractType
             ->add('birth_date', DateType::class, [
                 'widget' => 'choice',
                 'years' => range(date('Y') - 30, date('Y')),
-                'attr' => ['class' => 'add-dog__form__input'],
+                'attr' => ['class' => 'add-dog form__input'],
                 'label' => 'Date de naissance :',
-                'label_attr' => ['class' => 'add-dog__form-label'],
+                'label_attr' => ['class' => 'add-dog form__label'],
             ])
 
             ->add('sex', ChoiceType::class, [
@@ -50,9 +50,9 @@ class DogType extends AbstractType
                     'Femelle' => 'female',
                     'Mâle' => 'male'
                 ],
-                'attr' => ['class' => 'add-dog__form-input'],
+                'attr' => ['class' => 'add-dog form__input'],
                 'label' => 'Genre :',
-                'label_attr' => ['class' => 'add-dog__form-label'],
+                'label_attr' => ['class' => 'add-dog form__label'],
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez choisir un genre",
@@ -67,23 +67,23 @@ class DogType extends AbstractType
                 'placeholder' => 'Saisir une race',
                 'autocomplete' => true,
                 'label' => 'Race du chien :',
-                'label_attr' => ['class' => 'add-dog__form-label'],
+                'label_attr' => ['class' => 'add-dog form__label'],
             ])
 
             ->add(
                 'identity_number',
                 null,
                 [
-                    'attr' => ['class' => 'add-dog__form-input'],
+                    'attr' => ['class' => 'add-dog form__input'],
                     'label' => "Numéro d'identification du chien :",
-                    'label_attr' => ['class' => 'add-dog__form-label'],
+                    'label_attr' => ['class' => 'add-dog form__label'],
                 ],
             )
 
             ->add('photo', FileType::class, [
                 'label' => 'Photo de profil',
-                'label_attr' => ['class' => 'add-dog__form-label'],
-                'attr' => ['class' => 'add-dog__form-input'],
+                'label_attr' => ['class' => 'add-dog form__label'],
+                'attr' => ['class' => 'add-dog form__input'],
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [

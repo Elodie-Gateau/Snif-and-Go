@@ -21,6 +21,10 @@
         gap: $size-10;
     }
 
+    &__label {
+        @include form-label(var(--text), 45%);
+    }
+
     &__input {
         @include form-input(var(--border-color), var(--background-input));
         width: auto;
@@ -34,6 +38,10 @@
             var(--border-color)
         );
     }
+
+    &__error {
+        @include form-error($color-error);
+    }
 }
 
 .home-user__trail-search--advanced-item {
@@ -45,37 +53,6 @@
 
 input::placeholder {
     color: var(--text);
-}
-
-.register__form-label,
-.login__form-label,
-.home-user__trail--search-label,
-.add-dog__form-label,
-.label {
-    @include form-label(var(--text), 45%);
-}
-
-.add-trail__form-label {
-    @include form-label(var(--text), 100%);
-
-    font-weight: 600;
-}
-
-.add-walk__form-label-date {
-    @include form-label(var(--text), 40%);
-}
-
-.add-walk__form-label-number {
-    @include form-label(var(--text), 70%);
-}
-
-.register__form-error,
-.login__form-error,
-.home-user__trail-search--advanced-error,
-.add-dog__form-error,
-.add-trail__form_error,
-.add-walk__form-error {
-    @include form-error($color-error);
 }
 
 .walk-register__desc-select {
@@ -161,10 +138,7 @@ input::placeholder {
         width: 60%;
     }
 
-    .register__form-label,
-    .login__form-label,
-    .home-user__trail--search-label,
-    .add-dog__form-label {
+    .form__label {
         @include form-label(var(--text), 50%);
     }
 }

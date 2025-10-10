@@ -2,7 +2,8 @@ const toggleButton = document.getElementById("toggle-advanced");
 const advancedPanel = document.getElementById("trail-advanced");
 
 if (toggleButton && advancedPanel) {
-    toggleButton.addEventListener("click", () => {
+    toggleButton.addEventListener("click", e => {
+        e.preventDefault();
         const hidden = advancedPanel.classList.toggle("hidden");
         const open = !hidden;
         if (open) {
