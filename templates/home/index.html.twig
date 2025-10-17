@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block page_scripts %}
-	<script src="{{ asset('js/trail-search.js') }}" defer data-turbo-track="reload"></script>
+  {{ parent() }}
+  {{ importmap('home') }}
 {% endblock %}
 
 

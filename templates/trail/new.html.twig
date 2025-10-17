@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block page_scripts %}
-	<script src="{{ asset('js/cities.js') }}" defer data-turbo-track="reload"></script>
-	<script src="{{ asset('js/newTrail.js') }}" defer data-turbo-track="reload"></script>
+  {{ parent() }}
+  {{ importmap('trail_new') }}
 {% endblock %}
 {% block title %}Créer un nouvel itinéraire{% endblock %}
 

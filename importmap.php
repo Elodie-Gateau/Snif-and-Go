@@ -1,21 +1,40 @@
 <?php
 
 /**
- * Returns the importmap for this application.
- *
- * - "path" is a path inside the asset mapper system. Use the
- *     "debug:asset-map" command to see the full list of paths.
- *
- * - "entrypoint" (JavaScript only) set to true for any module that will
- *     be used as an "entrypoint" (and passed to the importmap() Twig function).
- *
- * The "importmap:require" command can be used to add new entries to this file.
+ * Importmap de l'application Snif & Go — scoping par page
  */
 return [
-    'app' => [
-        'path' => './assets/app.js',
+    // === Entrypoints par page ===
+    'global' => [
+        'path' => './assets/entrypoints/global.js',
         'entrypoint' => true,
     ],
+    'home' => [
+        'path' => './assets/entrypoints/home.js',
+        'entrypoint' => true,
+    ],
+    'admin' => [
+        'path' => './assets/entrypoints/admin.js',
+        'entrypoint' => true,
+    ],
+    'admin' => [
+        'path' => './assets/entrypoints/profile.js',
+        'entrypoint' => true,
+    ],
+    'trail_show' => [
+        'path' => './assets/entrypoints/trail_show.js',
+        'entrypoint' => true,
+    ],
+    'trail_new' => [
+        'path' => './assets/entrypoints/trail_new.js',
+        'entrypoint' => true,
+    ],
+    'walk_new' => [
+        'path' => './assets/entrypoints/walk_new.js',
+        'entrypoint' => true,
+    ],
+
+    // === Stimulus / Turbo  ===
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
@@ -25,6 +44,8 @@ return [
     '@hotwired/turbo' => [
         'version' => '7.3.0',
     ],
+
+    // === Tom Select ===
     'tom-select' => [
         'version' => '2.4.3',
     ],
@@ -34,22 +55,12 @@ return [
     '@orchidjs/unicode-variants' => [
         'version' => '1.1.2',
     ],
-    'tom-select/dist/css/tom-select.default.min.css' => [
-        'version' => '2.4.3',
-        'type' => 'css',
-    ],
-    'tom-select/dist/css/tom-select.default.css' => [
-        'version' => '2.4.3',
-        'type' => 'css',
-    ],
-    'tom-select/dist/css/tom-select.bootstrap4.css' => [
-        'version' => '2.4.3',
-        'type' => 'css',
-    ],
     'tom-select/dist/css/tom-select.bootstrap5.css' => [
         'version' => '2.4.3',
         'type' => 'css',
     ],
+
+    // === Flatpickr ===
     'flatpickr' => [
         'version' => '4.6.13',
     ],
@@ -60,7 +71,12 @@ return [
     'flatpickr/dist/l10n/fr.js' => [
         'version' => '4.6.13',
     ],
-    '@symfony/ux-autocomplete' => [
-        'version' => '2.30.0',
+
+    // === Leaflet ===
+    'leaflet' => [
+        'version' => 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+    ],
+    'leaflet-gpx' => [
+        'version' => 'https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js',
     ],
 ];

@@ -3,10 +3,12 @@
 namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Psr\Log\LoggerInterface;
+
 
 final class GeocodingService
 {
-    public function __construct(private HttpClientInterface $http) {}
+    public function __construct(private HttpClientInterface $http, private LoggerInterface $logger) {}
 
 
     public function geocode(string $address): ?array
@@ -25,7 +27,6 @@ final class GeocodingService
         if (!$result) return null;
         // On traduit les résultats en coordonnées
         [$lon, $lat] = $result['geometry']['coordinates'];
-
         return [
             'lat' => (float)$lat,
             'lon' => (float)$lon,
@@ -33,15 +34,10 @@ final class GeocodingService
         ];
     }
 
-
     public function reverse(float $lat, float $lon): ?array
     {
         // On liste les différentes options de recherche à faire : précis (la rue), large (l'API choisit) ou minimal (municipalité)
-        $tries = [
-            ['type' => 'street'],
-            [],
-            ['type' => 'municipality'],
-        ];
+        $tries = [['type' => 'street'], [], ['type' => 'municipality']];
 
         foreach ($tries as $extra) {
             // On construit la recherche avec les coordonnées et le type d'option à tester
@@ -82,16 +78,15 @@ final class GeocodingService
                 'timeout' => 5,
             ])->toArray(false);
 
-            $c = $communes[0] ?? null;
-            if ($c) {
+            $commune = $communes[0] ?? null;
+            if ($commune) {
                 // On enregistre la ville et code postal
-                $city = $c['nom'] ?? null;
+                $city = $commune['nom'] ?? null;
                 $postcode = null;
-                if (!empty($c['codesPostaux']) && is_array($c['codesPostaux'])) {
+                if (!empty($commune['codesPostaux']) && is_array($commune['codesPostaux'])) {
                     // s'il y a plusieurs CP, on prend le premier
                     $postcode = $c['codesPostaux'][0] ?? null;
                 }
-
                 return [
                     'label'    => $city,
                     'street'   => null,
@@ -99,9 +94,10 @@ final class GeocodingService
                     'postcode' => $postcode,
                 ];
             }
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            $this->logger->warning('Erreur API : ' . $e->getMessage());
+            // Si rien est trouvé on return null
         }
-        // Si rien est trouvé on return null
         return null;
     }
 }

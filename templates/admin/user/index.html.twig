@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block page_scripts %}
-	<script src="{{ asset('js/admin.js') }}" defer data-turbo-track="reload"></script>
-	<script src="{{ asset('js/confirm-modal.js') }}" defer data-turbo-track="reload"></script>
+  {{ parent() }}
+  {{ importmap('admin') }}
 {% endblock %}
 {% block title %}Espace administrateur
 {% endblock %}

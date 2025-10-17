@@ -4,12 +4,13 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>
-			{% block title %}Snif &amp; Go{% endblock %}
+			{% block title %}Snif &amp; Go
+			{% endblock %}
 		</title>
 		{% block meta_description %}
-			<meta name="description" content="Snif &amp; Go : 
-			trouvez et partagez des itinéraires de promenade pour chiens, près de chez vous. 
-			Inscrivez-vous avec vos chiens pour des rendez-vous à ne pas manquer !">
+			<meta name="description" content="Snif &amp; Go :
+						trouvez et partagez des itinéraires de promenade pour chiens, près de chez vous.
+						Inscrivez-vous avec vos chiens pour des rendez-vous à ne pas manquer !">
 		{% endblock %}
 		<link rel="icon" type="image/png" href="{{ asset('icons/image.png') }}">
 		{% block stylesheets %}
@@ -17,14 +18,14 @@
 		{% endblock %}
 
 		{% block javascripts %}
-			{% block importmap %}
-				{{ importmap('app') }}
+			{% block page_scripts %}
+				{{ importmap('global') }}
 			{% endblock %}
-			  {% block page_scripts %}{% endblock %}
 		{% endblock %}
 
 	</head>
-	<body data-turbo="false">
+	<body
+		data-turbo="false">
 
 		{# Skip link #}
 		<a class="skip-link" href="#contenu">Aller au contenu</a>

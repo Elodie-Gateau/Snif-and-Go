@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block page_scripts %}
-	<script src="{{ asset('js/flatpickr.js') }}" defer data-turbo-track="reload"></script>
+  {{ parent() }}
+  {{ importmap('walk_new') }}
 {% endblock %}
 
 {% block title %}Nouvelle balade

@@ -141,27 +141,25 @@ final class TrailController extends AbstractController
                         // Applique les modifications et enregistre dans le cloud Cloudinary l'image
                         $result = $cloudinary->uploadApi()->upload(
                             $this->getParameter('images_directory') . '/' . $newFilename,
-                           [
-                            'public_id'       => $publicId,
-                            'overwrite'       => false,
-                            'resource_type'   => 'image',
-                            'eager' => [[
-                                'width' => 300,
-                                'height' => 160,
-                                'crop' => 'fit',
-                                'quality' => 'auto:good',
-                                'fetch_format' => 'webp',
-                            ]],
-                        ]
-                    );
-                      // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
-                    $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
-                    $photo->setCdnLink($transformed);
-                      
-
+                            [
+                                'public_id'       => $publicId,
+                                'overwrite'       => false,
+                                'resource_type'   => 'image',
+                                'eager' => [[
+                                    'width' => 300,
+                                    'height' => 160,
+                                    'crop' => 'fit',
+                                    'quality' => 'auto:good',
+                                    'fetch_format' => 'webp',
+                                ]],
+                            ]
+                        );
+                        // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
+                        $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
+                        $photo->setCdnLink($transformed);
                     } catch (\Throwable $e) {
 
-                          $this->addFlash('error', 'Échec Cloudinary : '.$e->getMessage());
+                        $this->addFlash('error', 'Échec Cloudinary : ' . $e->getMessage());
                     }
                     $photo->setUser($this->getUser());
                     $photo->setTrail($trail);
@@ -185,8 +183,8 @@ final class TrailController extends AbstractController
                 $filePath = $this->getParameter('gpx_directory') . '/' . $newFilename;
 
                 // On lit le fichier GPX, on le parse (via méthode dans) GPXService
-                if ($infos = $gpx->parse($filePath)) {
-
+                $infos = $gpx->parse($filePath);
+                if ($infos) {
                     // On récupère la distance calculé en mètres et on la converti en kms ainsi que la durée
                     $meters = $infos['distance_m'];
                     $seconds = $infos['duration_s'];
@@ -197,7 +195,6 @@ final class TrailController extends AbstractController
                     $startLon = $infos['start']['lon'];
                     $endLat = $infos['end']['lat'];
                     $endLon = $infos['end']['lon'];
-
 
                     // On enregistre les latitudes et longitudes des coordonnées début et fin
                     $trail->setStartLat($startLat);
@@ -320,15 +317,15 @@ final class TrailController extends AbstractController
 
                 $photo = new Photo();
                 $photo->setName($newFilename);
- try {
-                        // Récupère le nom du fichier sans extention
-                        $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
-                        // Construit le lien sans extension demandé par Cloudinary
-                        $publicId = 'snifandgo/uploads/' . $basenameNoExt;
-                        // Applique les modifications et enregistre dans le cloud Cloudinary l'image
-                        $result = $cloudinary->uploadApi()->upload(
-                            $this->getParameter('images_directory') . '/' . $newFilename,
-                           [
+                try {
+                    // Récupère le nom du fichier sans extention
+                    $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
+                    // Construit le lien sans extension demandé par Cloudinary
+                    $publicId = 'snifandgo/uploads/' . $basenameNoExt;
+                    // Applique les modifications et enregistre dans le cloud Cloudinary l'image
+                    $result = $cloudinary->uploadApi()->upload(
+                        $this->getParameter('images_directory') . '/' . $newFilename,
+                        [
                             'public_id'       => $publicId,
                             'overwrite'       => false,
                             'resource_type'   => 'image',
@@ -341,25 +338,23 @@ final class TrailController extends AbstractController
                             ]],
                         ]
                     );
-                      // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
+                    // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
                     $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
                     $photo->setCdnLink($transformed);
-                      
+                } catch (\Throwable $e) {
 
-                    } catch (\Throwable $e) {
+                    $this->addFlash('error', 'Échec Cloudinary : ' . $e->getMessage());
+                }
+                $photo->setUser($this->getUser());
+                $photo->setTrail($trail);
+                $trail->addPhoto($photo);
 
-                          $this->addFlash('error', 'Échec Cloudinary : '.$e->getMessage());
-                    }
-                    $photo->setUser($this->getUser());
-                    $photo->setTrail($trail);
-                    $trail->addPhoto($photo);
+                $em->flush();
 
-            $em->flush();
-
-            $this->addFlash('success', 'Photos ajoutées avec succès');
-            return $this->redirectToRoute('app_trail_show', ['id' => $trail->getId()]);
+                $this->addFlash('success', 'Photos ajoutées avec succès');
+                return $this->redirectToRoute('app_trail_show', ['id' => $trail->getId()]);
+            }
         }
-    }
         return $this->render('trail/show.html.twig', [
             'trail' => $trail,
             'form'  => $form->createView(),
