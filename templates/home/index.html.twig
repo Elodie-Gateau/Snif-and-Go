@@ -55,7 +55,8 @@
 													class="{{ dogPhotoClass }}"
 													alt="Portrait de {{ dog.name }}"												
 													{% if dog.cdnLink %}
-													src="https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto:good,c_fill,g_face,r_max,w_160,h_160,dpr_auto/{{dog.cdnLink}}"
+													{% set id = dog.cdnLink ?? '' %}
+													src="{{'https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto:good,c_fill,g_face,r_max,w_160,h_160,dpr_auto/' ~ id }}"
 													{% else %}
 													src="{{ asset('uploads/images/' ~ dog.photo)}}"
 													{% endif %}
