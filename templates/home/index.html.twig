@@ -242,13 +242,14 @@
 						{% if trail.status == "Active" %}
 							<li class="home-user__trail-card">
 								{% if trail.photos|length > 0 %}
+								{% set id = trail.photos[0].cdnLink %}
 									<img loading="lazy" 
 									decoding="async" 
 									width="275" 
 									height="160" 
 									class="home-user__trail-photo" 
 										{% if trail.photos[0].cdnLink %}
-													src="{{trail.photos[0].cdnLink}}"
+													src="https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto:good,c_fill,g_auto,w_275,h_160,dpr_auto/{{ id }}"
 													{% else %}
 													src="{{ asset('uploads/images/' ~ trail.photos[0].name)}}"
 													{% endif %}
