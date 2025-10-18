@@ -58,5 +58,5 @@
     text/html text/plain text/css application/javascript application/json image/svg+xml
 
   # Evite de recompresser les fichiers déjà compressés
-  SetEnvIfNoCase Request_URI \.\(?:gz|br)$ no-gzip
+  SetEnvIfNoCase Request_URI \.((gz|br))$ no-gzip
 </IfModule>
