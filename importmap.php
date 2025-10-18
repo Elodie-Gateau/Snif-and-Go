@@ -17,7 +17,7 @@ return [
         'path' => './assets/entrypoints/admin.js',
         'entrypoint' => true,
     ],
-    'admin' => [
+    'profile' => [
         'path' => './assets/entrypoints/profile.js',
         'entrypoint' => true,
     ],
