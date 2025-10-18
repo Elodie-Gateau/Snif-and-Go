@@ -5,10 +5,6 @@
  */
 return [
     // === Entrypoints par page ===
-    'global' => [
-        'path' => './assets/entrypoints/global.js',
-        'entrypoint' => true,
-    ],
     'home' => [
         'path' => './assets/entrypoints/home.js',
         'entrypoint' => true,

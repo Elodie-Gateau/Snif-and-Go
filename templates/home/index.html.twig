@@ -248,7 +248,7 @@
 									height="160" 
 									class="home-user__trail-photo" 
 										{% if trail.photos[0].cdnLink %}
-													src="https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto,c_fill,w_275,h_160/{{trail.photos[0].cdnLink}}"
+													src="{{trail.photos[0].cdnLink}}"
 													{% else %}
 													src="{{ asset('uploads/images/' ~ trail.photos[0].name)}}"
 													{% endif %}
