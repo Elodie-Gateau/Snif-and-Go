@@ -74,9 +74,9 @@ return [
 
     // === Leaflet ===
     'leaflet' => [
-        'version' => 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+        'version' => '1.9.4',
     ],
     'leaflet-gpx' => [
-        'version' => 'https://cdn.jsdelivr.net/npm/leaflet-gpx@1.7.0/gpx.min.js',
+        'version' => '1.7.0',
     ],
 ];
