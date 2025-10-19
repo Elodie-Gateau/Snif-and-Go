@@ -9,7 +9,7 @@ const badgeWSCarbon = document.getElementById("wcb");
 
 // Récupération du thème stockée dans le local Storage
 const themeStorage = localStorage.getItem("theme");
-
+console.log(themeStorage);
 // Si le thème enregistré était "eco" application du thème eco
 if (themeStorage === "eco") {
     html.classList.add("eco");
@@ -17,7 +17,9 @@ if (themeStorage === "eco") {
     themeToggleOff.classList.add("hidden");
     sun.classList.add("hidden");
     moon.classList.remove("hidden");
-    badgeWSCarbon.classList.add("wcb-d");
+    if (badgeWSCarbon) {
+        badgeWSCarbon.classList.add("wcb-d");
+    }
 }
 
 // Application du thème selon le click du toggle
@@ -28,7 +30,9 @@ if (themeToggle) {
         themeToggleOff.classList.toggle("hidden", eco);
         sun.classList.toggle("hidden", eco);
         moon.classList.toggle("hidden", !eco);
-        badgeWSCarbon.classList.toggle("wcb-d", eco);
+        if (badgeWSCarbon) {
+            badgeWSCarbon.classList.toggle("wcb-d", eco);
+        }
         localStorage.setItem("theme", eco ? "eco" : "default");
     });
 }
