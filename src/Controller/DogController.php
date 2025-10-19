@@ -59,19 +59,19 @@ final class DogController extends AbstractController
                 try {
                     $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
                     $publicId = 'snifandgo/uploads/' . $basenameNoExt;
-                    // $result = $cloudinary->uploadApi()->upload(
-                    //     $this->getParameter('images_directory') . '/' . $newFilename,
-                    //     [
-                    //         'public_id'       => $publicId,
-                    //         'overwrite'       => false,
-                    //         'resource_type'   => 'image',
-                    //         'format'        => 'webp',
-                    //         'width'         => 190,
-                    //         'height'        => 200,
-                    //         'crop'          => 'fit',
-                    //         'quality'       => 80
-                    //     ]
-                    // );
+                    $result = $cloudinary->uploadApi()->upload(
+                        $this->getParameter('images_directory') . '/' . $newFilename,
+                        [
+                            'public_id'       => $publicId,
+                            'overwrite'       => false,
+                            'resource_type'   => 'image',
+                            // 'format'        => 'webp',
+                            // 'width'         => 190,
+                            // 'height'        => 200,
+                            // 'crop'          => 'fit',
+                            // 'quality'       => 80
+                        ]
+                    );
 
                     $dog->setCdnLink($publicId);
                 } catch (\Throwable $e) {

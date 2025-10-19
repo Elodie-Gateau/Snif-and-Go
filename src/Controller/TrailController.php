@@ -139,21 +139,21 @@ final class TrailController extends AbstractController
                         // Construit le lien sans extension demandé par Cloudinary
                         $publicId = 'snifandgo/uploads/' . $basenameNoExt;
                         // Applique les modifications et enregistre dans le cloud Cloudinary l'image
-                        // $result = $cloudinary->uploadApi()->upload(
-                        //     $this->getParameter('images_directory') . '/' . $newFilename,
-                        //     [
-                        //         'public_id'       => $publicId,
-                        //         'overwrite'       => false,
-                        //         'resource_type'   => 'image',
-                        //         'eager' => [[
-                        //             'width' => 300,
-                        //             'height' => 160,
-                        //             'crop' => 'fit',
-                        //             'quality' => 'auto:good',
-                        //             'fetch_format' => 'webp',
-                        //         ]],
-                        //     ]
-                        // );
+                        $result = $cloudinary->uploadApi()->upload(
+                            $this->getParameter('images_directory') . '/' . $newFilename,
+                            [
+                                'public_id'       => $publicId,
+                                'overwrite'       => false,
+                                'resource_type'   => 'image',
+                                // 'eager' => [[
+                                //     'width' => 300,
+                                //     'height' => 160,
+                                //     'crop' => 'fit',
+                                //     'quality' => 'auto:good',
+                                //     'fetch_format' => 'webp',
+                                // ]],
+                            ]
+                        );
                         // // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
                         // $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
                         $photo->setCdnLink($publicId);
