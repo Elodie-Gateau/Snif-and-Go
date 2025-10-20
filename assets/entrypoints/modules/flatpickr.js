@@ -2,11 +2,11 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import { French } from "flatpickr/dist/l10n/fr.js";
 
-const sel = ".add-walk__form-input-date";
+const sel = "#walk_date";
 const inputs = document.querySelectorAll(sel);
 
 if (inputs.length) {
-    flatpickr(sel, {
+    flatpickr(inputs, {
         enableTime: true,
         minTime: "7:00",
         maxTime: "21:00",
