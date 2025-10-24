@@ -42,21 +42,24 @@ final class DogController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // Récupération du fichier photo uploaded
             $imageFile = $form->get('photo')->getData();
             if ($imageFile) {
-
+                // Sécurisation du nom de fichier créé
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
 
                 $safeFilename = $slugger->slug($originalFilename);
 
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
-
+                // Je sauvegarde le fichier physiquement sur le serveur
                 $imageFile->move(
                     $this->getParameter('images_directory'),
                     $newFilename
                 );
                 $dog->setPhoto($newFilename);
 
+                // J'upload la photo vers Cloudinary
                 try {
                     $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
                     $publicId = 'snifandgo/uploads/' . $basenameNoExt;
@@ -68,19 +71,22 @@ final class DogController extends AbstractController
                             'resource_type'   => 'image',
                         ]
                     );
-
+                    // J'enregistre l'id de mon fichier
                     $dog->setCdnLink($publicId);
-                } catch (\Throwable $e) {
-                    $this->$logger->error('Cloudinary upload failed', [
-                        'error' => $e->getMessage(),
-                        'file' => $newFilename
-                    ]);
 
+                    // Si l'upload Cloudinary fonctionne alors je supprime la version locale
                     $filePath = $this->getParameter('images_directory') . '/' . $newFilename;
                     if (file_exists($filePath)) {
                         unlink($filePath);
                     }
+                } catch (\Throwable $e) {
+                    // Si l'upload Cloudinary ne fonctionne pas j'affiche l'erreur
+                    $logger->error('Cloudinary upload failed', [
+                        'error' => $e->getMessage(),
+                        'file' => $newFilename
+                    ]);
 
+                    // J'affiche un message d'erreur
                     $this->addFlash('warning', 'Image non uploadée. Veuillez réessayer.');
                 }
             }

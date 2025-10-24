@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block page_scripts %}
+  {{ importmap('global') }}
+{% endblock %}
+
 {% block title %}Inscription de
 	{{ wr.dog.name }}
 {% endblock %}

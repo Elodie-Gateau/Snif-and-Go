@@ -24,6 +24,7 @@ use App\Service\GpxService;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Psr\Log\LoggerInterface;
 
 
 use Symfony\Component\Validator\Constraints\File as FileConstraint;
@@ -104,7 +105,8 @@ final class TrailController extends AbstractController
         DistanceService $distanceService,
         GpxService $gpx,
         SluggerInterface $slugger,
-        Cloudinary $cloudinary
+        Cloudinary $cloudinary,
+        LoggerInterface $logger
     ): Response {
 
         $user = $this->getUser();
@@ -145,21 +147,25 @@ final class TrailController extends AbstractController
                                 'public_id'       => $publicId,
                                 'overwrite'       => false,
                                 'resource_type'   => 'image',
-                                // 'eager' => [[
-                                //     'width' => 300,
-                                //     'height' => 160,
-                                //     'crop' => 'fit',
-                                //     'quality' => 'auto:good',
-                                //     'fetch_format' => 'webp',
-                                // ]],
                             ]
                         );
                         // // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
-                        // $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
                         $photo->setCdnLink($publicId);
-                    } catch (\Throwable $e) {
 
-                        $this->addFlash('error', 'Échec Cloudinary : ' . $e->getMessage());
+                        // Si l'upload Cloudinary fonctionne alors je supprime la version locale
+                        $filePath = $this->getParameter('images_directory') . '/' . $newFilename;
+                        if (file_exists($filePath)) {
+                            unlink($filePath);
+                        }
+                    } catch (\Throwable $e) {
+                        // Si l'upload Cloudinary ne fonctionne pas j'affiche l'erreur
+                        $logger->error('Cloudinary upload failed', [
+                            'error' => $e->getMessage(),
+                            'file' => $newFilename
+                        ]);
+
+                        // J'affiche un message d'erreur
+                        $this->addFlash('warning', 'Image non uploadée. Veuillez réessayer.');
                     }
                     $photo->setUser($this->getUser());
                     $photo->setTrail($trail);

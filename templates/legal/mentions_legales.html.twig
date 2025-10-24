@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block page_scripts %}
+  {{ importmap('global') }}
+{% endblock %}
+
 {% block title %}Mentions légales, CGU &amp; Politique de confidentialité - Snif &amp; Go
 {% endblock %}
 

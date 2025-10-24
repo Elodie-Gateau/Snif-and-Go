@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block page_scripts %}
+  {{ importmap('global') }}
+{% endblock %}
+
+
 {% block title %}User{% endblock %}
 
 {% block body %}
