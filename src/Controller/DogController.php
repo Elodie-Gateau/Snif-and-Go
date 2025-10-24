@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Psr\Log\LoggerInterface;
 
 #[Route('/dog')]
 #[IsGranted('ROLE_USER')]
@@ -28,7 +29,7 @@ final class DogController extends AbstractController
     }
 
     #[Route('/new', name: 'app_dog_new', methods: ['GET', 'POST'])]
-    public function new(Cloudinary $cloudinary, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(Cloudinary $cloudinary, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, LoggerInterface $logger): Response
     {
         $user = $this->getUser();
         if ($user instanceof User && count($user->getDogs()) > 10) {
@@ -70,7 +71,17 @@ final class DogController extends AbstractController
 
                     $dog->setCdnLink($publicId);
                 } catch (\Throwable $e) {
-                    $this->addFlash('warning', "Échec de l'optimisation de votre photo");
+                    $this->$logger->error('Cloudinary upload failed', [
+                        'error' => $e->getMessage(),
+                        'file' => $newFilename
+                    ]);
+
+                    $filePath = $this->getParameter('images_directory') . '/' . $newFilename;
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
+
+                    $this->addFlash('warning', 'Image non uploadée. Veuillez réessayer.');
                 }
             }
             $entityManager->persist($dog);
