@@ -49,7 +49,12 @@ final class GeocodingService
                     'query'   => $query,
                     'timeout' => 5,
                 ])->toArray(false);
-            } catch (\Throwable) {
+            } catch (\Throwable $e) {
+                $this->logger->debug('Reverse geocoding attempt failed', [
+                    'type'  => $extra['type'] ?? 'unknown',
+                    'error' => $e->getMessage(),
+                ]);
+                $errors[] = $e->getMessage();
                 continue;
             }
             // On récupère la première donnée trouvée, si elle existe on récupère les informations
@@ -95,7 +100,11 @@ final class GeocodingService
                 ];
             }
         } catch (\Throwable $e) {
-            $this->logger->warning('Erreur API : ' . $e->getMessage());
+            $this->logger->warning('Geocoding fallback API failed', [
+                'error'  => $e->getMessage(),
+                'coords' => "$lat,$lon",
+                'previous_errors' => $errors,
+            ]);
             // Si rien est trouvé on return null
         }
         return null;

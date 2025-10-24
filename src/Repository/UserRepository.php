@@ -34,7 +34,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
 
-    public function desactivate($user): void
+    public function desactivate(User $user): void
     {
         $conn = $this->getEntityManager()->getConnection();
         $conn->beginTransaction();
@@ -61,11 +61,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             );
             $conn->commit();
         } catch (\Throwable $e) {
+            $this->logger->error('Failed to deactivate user', [
+                'user_id' => $user->getId(),
+                'error'   => $e->getMessage(),
+                'code'    => $e->getCode(),
+            ]);
+
             $conn->rollBack();
             throw $e;
         }
     }
-    public function reactivate($user): void
+    public function reactivate(User $user): void
     {
         $conn = $this->getEntityManager()->getConnection();
         $conn->beginTransaction();
@@ -98,6 +104,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             );
             $conn->commit();
         } catch (\Throwable $e) {
+
+            $this->logger->error('Failed to deactivate user', [
+                'user_id' => $user->getId(),
+                'error'   => $e->getMessage(),
+                'code'    => $e->getCode(),
+            ]);
+
             $conn->rollBack();
             throw $e;
         }
@@ -120,6 +133,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             );
             $conn->commit();
         } catch (\Throwable $e) {
+            $this->logger->error('Failed to deactivate user', [
+                'user_id' => $user->getId(),
+                'error'   => $e->getMessage(),
+                'code'    => $e->getCode(),
+            ]);
+
             $conn->rollBack();
             throw $e;
         }

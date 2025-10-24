@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Psr\Log\LoggerInterface;
 
 #[Route('/photo')]
 #[IsGranted('ROLE_USER')]
@@ -27,7 +28,7 @@ final class PhotoController extends AbstractController
     }
 
     #[Route('/new', name: 'app_photo_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, Cloudinary $cloudinary): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, Cloudinary $cloudinary, LoggerInterface $logger): Response
     {
         $photo = new Photo();
         $form = $this->createForm(PhotoType::class, $photo);
@@ -55,20 +56,26 @@ final class PhotoController extends AbstractController
                             'public_id'       => $publicId,
                             'overwrite'       => false,
                             'resource_type'   => 'image',
-                            'eager' => [[
-                                'width' => 300,
-                                'height' => 160,
-                                'crop' => 'fit',
-                                'quality' => 'auto:good',
-                                'fetch_format' => 'webp',
-                            ]],
                         ]
                     );
-                    $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
-                    $photo->setCdnLink($transformed);
+
+                    $photo->setCdnLink($publicId);
+
+                    // Si l'upload Cloudinary fonctionne alors je supprime la version locale
+                    $filePath = $this->getParameter('images_directory') . '/' . $newFilename;
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
                 } catch (\Throwable $e) {
-                     $this->addFlash('error', 'Échec Cloudinary : '.$e->getMessage());
-                   }
+                    // Si l'upload Cloudinary ne fonctionne pas j'affiche l'erreur
+                    $logger->error('Cloudinary upload failed', [
+                        'error' => $e->getMessage(),
+                        'file' => $newFilename
+                    ]);
+
+                    // J'affiche un message d'erreur
+                    $this->addFlash('warning', 'Image non uploadée. Veuillez réessayer.');
+                }
             }
             $entityManager->persist($photo);
             $entityManager->flush();

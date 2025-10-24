@@ -4,11 +4,12 @@ namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Psr\Log\LoggerInterface;
 
 
 final class DistanceService
 {
-    public function __construct(private HttpClientInterface $http) {}
+    public function __construct(private HttpClientInterface $http, private LoggerInterface $logger) {}
 
     public function osrmFootRoute(float $lat1, float $lon1, float $lat2, float $lon2): ?array
     {
@@ -36,7 +37,11 @@ final class DistanceService
                 'distance_m' => (int) round($route['distance'] ?? 0),
             ];
         } catch (TransportExceptionInterface $e) {
-
+            $this->logger->warning('OSRM route API failed', [
+                'error'       => $e->getMessage(),
+                'coordinates' => "$lat1,$lon1 -> $lat2,$lon2",
+                'exception'   => get_class($e),
+            ]);
             return [
                 'distance_m' => $this->haversine($lat1, $lon1, $lat2, $lon2),
                 'source'     => 'haversine',
