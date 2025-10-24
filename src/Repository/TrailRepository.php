@@ -93,13 +93,13 @@ class TrailRepository extends ServiceEntityRepository
         ;
     }
 
-    //    public function findOneBySomeField($value): ?Trail
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findAllByStatus($status): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

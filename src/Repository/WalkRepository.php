@@ -59,13 +59,25 @@ class WalkRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    //    public function findOneBySomeField($value): ?Walk
-    //    {
-    //        return $this->createQueryBuilder('w')
-    //            ->andWhere('w.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findOneById(int $id): ?Walk
+    {
+        return $this->createQueryBuilder('walk')
+            ->andWhere('walk.id = :id')
+            ->andWhere('walk.status = :status')
+            ->setParameter('id', $id)
+            ->setParameter('status', 'Active')
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findAllByStatus($status): array
+    {
+        return $this->createQueryBuilder('walk')
+            ->andWhere('walk.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

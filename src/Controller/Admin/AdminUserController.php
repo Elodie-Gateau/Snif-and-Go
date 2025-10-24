@@ -25,33 +25,18 @@ final class AdminUserController extends AbstractController
     public function index(UserRepository $userRepository, DogRepository $dogRepository, TrailRepository $trailRepository, WalkRepository $walkRepository): Response
     {
         $allUsers = $userRepository->findAll();
-        $activeUsers = [];
-        foreach ($allUsers as $user) {
-            if ($user->getStatus() === "Active") {
-                $activeUsers[] = $user;
-            }
-        }
+        $activeUsers = $userRepository->findAllByStatus('Active');
+
         $allDogs = $dogRepository->findAll();
-        $activeDogs = [];
-        foreach ($allDogs as $dog) {
-            if ($dog->getStatus() === "Active") {
-                $activeDogs[] = $dog;
-            }
-        }
+        $activeDogs = $dogRepository->findAllByStatus('Active');
+
         $allTrails = $trailRepository->findAll();
-        $activeTrails = [];
-        foreach ($allTrails as $trail) {
-            if ($trail->getStatus() === "Active") {
-                $activeTrails[] = $trail;
-            }
-        }
+        $activeTrails = $trailRepository->findAllByStatus('Active');
+
         $allWalks = $walkRepository->findAll();
-        $activeWalks = [];
-        foreach ($allWalks as $walk) {
-            if ($walk->getStatus() === "Active") {
-                $activeWalks[] = $walk;
-            }
-        }
+        $activeWalks = $walkRepository->findAllByStatus('Active');
+
+
         return $this->render('admin/user/index.html.twig', [
             'users' => $allUsers,
             'activeUsers' => $activeUsers,
@@ -96,17 +81,20 @@ final class AdminUserController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser() !== $user && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Vous ne pouvez éditer que votre profil.');
+        }
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             if ($this->isGranted('ROLE_ADMIN')) {
-                                $this->addFlash('success', 'Informations mises à jour.');
+                $this->addFlash('success', 'Informations mises à jour.');
                 return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
             } else {
-                                $this->addFlash('success', 'Vos informations sont mises à jour.');
+                $this->addFlash('success', 'Vos informations sont mises à jour.');
                 return $this->redirectToRoute('app_profile', [], Response::HTTP_SEE_OTHER);
             }
         }

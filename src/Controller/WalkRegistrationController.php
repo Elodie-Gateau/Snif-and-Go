@@ -33,11 +33,20 @@ final class WalkRegistrationController extends AbstractController
     #[Route('/new/{walkId}', name: 'app_walk_registration_new', methods: ['GET', 'POST'])]
     public function new(int $walkId, WalkRegistrationRepository $walkRegistrationRepository, WalkRepository $walkRepository, DogRepository $dogRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $walk = $walkRepository->find($walkId);
+        $walk = $walkRepository->findOneById($walkId);
+
+        if (!$walk) {
+            throw $this->createNotFoundException('Cette balade n\'existe pas.');
+        }
+
         $walkRegistration = new WalkRegistration();
         $walkRegistration->setWalk($walk);
 
-
+        /** @var User|null $currentUser */
+        $currentUser = $this->getUser();
+        if (!$currentUser || $currentUser->getDogs()->isEmpty()) {
+            $this->addFlash('warning', 'Vous devez ajouter un chien avant de vous inscrire.');
+        }
         $availableDogs = $dogRepository->findAvailableForWalk($this->getUser(), $walk);
 
 

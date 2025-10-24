@@ -65,18 +65,12 @@ final class DogController extends AbstractController
                             'public_id'       => $publicId,
                             'overwrite'       => false,
                             'resource_type'   => 'image',
-                            // 'format'        => 'webp',
-                            // 'width'         => 190,
-                            // 'height'        => 200,
-                            // 'crop'          => 'fit',
-                            // 'quality'       => 80
                         ]
                     );
 
                     $dog->setCdnLink($publicId);
                 } catch (\Throwable $e) {
-
-                    $this->addFlash('notice', "Votre photo est enregistrée");
+                    $this->addFlash('warning', "Échec de l'optimisation de votre photo");
                 }
             }
             $entityManager->persist($dog);
@@ -103,6 +97,10 @@ final class DogController extends AbstractController
     #[Route('/{id}/edit', name: 'app_dog_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Dog $dog, EntityManagerInterface $entityManager): Response
     {
+        $currentUser = $this->getUser();
+        if ($dog->getUser() !== $currentUser && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
         $form = $this->createForm(DogType::class, $dog);
         $form->handleRequest($request);
 
@@ -121,6 +119,10 @@ final class DogController extends AbstractController
     #[Route('/{id}/inactive', name: 'app_dog_inactive', methods: ['POST'])]
     public function inactive(Request $request, Dog $dog, EntityManagerInterface $entityManager): Response
     {
+        $currentUser = $this->getUser();
+        if ($dog->getUser() !== $currentUser && !$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
         $submittedToken = $request->request->get('_token');
 
         if ($this->isCsrfTokenValid('inactive' . $dog->getId(), $submittedToken)) {

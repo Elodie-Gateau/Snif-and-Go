@@ -114,29 +114,24 @@ class Dog
     public function getAge(): ?int
     {
         $birthDate = $this->getBirthDate();
-        if ($birthDate) {
-            $now = new DateTime('now');
-            $bd = $birthDate->getTimestamp();
-            $nowb = $now->getTimestamp();
-            $age = ($nowb - $bd) / (365 * 24 * 60 * 60);
-            return $age;
-        } else {
+        if (!$birthDate) {
             return null;
         }
+        $now = new DateTime('now');
+        $interval = $birthDate->diff($now);
+        return $interval->y;
     }
 
     public function getAgeM(): ?int
     {
         $birthDate = $this->getBirthDate();
-        if ($birthDate) {
-            $now = new DateTime('now');
-            $bd = $birthDate->getTimestamp();
-            $nowb = $now->getTimestamp();
-            $age = ($nowb - $bd) / ((365 / 12) * 24 * 60 * 60);
-            return $age;
-        } else {
+        if (!$birthDate) {
             return null;
         }
+        $now = new \DateTime('now');
+        $interval = $birthDate->diff($now);
+
+        return ($interval->y * 12) + $interval->m;
     }
 
     public function getSex(): ?string
