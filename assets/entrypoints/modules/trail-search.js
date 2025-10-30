@@ -1,8 +1,10 @@
+"use strict";
+
 const toggleButton = document.getElementById("toggle-advanced");
 const advancedPanel = document.getElementById("trail-advanced");
 
 if (toggleButton && advancedPanel) {
-    toggleButton.addEventListener("click", e => {
+    toggleButton.addEventListener("click", function(e) {
         e.preventDefault();
         const hidden = advancedPanel.classList.toggle("hidden");
         const open = !hidden;

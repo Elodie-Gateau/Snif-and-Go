@@ -1,3 +1,5 @@
+"use strict";
+
 // Définition des variables
 const themeToggle = document.getElementById("themeToggle");
 const themeToggleOn = document.getElementById("iconOn");

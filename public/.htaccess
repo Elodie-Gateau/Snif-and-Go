@@ -31,6 +31,8 @@
   <FilesMatch "\-[A-Za-z0-9]{6,}\.(?:css|js|mjs|woff2|webp|avif|svg|png|jpe?g|gif)$">
     Header unset Cache-Control
     Header set Cache-Control "public, max-age=31536000, immutable"
+    # Supprimer les cookies des assets
+    Header unset Set-Cookie
   </FilesMatch>
 
   # b) HTML : jamais mis en cache (toujours revalidé)
@@ -48,6 +50,12 @@
   # d) JS/CSS non fingerprintés : cache 1 an
   <FilesMatch "\.(?:js|mjs|css)$">
     Header set Cache-Control "public, max-age=31536000"
+    Header unset Set-Cookie
+  </FilesMatch>
+
+  # e) Fonts : supprimer les cookies
+  <FilesMatch "\.(?:woff|woff2|ttf|eot)$">
+    Header unset Set-Cookie
   </FilesMatch>
 
   # d) Indique au cache les variantes encodage
