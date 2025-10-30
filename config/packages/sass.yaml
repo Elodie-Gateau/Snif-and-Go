@@ -1,0 +1,10 @@
+symfonycasts_sass:
+  # Style de sortie : expanded en dev, compressed en prod
+  sass_options:
+    style: 'expanded'
+
+when@prod:
+  symfonycasts_sass:
+    sass_options:
+      style: 'compressed'
+      source_map: false
