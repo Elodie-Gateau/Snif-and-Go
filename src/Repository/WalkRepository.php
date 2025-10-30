@@ -44,7 +44,7 @@ class WalkRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findNextByTrail(int $limit = 10, Trail $trail): array
+    public function findNextByTrail(Trail $trail, int $limit = 10): array
     {
         return $this->createQueryBuilder('walk')
             ->andWhere('walk.date >= :today')

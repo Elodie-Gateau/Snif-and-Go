@@ -20,12 +20,15 @@
 			<div class="home-user__container">
 				<div class="home-user__wrapper">
 					<div class="home-user__intro">
-						<img class="home-user__intro-bg" 
-							src="{{ asset('images/photo-accueil-user.webp') }}" 
-							width="360" height="240" 
-							fetchpriority="high" 
-							decoding="async" 
-							alt="Image d'un jeune chien qui sourit" 
+						<img class="home-user__intro-bg"
+							src="{{ asset('images/photo-accueil-user335x234.webp') }}"
+							srcset="{{ asset('images/photo-accueil-user335x234.webp') }} 335w,
+									{{ asset('images/photo-accueil-user.webp') }} 576w"
+							sizes="(max-width: 640px) 335px, 360px"
+							width="335" height="auto"
+							fetchpriority="high"
+							decoding="async"
+							alt="Image d'un jeune chien qui sourit"
 							aria-hidden="true">
 						<div class="home-user__intro-wrapper">
 							<p class="home-user__intro-content">Bienvenue sur votre espace. Ici, vous pouvez accédez à toutes les fonctionnalités de Snif&nbsp;&amp;&nbsp;Go.

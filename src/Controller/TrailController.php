@@ -286,7 +286,7 @@ final class TrailController extends AbstractController
         WalkRepository $walkRepository,
         Cloudinary $cloudinary
     ): Response {
-        $nextWalks = $walkRepository->findNextByTrail(10, $trail);
+        $nextWalks = $walkRepository->findNextByTrail($trail);
 
 
         $form = $this->createFormBuilder()
