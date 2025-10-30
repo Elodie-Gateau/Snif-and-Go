@@ -1,8 +1,14 @@
 {
+  "scripts": {
+    "minify": "node minify-assets.js",
+    "build": "php bin/console sass:build && php bin/console asset-map:compile && npm run minify",
+    "build:prod": "APP_ENV=prod php bin/console sass:build && APP_ENV=prod php bin/console asset-map:compile && npm run minify"
+  },
   "dependencies": {
     "flatpickr": "^4.6.13"
   },
   "devDependencies": {
-    "prettier-plugin-twig-melody": "^0.4.6"
+    "prettier-plugin-twig-melody": "^0.4.6",
+    "terser": "^5.44.0"
   }
 }
