@@ -19,8 +19,10 @@
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/gif  "access plus 1 month"
   ExpiresByType font/woff2 "access plus 1 year"
-  ExpiresByType text/css   "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/css   "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/x-javascript "access plus 1 year"
 </IfModule>
 
 # --- En-têtes Cache-Control (seulement ce qui est autorisé en .htaccess)
@@ -43,6 +45,11 @@
     Header set Cache-Control "public, max-age=2592000"
   </FilesMatch>
 
+  # d) JS/CSS non fingerprintés : cache 1 an
+  <FilesMatch "\.(?:js|mjs|css)$">
+    Header set Cache-Control "public, max-age=31536000"
+  </FilesMatch>
+
   # d) Indique au cache les variantes encodage
   Header merge Vary Accept-Encoding
 
@@ -54,13 +61,14 @@
 # --- Compression (Brotli / Gzip)
 <IfModule mod_brotli.c>
   AddOutputFilterByType BROTLI_COMPRESS \
-    text/html text/plain text/css application/javascript application/json image/svg+xml
+    text/html text/plain text/css text/javascript application/javascript \
+    application/x-javascript application/json image/svg+xml
 </IfModule>
 
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE \
-    text/html text/plain text/css application/javascript application/json image/svg+xml \
-    application/x-javascript text/xml
+    text/html text/plain text/css text/javascript application/javascript \
+    application/x-javascript application/json image/svg+xml text/xml
 
   # Evite de recompresser les fichiers déjà compressés
   SetEnvIfNoCase Request_URI \.((gz|br))$ no-gzip

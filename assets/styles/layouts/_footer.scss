@@ -4,7 +4,7 @@
 .site-footer {
     width: 100%;
     background-color: var(--background-footer);
-    color: white;
+    color: var(--text-footer);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,7 +20,10 @@
     }
 
     &__link {
-        color: white;
+        color: var(--text-footer);
+    }
+    &__link:hover {
+        color: var(--title);
     }
 
     &__logo-img {
@@ -29,8 +32,15 @@
 
     &__legal {
         padding: $size-32 0;
-        color: white;
+        color: var(--text-footer);
         text-align: center;
+    }
+
+    &__badge {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
     }
 }
 
