@@ -59,8 +59,17 @@
 
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE \
-    text/html text/plain text/css application/javascript application/json image/svg+xml
+    text/html text/plain text/css application/javascript application/json image/svg+xml \
+    application/x-javascript text/xml
 
   # Evite de recompresser les fichiers déjà compressés
   SetEnvIfNoCase Request_URI \.((gz|br))$ no-gzip
+
+  # Force la compression pour les navigateurs
+  <IfModule mod_setenvif.c>
+    <IfModule mod_headers.c>
+      SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+      RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+    </IfModule>
+  </IfModule>
 </IfModule>
