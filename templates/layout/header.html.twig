@@ -7,14 +7,17 @@
 					<picture>
 						<source
 							media="(min-width: 1024px)"
-							srcset="{{ asset('images/logos/logoRVB-inline.webp') }}"
-							data-eco="{{ asset('images/logos/logoRVB-inline-eco.webp') }}"
-							data-normal="{{ asset('images/logos/logoRVB-inline.webp') }}">
+							srcset="{{ asset('images/logos/logoRVB-inline250x75.webp') }}"
+							data-eco="{{ asset('images/logos/logoRVB-inline-eco250x75.webp') }}"
+							data-normal="{{ asset('images/logos/logoRVB-inline250x75.webp') }}">
 						<img
 							class="site-header__logo-img"
-							src="{{ asset('images/logos/logoRVB.webp') }}"
-							data-eco="{{ asset('images/logos/logoRVBeco.webp') }}"
-							data-normal="{{ asset('images/logos/logoRVB.webp') }}"
+							src="{{ asset('images/logos/logoRVB75x75.webp') }}"
+							srcset="{{ asset('images/logos/logoRVB75x75.webp') }} 75w,
+									{{ asset('images/logos/logoRVB.webp') }} 231w"
+							sizes="75px"
+							data-eco="{{ asset('images/logos/logoRVBeco75x75.webp') }}"
+							data-normal="{{ asset('images/logos/logoRVB75x75.webp') }}"
 							width="75"
 							height="75"
 							alt="Logo de Snif &amp; Go">

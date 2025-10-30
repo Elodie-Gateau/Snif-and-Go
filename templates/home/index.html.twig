@@ -255,7 +255,12 @@
 													{% endif %}
 									alt="Photo de l'itinéraire {{ trail.name }}">
 								{% else %}
-									<img loading="lazy" decoding="async" width = "275" height="160" class="home-user__trail-photo" src="{{ asset('images/photo-trail-default.webp') }}" alt="Photo d'une carte routière'">
+									<img loading="lazy" decoding="async" width="327" height="auto" class="home-user__trail-photo"
+										src="{{ asset('images/photo-trail-default327x160.webp') }}"
+										srcset="{{ asset('images/photo-trail-default327x160.webp') }} 327w,
+												{{ asset('images/photo-trail-default.webp') }} 682w"
+										sizes="(max-width: 640px) 275px, 327px"
+										alt="Photo d'une carte routière'">
 								{% endif %}
 								<p class="home-user__trail-name">
 									<strong>{{ trail.name }}</strong>
