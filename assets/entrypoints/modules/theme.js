@@ -6,10 +6,23 @@ const sun = document.getElementById("sun");
 const moon = document.getElementById("moon");
 const html = document.documentElement;
 const badgeWSCarbon = document.getElementById("wcb");
+const logoImg = document.querySelector(".site-header__logo-img");
+const logoSource = document.querySelector(".site-header__logo source");
+
+// Fonction pour mettre à jour les logos
+function updateLogos(isEco) {
+    if (logoImg) {
+        const imgSrc = isEco ? logoImg.dataset.eco : logoImg.dataset.normal;
+        logoImg.src = imgSrc;
+    }
+    if (logoSource) {
+        const sourceSrc = isEco ? logoSource.dataset.eco : logoSource.dataset.normal;
+        logoSource.srcset = sourceSrc;
+    }
+}
 
 // Récupération du thème stockée dans le local Storage
 const themeStorage = localStorage.getItem("theme");
-console.log(themeStorage);
 // Si le thème enregistré était "eco" application du thème eco
 if (themeStorage === "eco") {
     html.classList.add("eco");
@@ -17,6 +30,7 @@ if (themeStorage === "eco") {
     themeToggleOff.classList.add("hidden");
     sun.classList.add("hidden");
     moon.classList.remove("hidden");
+    updateLogos(true);
     if (badgeWSCarbon) {
         badgeWSCarbon.classList.add("wcb-d");
     }
@@ -30,6 +44,7 @@ if (themeToggle) {
         themeToggleOff.classList.toggle("hidden", eco);
         sun.classList.toggle("hidden", eco);
         moon.classList.toggle("hidden", !eco);
+        updateLogos(eco);
         if (badgeWSCarbon) {
             badgeWSCarbon.classList.toggle("wcb-d", eco);
         }

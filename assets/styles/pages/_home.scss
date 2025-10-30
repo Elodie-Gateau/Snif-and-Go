@@ -41,6 +41,7 @@
 
         &-img {
             width: 40%;
+            height: auto;
         }
     }
 
@@ -84,6 +85,7 @@
 }
 .photo {
     width: 100%;
+    height: auto;
     border-radius: $size-10;
 }
 
@@ -315,6 +317,7 @@
 
         &__intro-img {
             width: 45%;
+            height: auto;
         }
         &__intro-content,
         &__intro-container,

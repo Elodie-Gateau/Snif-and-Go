@@ -1,6 +1,13 @@
 <footer class="site-footer">
 	<div class="site-footer__container">
-		<img class="site-footer__logo-img" src="{{ asset('images/logos/logoWhite.webp') }}" alt="Logo de Snif &amp; Go">
+		<img class="site-footer__logo-img"
+			src="{{ asset('images/logos/logoWhite90x91.webp') }}"
+			srcset="{{ asset('images/logos/logoWhite90x91.webp') }} 90w,
+					{{ asset('images/logos/logoWhite.webp') }} 231w"
+			sizes="90px"
+			width="90"
+			height="91"
+			alt="Logo de Snif &amp; Go">
 
 		<nav class="site-footer__nav">
 			<ul class="site-footer__menu">

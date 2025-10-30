@@ -324,10 +324,15 @@
 	{% else %}
 		<section class="home-guest">
 			<div class="home-guest__hero">
-				<img class="home-guest__hero photo" src="{{ asset('images/hero-picture.webp') }}" 
-
-				fetchpriority="high" 
-				decoding="async" 
+				<img class="home-guest__hero photo"
+				src="{{ asset('images/hero-picture350x273.webp') }}"
+				srcset="{{ asset('images/hero-picture350x273.webp') }} 350w,
+						{{ asset('images/hero-picture.webp') }} 1000w"
+				sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+				width="350"
+				height="273"
+				fetchpriority="high"
+				decoding="async"
 				alt="Deux femmes se baladent avec leurs chiens.">
 				<h1 class="home-guest__hero-title">Bienvenue sur Snif &amp;Go</h1>
 				<h2 class="home-guest__hero-subtitle">Plus de chiens, plus de fun !</h2>
@@ -337,16 +342,26 @@
 				<div class="home-guest__intro-container">
 					<img loading="lazy" decoding="async"
 						class="home-guest__intro-img"
-						src="{{ asset('images/capture-homelog.webp') }}"
-						
+						src="{{ asset('images/capture-homelog226x427.webp') }}"
+						srcset="{{ asset('images/capture-homelog140x265.webp') }} 140w,
+								{{ asset('images/capture-homelog226x427.webp') }} 226w,
+								{{ asset('images/capture-homelog.webp') }} 752w"
+						sizes="(max-width: 640px) 40vw, (max-width: 1024px) 45vw, 350px"
+						width="226"
+						height="427"
 						alt="Capture d'écran du site Snif &amp;Go">
 					<img loading="lazy" decoding="async"
 						class="home-guest__intro-img"
-						src="{{ asset('images/capture-home.webp') }}"
-						
-						alt="Capture d'écran du site Snif &amp;Go">	
+						src="{{ asset('images/capture-home226x427.webp') }}"
+						srcset="{{ asset('images/capture-home140x265.webp') }} 140w,
+								{{ asset('images/capture-home226x427.webp') }} 226w,
+								{{ asset('images/capture-home.webp') }} 752w"
+						sizes="(max-width: 640px) 40vw, (max-width: 1024px) 45vw, 350px"
+						width="226"
+						height="427"
+						alt="Capture d'écran du site Snif &amp;Go">
 				</div>
-				{# <div class="home-guest__intro-description"> #}
+
 					<p class="home-guest__intro-content">Snif &amp;Go est une plateforme communautaire où chaque utilisateur peut créer un compte, inscrire son chien et participer à des balades organisées par d'autres membres.</p>
 					<p class="home-guest__intro-content">
 						<strong>L'idée : transformer la promenade quotidienne en moment de partage et de convivialité.</strong>
@@ -357,8 +372,16 @@
 					<p class="home-guest__intro-content">Plus qu'une application, Snif &amp;Go favorise les rencontres : entre maîtres, entre chiens et avec votre environnement local. Offrez à votre compagnon des sorties enrichissantes, et élargissez votre cercle autour d'une passion commune.</p>
 				</div>
 
-				<img loading="lazy" class="home-guest__intro photo" src="{{ asset('images/photo-intro.webp') }}" alt="Un homme et une femme se baladent avec leur chien">
-			{# </div> #}
+				<img loading="lazy" decoding="async"
+				class="home-guest__intro photo"
+				src="{{ asset('images/photo-intro350x234.webp') }}"
+				srcset="{{ asset('images/photo-intro350x234.webp') }} 350w,
+						{{ asset('images/photo-intro.webp') }} 806w"
+				sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+				width="350"
+				height="234"
+				alt="Un homme et une femme se baladent avec leur chien">
+
 
 			<div class="home-guest__cta">
 				<a class="home-guest__cta-button btn" href="{{ path('app_register') }}">Créer mon compte</a>

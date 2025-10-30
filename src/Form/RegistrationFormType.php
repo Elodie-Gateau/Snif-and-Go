@@ -144,7 +144,8 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'required' => false
+            'required' => false,
+            'attr' => ['class' => 'form']
         ]);
     }
 }

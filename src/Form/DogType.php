@@ -102,7 +102,8 @@ class DogType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Dog::class,
-            'required' => false
+            'required' => false,
+            'attr' => ['class' => 'form']
         ]);
     }
 }

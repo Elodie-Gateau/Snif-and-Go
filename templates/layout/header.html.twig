@@ -4,10 +4,21 @@
 	<div class="site-header__banner">
 			<div class="site-header__logo">
 				<a aria-label="Accueil Snif &amp; Go" class="site-header__logo" href="{{ path('app_home') }}">
-					<img class="site-header__logo-img-inline" src="{{ asset('images/logos/logoRVB-inline.webp') }}" width="210" height="65" alt="Logo de Snif &amp; Go">
-					<img class="site-header__logo-img-inline eco" src="{{ asset('images/logos/logoRVB-inline-eco.webp') }}" width="210" height="65" alt="Logo de Snif &amp; Go">
-					<img class="site-header__logo-img-block" src="{{ asset('images/logos/logoRVB.webp') }}" width="75" height="75" alt="Logo de Snif &amp; Go">
-					<img class="site-header__logo-img-block eco" src="{{ asset('images/logos/logoRVBeco.webp') }}" width="75" height="75" alt="Logo de Snif &amp; Go">
+					<picture>
+						<source
+							media="(min-width: 1024px)"
+							srcset="{{ asset('images/logos/logoRVB-inline.webp') }}"
+							data-eco="{{ asset('images/logos/logoRVB-inline-eco.webp') }}"
+							data-normal="{{ asset('images/logos/logoRVB-inline.webp') }}">
+						<img
+							class="site-header__logo-img"
+							src="{{ asset('images/logos/logoRVB.webp') }}"
+							data-eco="{{ asset('images/logos/logoRVBeco.webp') }}"
+							data-normal="{{ asset('images/logos/logoRVB.webp') }}"
+							width="75"
+							height="75"
+							alt="Logo de Snif &amp; Go">
+					</picture>
 				</a>
 			</div>
 			<div class="site-header__wrapper" aria-hidden="true">

@@ -11,8 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 final class HomeController extends AbstractController
 {
@@ -29,7 +28,6 @@ final class HomeController extends AbstractController
         $nextWalks = $walkRepository->findNext($limit + 1);
         $spotsByWalk = [];
         if ($nextWalks && !empty($nextWalks)) {
-            // $spotsByWalk = [];
             foreach ($nextWalks as $walk) {
                 $validRegisters = $walkRegistrationRepository->findValidRegisters($walk);
                 if ($validRegisters) {

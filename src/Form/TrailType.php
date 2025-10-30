@@ -237,6 +237,7 @@ class TrailType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Trail::class,
             'required' => false,
+            'attr' => ['class' => 'form'],
             'validation_groups' => function (FormInterface $form) {
                 $data = $form->getData();
                 $mode = $data?->getInputMode();
