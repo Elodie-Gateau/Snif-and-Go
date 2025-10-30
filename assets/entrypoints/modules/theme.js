@@ -6,6 +6,7 @@ const sun = document.getElementById("sun");
 const moon = document.getElementById("moon");
 const html = document.documentElement;
 const badgeWSCarbon = document.getElementById("wcb");
+const badgeEcoindex = document.getElementById("ecoindex-badge");
 const logoImg = document.querySelector(".site-header__logo-img");
 const logoSource = document.querySelector(".site-header__logo source");
 
@@ -34,6 +35,9 @@ if (themeStorage === "eco") {
     if (badgeWSCarbon) {
         badgeWSCarbon.classList.add("wcb-d");
     }
+    if (badgeEcoindex) {
+        badgeEcoindex.setAttribute("data-theme", "dark");
+    }
 }
 
 // Application du thème selon le click du toggle
@@ -47,6 +51,13 @@ if (themeToggle) {
         updateLogos(eco);
         if (badgeWSCarbon) {
             badgeWSCarbon.classList.toggle("wcb-d", eco);
+        }
+        if (badgeEcoindex) {
+            if (eco) {
+                badgeEcoindex.setAttribute("data-theme", "dark");
+            } else {
+                badgeEcoindex.removeAttribute("data-theme");
+            }
         }
         localStorage.setItem("theme", eco ? "eco" : "default");
     });
