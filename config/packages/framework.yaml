@@ -7,7 +7,7 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session:
         cookie_httponly: true
-        cookie_samesite: strict
+        cookie_samesite: lax
         cookie_secure: auto
         # Ne pas envoyer les cookies sur les assets - limiter le cookie_path
         # Malheureusement, on ne peut pas exclure /assets/ du cookie_path directement
