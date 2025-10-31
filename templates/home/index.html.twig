@@ -208,26 +208,6 @@
 								</div>
 							{% endif %}
 						</div>
-						{# 
-						<div class="home-user__trail-search--advanced-item">
-							{{ form_label(form.minScore)}}
-							{{ form_widget(form.minScore)}}
-							{% if form_errors(form.minScore) %}
-								<div class="home-user__trail-search--advanced-error">
-									{{ form_errors(form.minScore)}}
-								</div>
-							{% endif %}
-						</div>
-
-						<div class="home-user__trail-search--advanced-item">
-							{{ form_label(form.maxScore)}}
-							{{ form_widget(form.maxScore)}}
-							{% if form_errors(form.maxScore) %}
-								<div class="home-user__trail-search--advanced-error">
-									{{ form_errors(form.maxScore)}}
-								</div>
-							{% endif %}
-						</div> #}
 						<div class="home-user__trail-search--advanced-button">
 							<button class="home-user__button btn">Rechercher</button>
 						</div>
@@ -235,9 +215,6 @@
 					{{ form_end(form) }}
 				</fieldset>
 			</div>
-
-			{# Compteur de résultats #}
-			{# <p id="search-result-count" role="status" aria-live="polite" class="visually-hidden"></p> #}
 
 			{# Résultats #}
 				<ul class="home-user__trail-search--results" role="list" aria-label="Résultats de recherche" aria-relevant="additions removals"> {% if foundTrails is defined and foundTrails|length > 0 %}

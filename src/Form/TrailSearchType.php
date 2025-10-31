@@ -16,10 +16,10 @@ final class TrailSearchType extends AbstractType
         $builder
             ->add('search', TextType::class, [
                 'label' => false,
-                'label_attr' => ['class' => 'home-user__trail--search form__label'],
+                'label_attr' => ['class' => 'home-user__trail--search__label'],
                 'attr' => [
                     'placeholder' => 'Saisir une ville ou un nom d\'itinéraire',
-                    'class' => 'home-user__trail--search form__input'
+                    'class' => 'home-user__trail--search__input'
                 ],
             ])
 

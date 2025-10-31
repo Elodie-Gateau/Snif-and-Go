@@ -9,8 +9,9 @@ framework:
         cookie_httponly: true
         cookie_samesite: strict
         cookie_secure: auto
-        cookie_path: /
-        # Ne pas envoyer les cookies sur les assets
+        # Ne pas envoyer les cookies sur les assets - limiter le cookie_path
+        # Malheureusement, on ne peut pas exclure /assets/ du cookie_path directement
+        # La seule solution serait un sous-domaine séparé pour les assets
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
 
     #esi: true

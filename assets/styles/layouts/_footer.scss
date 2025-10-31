@@ -39,8 +39,10 @@
     &__badge {
         width: 100%;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
+        gap: $size-20;
         align-items: center;
+        padding: $size-20 0;
     }
 }
 
