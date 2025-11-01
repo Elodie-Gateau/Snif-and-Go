@@ -63,7 +63,7 @@
 
   # --- Normalize Permissions-Policy (avoid unknown features like 'browsing-topics')
   Header always unset Permissions-Policy
-  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), browsing-topics=()"
 </IfModule>
 
 # --- Compression (Brotli / Gzip)
