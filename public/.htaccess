@@ -61,9 +61,9 @@
   # d) Indique au cache les variantes encodage
   Header merge Vary Accept-Encoding
 
-  # --- Normalize Permissions-Policy (avoid unknown features like 'browsing-topics')
+  # --- Normalize Permissions-Policy 
   Header always unset Permissions-Policy
-  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), browsing-topics=()"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
 </IfModule>
 
 # --- Compression (Brotli / Gzip)
