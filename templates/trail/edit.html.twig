@@ -5,14 +5,18 @@
 {% endblock %}
 
 
-{% block title %}Edit Trail{% endblock %}
+{% block title %}Modifier l'itinéraire{% endblock %}
 
 {% block body %}
-    <h1>Edit Trail</h1>
+    <h1>Modifier l'itinéraire</h1>
 
-    {{ include('trail/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('trail/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+	<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
+								<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ trail.id) }}">
+								<button class="js-delete profile__trail-icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="{{ csrf_token('inactive' ~ trail.id) }}" data-name="l'itinéraire {{ trail.name }}" type="submit">
+									{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__trail-icon' }) }}
+								</button>
+							</form>
+    <a class="trail__back back" href="{{ path('app_trail_index') }}">Retour</a>
 
-    <a href="{{ path('app_trail_index') }}">back to list</a>
-
-    {{ include('trail/_delete_form.html.twig') }}
 {% endblock %}

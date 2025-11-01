@@ -32,7 +32,7 @@ class TrailType extends AbstractType
                 ],
                 'label' => "Nom de l'itinéraire :",
 
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez saisir un nom",
@@ -45,8 +45,8 @@ class TrailType extends AbstractType
                 ],
             ])
             ->add('inputMode', ChoiceType::class, [
-                'attr' => ['class' => 'add-trail__form-input-select'],
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'attr' => ['class' => 'add-trail form-input-select'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'expanded' => true,
                 'multiple' => false,
                 'choices' => [
@@ -59,7 +59,7 @@ class TrailType extends AbstractType
 
             ->add('gpxFile', FileType::class, [
                 'attr' => ['class' => 'add-trail form__input'],
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'mapped' => false,
                 'required' => false,
                 'label' => 'Importer un fichier GPX :',
@@ -81,7 +81,7 @@ class TrailType extends AbstractType
 
             ->add('startAddress', null, [
                 'attr' => ['class' => 'add-trail form__input'],
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'label' => 'Adresse :',
                 'constraints' => [
                     new NotBlank([
@@ -99,7 +99,7 @@ class TrailType extends AbstractType
 
             ->add('startCode', null, [
                 'attr' => ['class' => 'add-trail form__input'],
-                'label_attr' => ['class' => 'add-trail__form-label code'],
+                'label_attr' => ['class' => 'add-trail form-label code'],
                 'label' => 'Code Postal :',
                 'constraints' => [
                     new NotBlank([
@@ -118,7 +118,7 @@ class TrailType extends AbstractType
 
             ->add('startCity', null, [
                 'attr' => ['class' => 'add-trail form__input'],
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'label' => 'Ville :',
                 'constraints' => [
                     new NotBlank([
@@ -136,7 +136,7 @@ class TrailType extends AbstractType
 
             ->add('endAddress', null, [
                 'attr' => ['class' => 'add-trail form__input'],
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'label' => 'Adresse :',
                 'constraints' => [
                     new NotBlank([
@@ -153,7 +153,7 @@ class TrailType extends AbstractType
             ])
             ->add('endCode', null, [
                 'attr' => ['class' => 'add-trail form__input'],
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'label' => 'Code Postal :',
                 'constraints' => [
                     new NotBlank([
@@ -170,7 +170,7 @@ class TrailType extends AbstractType
             ])
             ->add('endCity', null, [
                 'attr' => ['class' => 'add-trail form__input'],
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'label' => 'Ville :',
                 'constraints' => [
                     new NotBlank([
@@ -188,7 +188,7 @@ class TrailType extends AbstractType
 
             ->add('water_point', ChoiceType::class, [
                 'attr' => ['class' => 'add-trail form__input'],
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'multiple' => false,
                 'choices' => [
                     'Oui' => 'true',
@@ -200,7 +200,7 @@ class TrailType extends AbstractType
 
             ->add('difficulty', ChoiceType::class, [
                 'attr' => ['class' => 'add-trail form__input'],
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'expanded' => false,
                 'multiple' => false,
                 'choices' => [
@@ -214,7 +214,7 @@ class TrailType extends AbstractType
 
             ->add('photoFiles', FileType::class, [
                 'label' => 'Téléchargez des photos (facultatif) :',
-                'label_attr' => ['class' => 'add-trail__form-label'],
+                'label_attr' => ['class' => 'add-trail form-label'],
                 'mapped' => false,
                 'multiple' => true,
                 'required' => false,

@@ -5,14 +5,25 @@
 {% endblock %}
 
 
-{% block title %}Edit WalkRegistration{% endblock %}
+{% block title %}Modifier l'inscription{% endblock %}
 
 {% block body %}
-    <h1>Edit WalkRegistration</h1>
+    <h1>Modifier l'inscription</h1>
 
     {{ include('walk_registration/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_walk_registration_index') }}">back to list</a>
+			{% if app.user == wr.dog.user %}
+				<div class="walk-register__wrapper actions">
+					<form method="post" action="{{ path('app_walk_registration_cancelled', {'id': wr.id}) }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ wr.id) }}">
+						<button class="js-delete walk-register__button" data-url="{{ path('app_walk_registration_cancelled', {'id': wr.id}) }}" data-token="notoken" data-name="l'inscription de {{ wr.dog.name }} " type="submit">
+							Annuler l'inscription de
+							{{ wr.dog.name }}
+						</button>
+					</form>
+				</div>
+			{% endif %}
+      
+    <a class="wr__back back" href="{{ path('app_walk_registration_index') }}">Retour</a>
 
-    {{ include('walk_registration/_delete_form.html.twig') }}
 {% endblock %}

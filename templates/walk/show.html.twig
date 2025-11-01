@@ -1,39 +1,94 @@
 {% extends 'base.html.twig' %}
 
 {% block page_scripts %}
-  {{ importmap('global') }}
+	{{ importmap('global') }}
 {% endblock %}
 
 
-{% block title %}Walk{% endblock %}
+{% block title %}Balade du
+	{{ walk.date|format_datetime('full', 'short', locale: 'fr')  }}
+{% endblock %}
 
 {% block body %}
-    <h1>Walk</h1>
+	<h1>Balade du
+		{{ walk.date|format_datetime('full', 'short', locale: 'fr')  }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ walk.id }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ walk.date ? walk.date|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Max_dogs</th>
-                <td>{{ walk.maxDogs }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ walk.status }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<div class="walk__desc-item">
+		<p class="walk__desc-title">Itinéraire</p>
+		<p class="walk__desc-content">{{ walk.trail.name }}</p>
+	</div>
+	<div class="walk__desc-item">
+		<p class="walk__desc-title">Distance</p>
+		<p class="walk__desc-content">{{ walk.trail.distance }}
+			km{{ walk.trail.distance > 1 ? "s" : "" }}</p>
+	</div>
+	<div class="walk__desc-item">
+		<p class="walk__desc-title">Durée</p>
+		<p class="walk__desc-content">{% import 'macros/duration.html.twig' as dur %}
+			{{ dur.minutes(walk.trail.duration) }}</p>
+	</div>
+	<div class="walk__desc-item">
+		<p class="walk__desc-title">Difficulté</p>
+		<p class="walk__desc-content">{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+			{{ difficultyLabels[walk.trail.difficulty] ?? 'Non défini' }}</p>
+	</div>
+	<div class="walk__desc-item">
+		<p class="walk__desc-title">Point d'eau</p>
+		{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
+		<p class="trail__desc-content">{{ waterPointLabels[walk.trail.waterPoint] ?? "Inconnu" }}</p>
+	</div>
+	<div class="walk__desc-item">
+		<p class="walk__desc-title">Point de départ</p>
+		<div class="walk__desc-wrapper">
+			<p class="walk__desc-content">{{ walk.trail.startAddress }}</p>
+			<p class="walk__desc-content">{{ walk.trail.startCode }}</p>
+			<p class="walk__desc-content">{{ walk.trail.startCity }}</p>
+		</div>
+	</div>
+	<div class="walk__desc-item">
+		<p class="walk__desc-title">Point d'arrivée</p>
+		<div class="walk__desc-wrapper">
+			<p class="walk__desc-content">{{ walk.trail.endAddress }}</p>
+			<p class="walk__desc-content">{{ walk.trail.endCode }}</p>
+			<p class="walk__desc-content">{{ walk.trail.endCity }}</p>
+		</div>
+	</div>
 
-    <a href="{{ path('app_walk_index') }}">back to list</a>
+	<div class="walk__desc-item">
+		<p class="walk__desc-title">Nombre de chien maximum</p>
+		<p class="walk__desc-content">{{ walk.maxDogs }}</p>
+	</div>
+	<div class="walk__desc-item">
+		<p class="walk__desc-title">Les chiens inscrits</p>
+		<div class="walk__desc-wrapper">
+			{% if validRegisters|length > 0 %}
+				{% for register in validRegisters %}
+					<div class="walk__desc-container">
+						{% set dogPhotoClass = ['walk__dog-photo', register.dog.sex] | join(' ') %}
+						{% if register.dog.photo %}
+							<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ register.dog.photo)}}">
+						{% else %}
+							{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+						{% endif %}
+						<p class="walk__desc-content">{{ register.dog.name }}</p>
+					</div>
+				{% endfor %}
 
-    <a href="{{ path('app_walk_edit', {'id': walk.id}) }}">edit</a>
+			{% else %}
+				<p class="walk__desc-content">Aucun chien n'est encore inscrit à cette balade</p>
+			{% endif %}
+		</div>
+	</div>
 
-    {{ include('walk/_delete_form.html.twig') }}
+
+	<div class="profile__walks-wrapper actions">
+		<a class="profile__walks-icon" href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}">{{ ux_icon('emojione-monotone:magnifying-glass-tilted-left', {class: 'home-user__dog-icon'}) }}</a>
+		<form method="post" action="{{ path('app_walk_inactive', {'id': walk.id}) }}">
+			<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ walk.id) }}">
+			<button class="js-delete profile__walks-icon" data-url="{{ path('app_walk_inactive', {'id': walk.id}) }}" data-token="{{ csrf_token('inactive' ~ walk.id) }}" data-name="la balade du {{ walk.date|format_datetime('full', 'short', locale: 'fr') }}" type="submit">
+				{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__walks-icon' }) }}
+			</button>
+		</form>
+	</div>
+	<a class="walk__back back" href="{{ path('app_walk_index') }}">Retour</a>
 {% endblock %}

@@ -5,14 +5,20 @@
 {% endblock %}
 
 
-{% block title %}Edit Walk{% endblock %}
+{% block title %}Modifier la balade{% endblock %}
 
 {% block body %}
-    <h1>Edit Walk</h1>
+    <h1>Modifier la balade </h1>
 
-    {{ include('walk/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('walk/_form.html.twig', {'button_label': 'Enregistrer'}) }}
 
-    <a href="{{ path('app_walk_index') }}">back to list</a>
 
-    {{ include('walk/_delete_form.html.twig') }}
+<form method="post" action="{{ path('app_walk_inactive', {'id': walk.id}) }}">
+	<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ walk.id) }}">
+	<button class="js-delete profile__walks-icon" data-url="{{ path('app_walk_inactive', {'id': walk.id}) }}" data-token="{{ csrf_token('inactive' ~ walk.id) }}" data-name="la balade du {{ walk.date|format_datetime('full', 'short', locale: 'fr') }}" type="submit">
+		{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'profile__walks-icon' }) }}
+	</button>
+</form>
+    <a class="trail__back back" href="{{ path('app_walk_index') }}">Retour</a>
+
 {% endblock %}

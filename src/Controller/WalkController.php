@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\WalkType;
 use App\Repository\TrailRepository;
 use App\Repository\WalkRepository;
+use App\Repository\WalkRegistrationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,10 +71,12 @@ final class WalkController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_walk_show', methods: ['GET'])]
-    public function show(Walk $walk): Response
+    public function show(Walk $walk, WalkRegistrationRepository $walkRegistrationRepository): Response
     {
+        $validRegisters = $walkRegistrationRepository->findValidRegisters($walk);
         return $this->render('walk/show.html.twig', [
             'walk' => $walk,
+            'validRegisters' => $validRegisters
         ]);
     }
 
