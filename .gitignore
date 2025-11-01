@@ -26,7 +26,7 @@ node_modules/
 dist/
 build/
 .cache/
-vendor/ # si tu ne veux pas versionner composer (souvent on le garde, mais à toi de voir)
+vendor/
 
 # Uploads
 public/uploads/
