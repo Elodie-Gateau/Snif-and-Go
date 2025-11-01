@@ -158,6 +158,10 @@
         border-radius: $size-10;
         padding: $size-30 $size-10;
         width: 100%;
+
+        &--card {
+            padding: $size-10 $size-20;
+        }
     }
 
     &__walk-title {
@@ -244,11 +248,10 @@
     &__trail-search {
         width: 100%;
         background: var(--background-tertiary);
-        padding: $size-20 $size-10;
         border-radius: $size-10;
 
         .form__input {
-            width: 60%;
+            width: 90%;
         }
     }
 
