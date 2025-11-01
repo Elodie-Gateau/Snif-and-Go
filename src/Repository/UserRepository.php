@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private LoggerInterface $logger)
     {
         parent::__construct($registry, User::class);
     }
@@ -30,7 +31,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        try {
+            $this->getEntityManager()->flush();
+        } catch (\Exception $e) {
+            $this->logger->error('Failed to upgrade user password', [
+                'user_id' => $user->getId(),
+                'error'   => $e->getMessage(),
+                'code'    => $e->getCode(),
+            ]);
+            throw $e;
+        }
     }
 
 
@@ -105,7 +115,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $conn->commit();
         } catch (\Throwable $e) {
 
-            $this->logger->error('Failed to deactivate user', [
+            $this->logger->error('Failed to reactivate user', [
                 'user_id' => $user->getId(),
                 'error'   => $e->getMessage(),
                 'code'    => $e->getCode(),
@@ -133,7 +143,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             );
             $conn->commit();
         } catch (\Throwable $e) {
-            $this->logger->error('Failed to deactivate user', [
+            $this->logger->error('Failed to delete user', [
                 'user_id' => $user->getId(),
                 'error'   => $e->getMessage(),
                 'code'    => $e->getCode(),

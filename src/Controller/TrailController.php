@@ -13,9 +13,12 @@ use App\Repository\WalkRegistrationRepository;
 use App\Repository\WalkRepository;
 use App\Form\TrailSearchType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Service\GeocodingService;
@@ -130,7 +133,17 @@ final class TrailController extends AbstractController
                     $safeFilename = $slugger->slug($originalFilename);
                     $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
                     // Déplace l'image dans le dossier d'upload
-                    $image->move($this->getParameter('images_directory'), $newFilename);
+                    try {
+                        $image->move($this->getParameter('images_directory'), $newFilename);
+                    } catch (FileException $e) {
+                        $logger->error('Image upload failed', [
+                            'error' => $e->getMessage(),
+                            'file' => $newFilename,
+                            'directory' => $this->getParameter('images_directory')
+                        ]);
+                        $this->addFlash('error', 'Erreur lors du téléchargement de l\'image. Vérifiez vos permissions.');
+                        return $this->redirectToRoute('app_trail_new');
+                    }
                     // Création d'une entité Photo
                     $photo = new Photo;
                     $photo->setName($newFilename);
@@ -155,7 +168,14 @@ final class TrailController extends AbstractController
                         // Si l'upload Cloudinary fonctionne alors je supprime la version locale
                         $filePath = $this->getParameter('images_directory') . '/' . $newFilename;
                         if (file_exists($filePath)) {
-                            unlink($filePath);
+                            try {
+                                unlink($filePath);
+                            } catch (\Throwable $e) {
+                                $logger->warning('Failed to delete local file after Cloudinary upload', [
+                                    'file' => $filePath,
+                                    'error' => $e->getMessage()
+                                ]);
+                            }
                         }
                     } catch (\Throwable $e) {
                         // Si l'upload Cloudinary ne fonctionne pas j'affiche l'erreur
@@ -182,7 +202,17 @@ final class TrailController extends AbstractController
                 $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
-                $file->move($this->getParameter('gpx_directory'), $newFilename);
+                try {
+                    $file->move($this->getParameter('gpx_directory'), $newFilename);
+                } catch (FileException $e) {
+                    $logger->error('File upload failed', [
+                        'error' => $e->getMessage(),
+                        'file' => $newFilename,
+                        'directory' => $this->getParameter('gpx_directory')
+                    ]);
+                    $this->addFlash('error', 'Erreur lors du téléchargement du fichier GPX. Vérifiez vos permissions.');
+                    return $this->redirectToRoute('app_trail_new');
+                }
                 $trail->setGpxFile($newFilename);
 
                 // On récupère le fichier récemment enregistré
@@ -265,10 +295,34 @@ final class TrailController extends AbstractController
                     }
                 }
             }
+
+            // Prépare l'objet à enregistrer
             $em->persist($trail);
-            $em->flush();
-            $this->addFlash('success', 'Itinéraire créé avec succès');
-            return $this->redirectToRoute('app_trail_index');
+
+
+            try {
+                // On essaye de l'ajouter à la base de données
+                $em->flush();
+                $this->addFlash('success', 'Itinéraire créé avec succès');
+                return $this->redirectToRoute('app_trail_index');
+            } catch (UniqueConstraintViolationException $e) {
+                // Exception levée s'il y a un doublon
+                $logger->warning('Trail already exists', [
+                    'user_id' => $user->getId(),
+                    'error' => $e->getMessage()
+                ]);
+                $this->addFlash('warning', 'Cet itinéraire existe déjà.');
+                return $this->redirectToRoute('app_trail_new');
+            } catch (\Exception $e) {
+                // Exception pour d'autres erreurs SQL
+                $logger->error('Failed to save trail', [
+                    'user_id' => $user->getId(),
+                    'error' => $e->getMessage(),
+                    'code' => $e->getCode()
+                ]);
+                $this->addFlash('warning', 'Une erreur est survenue lors de l\'enregistrement. Veuillez réessayer.');
+                return $this->redirectToRoute('app_home');
+            }
         }
 
         return $this->render('trail/new.html.twig', [
@@ -284,9 +338,11 @@ final class TrailController extends AbstractController
         EntityManagerInterface $em,
         SluggerInterface $slugger,
         WalkRepository $walkRepository,
-        Cloudinary $cloudinary
+        Cloudinary $cloudinary,
+        LoggerInterface $logger
     ): Response {
         $nextWalks = $walkRepository->findNextByTrail($trail);
+
 
 
         $form = $this->createFormBuilder()
@@ -319,7 +375,17 @@ final class TrailController extends AbstractController
                 $safe = $slugger->slug($original);
                 $newFilename = $safe . '-' . uniqid() . '.' . $image->guessExtension();
 
-                $image->move($this->getParameter('images_directory'), $newFilename);
+                try {
+                    $image->move($this->getParameter('images_directory'), $newFilename);
+                } catch (FileException $e) {
+                    $logger->error('Image upload failed', [
+                        'error' => $e->getMessage(),
+                        'file' => $newFilename,
+                        'directory' => $this->getParameter('images_directory')
+                    ]);
+                    $this->addFlash('error', 'Erreur lors du téléchargement de l\'image. Vérifiez vos permissions.');
+                    return $this->redirectToRoute('app_trail_new');
+                }
 
                 $photo = new Photo();
                 $photo->setName($newFilename);
@@ -354,11 +420,20 @@ final class TrailController extends AbstractController
                 $photo->setUser($this->getUser());
                 $photo->setTrail($trail);
                 $trail->addPhoto($photo);
-
-                $em->flush();
-
-                $this->addFlash('success', 'Photos ajoutées avec succès');
-                return $this->redirectToRoute('app_trail_show', ['id' => $trail->getId()]);
+                try {
+                    // On essaye de l'ajouter à la base de données
+                    $em->flush();
+                    $this->addFlash('success', 'Photos ajoutées avec succès');
+                    return $this->redirectToRoute('app_trail_show', ['id' => $trail->getId()]);
+                } catch (\Exception $e) {
+                    // Exception pour erreurs SQL
+                    $logger->error('Failed to save image', [
+                        'error' => $e->getMessage(),
+                        'code' => $e->getCode()
+                    ]);
+                    $this->addFlash('warning', 'Une erreur est survenue lors de l\'enregistrement. Veuillez réessayer.');
+                    return $this->redirectToRoute('app_home');
+                }
             }
         }
         return $this->render('trail/show.html.twig', [
@@ -369,15 +444,26 @@ final class TrailController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_trail_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Trail $trail, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Trail $trail, EntityManagerInterface $entityManager, LoggerInterface $logger): Response
     {
+
         $form = $this->createForm(TrailType::class, $trail);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-            $this->addFlash('notice', 'Vos modifications sont enregistrées !');
-            return $this->redirectToRoute('app_trail_index', [], Response::HTTP_SEE_OTHER);
+            try {
+                // On essaye de l'ajouter à la base de données
+                $entityManager->flush();
+                $this->addFlash('notice', 'Vos modifications sont enregistrées !');
+                return $this->redirectToRoute('app_trail_index', [], Response::HTTP_SEE_OTHER);
+            } catch (\Exception $e) {
+                // Exception pour erreurs SQL
+                $logger->error('Failed to save trail', [
+                    'error' => $e->getMessage(),
+                    'code' => $e->getCode()
+                ]);
+                $this->addFlash('warning', 'Une erreur est survenue lors de l\'enregistrement. Veuillez réessayer.');
+            }
         }
 
         return $this->render('trail/edit.html.twig', [
@@ -387,31 +473,48 @@ final class TrailController extends AbstractController
     }
 
     #[Route('/{id}/inactive', name: 'app_trail_inactive', methods: ['POST'])]
-    public function inactive(Request $request, Trail $trail, EntityManagerInterface $entityManager): Response
+    public function inactive(Request $request, Trail $trail, EntityManagerInterface $entityManager, LoggerInterface $logger): Response
     {
         $submittedToken = $request->request->get('_token');
 
         if ($this->isCsrfTokenValid('inactive' . $trail->getId(), $submittedToken)) {
             $trail->setStatus("Inactive");
-            $entityManager->flush();
-
-            $this->addFlash('warning', 'Votre itinéraire a été supprimé');
+            try {
+                $entityManager->flush();
+                $this->addFlash('warning', 'Votre itinéraire a été supprimé');
+            } catch (\Exception $e) {
+                $logger->error('Failed to save trail', [
+                    'error' => $e->getMessage(),
+                    'code' => $e->getCode()
+                ]);
+                $this->addFlash('error', 'Erreur lors de la désactivation de l\'itinéraire.');
+            }
         } else {
-            $this->addFlash('error', 'Jeton CSRF invalide, action annulée.');
+            $this->addFlash('warning', 'Jeton CSRF invalide, action annulée.');
         }
 
         return $this->redirectToRoute('app_home');
     }
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/delete', name: 'app_trail_delete', methods: ['POST'])]
-    public function delete(Request $request, Trail $trail, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Trail $trail, EntityManagerInterface $entityManager, LoggerInterface $logger): Response
     {
         if ($this->isCsrfTokenValid('delete' . $trail->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($trail);
-            $entityManager->flush();
-            $this->addFlash('warning', "L'itinéraire a été supprimé");
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', "L'itinéraire a été supprimé");
+            } catch (ForeignKeyConstraintViolationException $e) {
+                $this->addFlash('warning', 'Impossible de supprimer : cet itinéraire est utilisé dans des balades.');
+            } catch (\Exception $e) {
+                $this->addFlash('warning', 'Erreur lors de la suppression.');
+                $logger->error('Failed to save trail', [
+                    'error' => $e->getMessage(),
+                    'code' => $e->getCode()
+                ]);
+            }
         } else {
-            $this->addFlash('error', 'Jeton CSRF invalide, action annulée.');
+            $this->addFlash('warning', 'Jeton CSRF invalide, action annulée.');
         }
         return $this->redirectToRoute('admin_user_index', [], Response::HTTP_SEE_OTHER);
     }

@@ -55,11 +55,6 @@ class WalkType extends AbstractType
                     ]),
                 ],
             ])
-            // ->add('status')
-            // ->add('trail', EntityType::class, [
-            //     'class' => Trail::class,
-            //     'choice_label' => 'name'
-            // ])
         ;
     }
 
@@ -67,6 +62,7 @@ class WalkType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Walk::class,
+            'attr' => ['class' => 'form']
         ]);
     }
 }
