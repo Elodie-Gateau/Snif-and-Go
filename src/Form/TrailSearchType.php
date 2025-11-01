@@ -19,7 +19,7 @@ final class TrailSearchType extends AbstractType
                 'label_attr' => ['class' => 'home-user__trail-search__label'],
                 'attr' => [
                     'placeholder' => 'Saisir une ville ou un nom d\'itinéraire',
-                    'class' => 'home-user__trail-search__input'
+                    'class' => 'home-user__trail-search form__input'
                 ],
             ])
 
