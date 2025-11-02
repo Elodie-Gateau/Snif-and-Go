@@ -4,6 +4,10 @@
 .home-guest {
     width: 100%;
 
+    &__hero {
+        width: 100%;
+    }
+
     &__intro {
         display: grid;
         grid-template-columns: 1fr;
@@ -81,8 +85,8 @@
     }
 }
 .home-guest__hero.photo {
-    padding: $size-20 0;
     width: 100%;
+    border-radius: $size-10;
 }
 .photo {
     width: 100%;
