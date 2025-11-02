@@ -4,7 +4,7 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 {% endblock %}
 {% block page_scripts %}
-  {{ importmap('trail_show') }}
+	{{ importmap('trail_show') }}
 {% endblock %}
 
 {% block title %}Itinéraire
@@ -14,123 +14,116 @@
 	<section class="trail">
 		<h1 class="trail__title">{{ trail.name }}</h1>
 
-		<div class="trail__desc">
-			{% if trail.photos|length > 0 %}
-				<img class="profile__trail-photo" {% if trail.photos[0].cdnLink %} src="https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto,c_fill,w_275,h_160/{{trail.photos[0].cdnLink}}" {% else %} src="{{ asset('uploads/images/' ~ trail.photos[0].name)}}" {% endif %} alt="Photo de l'itinéraire {{ trail.name }}">
-			{% else %}
-				<img class="profile__trail-photo" width="327" height="auto"
-					src="{{ asset('images/photo-trail-default327x160.webp') }}"
-					srcset="{{ asset('images/photo-trail-default327x160.webp') }} 327w,
-							{{ asset('images/photo-trail-default.webp') }} 682w"
-					sizes="(max-width: 640px) 275px, 327px"
-					alt="Photo de l'itinéraire {{ trail.name }}">
-			{% endif %}
+
+		{% if trail.photos|length > 0 %}
+			<img class="trail__desc-photo" loading="lazy" decoding="async" width="682" height="auto" {% if trail.photos[0].cdnLink %} srcset="https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto:good,c_fill,w_327,h_160,dpr_auto/{{trail.photos[0].cdnLink}} 327w,
+																									https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto:good,c_fill,w_682,h_334,dpr_auto/{{trail.photos[0].cdnLink}} 682w" sizes="(max-width: 640px) 275px, 327px" src="https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto:good,c_fill,w_682,h_334,dpr_auto/{{trail.photos[0].cdnLink}}" {% else %} src="{{ asset('uploads/images/' ~ trail.photos[0].name)}}" {% endif %} alt="Photo de l'itinéraire {{ trail.name }}">
+		{% else %}
+			<img class="trail__desc-photo" loading="lazy" decoding="async" width="682" height="auto" src="{{ asset('images/photo-trail-default327x160.webp') }}" srcset="{{ asset('images/photo-trail-default327x160.webp') }} 327w, {{ asset('images/photo-trail-default.webp') }} 682w" sizes="(max-width: 640px) 275px, 327px" alt="Photo de l'itinéraire {{ trail.name }}">
+		{% endif %}
 
 
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Distance</p>
-				<p class="trail__desc-content">{{ trail.distance }}
-					km{{ trail.distance > 1 ? "s" : "" }}</p>
-			</div>
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Durée</p>
-				<p class="trail__desc-content">{% import 'macros/duration.html.twig' as dur %}
-					{{ dur.minutes(trail.duration) }}</p>
-			</div>
-			{% if trail.difficulty %}
-				<div class="trail__desc-item">
-					<p class="trail__desc-title">Difficulté</p>
-					{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
-					<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
-				</div>
-			{% endif %}
-			{% if trail.score %}
-				<div class="trail__desc-item">
-					<p class="trail__desc-title">Note</p>
-					<p class="trail__desc-content">{{ trail.score }}</p>
-				</div>
-			{% endif %}
-
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Point d'eau</p>
-				{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
-				<p class="trail__desc-content">{{ waterPointLabels[trail.waterPoint] ?? "Inconnu" }}</p>
-			</div>
-
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Point de départ</p>
-				<div class="trail__wrapper">
-					<p class="trail__desc-content">{{ trail.startAddress }}</p>
-					<p class="trail__desc-content">{{ trail.startCode }}</p>
-					<p class="trail__desc-content">{{ trail.startCity }}</p>
-				</div>
-			</div>
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Point d'arrivée</p>
-				<div class="trail__wrapper">
-					<p class="trail__desc-content">{{ trail.endAddress }}</p>
-					<p class="trail__desc-content">{{ trail.endCode }}</p>
-					<p class="trail__desc-content">{{ trail.endCity }}</p>
-				</div>
-			</div>
-			<div class="trail__desc-item">
-				{% if trail.gpxFile %}
-					<a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
-						Télécharger le fichier GPX
-						{{ ux_icon('material-symbols:download-rounded', {class: 'trail__icon'}) }}
-					</a>
-
-				</div>
-				<div id="map" class="trail__map" data-gpx="{{ trail.gpxFile ? asset('uploads/gpx/' ~ trail.gpxFile) : '' }}" style="height: 400px"></div>
-				<p class="trail__desc-content">Pour respecter votre vie privée, nous utilisons une carte sans cookies tiers</p>
-			{% endif %}
-			{% if trail.photos and trail.photos|length > 1 %}
-				<div class="trail__desc-item">
-					<p class="trail__desc-title">Photos</p>
-					<div class="trail__wrapper">
-						{% for photo in trail.photos %}
-							<img class="trail__photo" src="{{ asset('uploads/images/' ~ photo.name) }}" alt="Photo de l'itinéraire {{ photo.name }}">
-						{% endfor %}
-					</div>
-				</div>
-			{% endif %}
-
-			<div class="trail__desc-item">
-				<p class="trail__desc-title">Téléchargez vos photos</p>
-				{{ form_start(form, { attr: { class: 'trail__form' } }) }}
-
-				{{ form_widget(form.photoFiles) }}
-				<div class="trail__form_error">
-					{{ form_errors(form.photoFiles) }}
-				</div>
-
-				<button type="submit" class="trail__form-submit btn">Valider</button>
-
-				{{ form_end(form) }}
-			</div>
-			{% if app.user == trail.user %}
-				<div class="trail__wrapper actions">
-					<a class="trail__icon" href="{{ path('app_trail_edit', { 'id': trail.id }) }}">{{ ux_icon('fa:edit', {class: 'trail__icon'}) }}</a>
-					<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
-						<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ trail.id) }}">
-						<button class="js-delete trail__icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="{{ csrf_token('inactive' ~ trail.id) }}" data-name="l'itinéraire {{ trail.name }}" type="submit">
-							{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'trail__icon' }) }}
-						</button>
-					</form>
-				</div>
-			{% endif %}
-			{% if not nextWalks %}
-				<a class="next-walks__button btn" href="{{ path('app_walk_new', { trailId: trail.id }) }}">Programmer une balade</a>
-			{% endif %}
-
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Distance</p>
+			<p class="trail__desc-content">{{ trail.distance }}
+				km{{ trail.distance > 1 ? "s" : "" }}</p>
 		</div>
-	</section>
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Durée</p>
+			<p class="trail__desc-content">{% import 'macros/duration.html.twig' as dur %}
+				{{ dur.minutes(trail.duration) }}</p>
+		</div>
+		{% if trail.difficulty %}
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Difficulté</p>
+				{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+				<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
+			</div>
+		{% endif %}
+		{% if trail.score %}
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Note</p>
+				<p class="trail__desc-content">{{ trail.score }}</p>
+			</div>
+		{% endif %}
 
-	{% if nextWalks and nextWalks|length > 0 %}
-		<section class="next-walks">
-			<h1 class="next-walks__title">Les balades à venir</h1>
-			<a class="next-walks__ btn" href="{{ path('app_walk_new', { trailId: trail.id }) }}">Programmer une balade</a>
-			<div class="next-walks__wrapper">
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Point d'eau</p>
+			{% set waterPointLabels = {'true': 'Oui','false': 'Non'} %}
+			<p class="trail__desc-content">{{ waterPointLabels[trail.waterPoint] ?? "Inconnu" }}</p>
+		</div>
+
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Point de départ</p>
+			<div class="trail__wrapper">
+				<p class="trail__desc-content">{{ trail.startAddress }}</p>
+				<p class="trail__desc-content">{{ trail.startCode }}</p>
+				<p class="trail__desc-content">{{ trail.startCity }}</p>
+			</div>
+		</div>
+		<div class="trail__desc-item">
+			<p class="trail__desc-title">Point d'arrivée</p>
+			<div class="trail__wrapper">
+				<p class="trail__desc-content">{{ trail.endAddress }}</p>
+				<p class="trail__desc-content">{{ trail.endCode }}</p>
+				<p class="trail__desc-content">{{ trail.endCity }}</p>
+			</div>
+		</div>
+		<div class="trail__desc-item">
+			{% if trail.gpxFile %}
+				<a class="trail__desc-link" href="{{ asset('uploads/gpx/' ~ trail.gpxFile) }}" download>
+					Télécharger le fichier GPX
+					{{ ux_icon('material-symbols:download-rounded', {class: 'trail__icon'}) }}
+				</a>
+
+			</div>
+			<div id="map" class="trail__map" data-gpx="{{ trail.gpxFile ? asset('uploads/gpx/' ~ trail.gpxFile) : '' }}" style="height: 400px"></div>
+			<p class="trail__desc-content">Pour respecter votre vie privée, nous utilisons une carte sans cookies tiers</p>
+		{% endif %}
+		{% if trail.photos and trail.photos|length > 1 %}
+			<div class="trail__desc-item">
+				<p class="trail__desc-title">Photos</p>
+				<div class="trail__wrapper">
+					{% for photo in trail.photos %}
+						<img class="trail-photo" {% if photo.cdnLink %} src="https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto,c_fill,w_275,h_160/{{photo.cdnLink}}" {% else %} src="{{ asset('uploads/images/' ~ photo.name)}}" {% endif %} alt="Photo de l'itinéraire {{ trail.name }}">
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="trail__desc-item">
+			{{ form_start(form, { attr: { class: 'trail__desc-item' } }) }}
+
+			{{ form_label(form.name) }}
+			{{ form_widget(form.name) }}
+
+			<div class="form__error">
+				{{ form_errors(form.name) }}
+			</div>
+			<button type="submit" class="trail__form-submit btn">Télécharger</button>
+
+			{{ form_end(form) }}
+		</div>
+		{% if app.user == trail.user %}
+			<div class="trail__wrapper actions">
+				<a class="trail__icon" href="{{ path('app_trail_edit', { 'id': trail.id }) }}">{{ ux_icon('fa:edit', {class: 'trail__icon'}) }}</a>
+				<form method="post" action="{{ path('app_trail_inactive', {'id': trail.id}) }}">
+					<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ trail.id) }}">
+					<button class="js-delete trail__icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="{{ csrf_token('inactive' ~ trail.id) }}" data-name="l'itinéraire {{ trail.name }}" type="submit">
+						{{ ux_icon('streamline-ultimate:bin-1-bold',{ class: 'trail__icon' }) }}
+					</button>
+				</form>
+			</div>
+		{% endif %}
+
+
+	</section>
+	<section class="next-walks">
+		<h1 class="next-walks__title">Les balades à venir</h1>
+
+
+		<div class="next-walks__wrapper">
+			{% if nextWalks and nextWalks|length > 0 %}
 				{% for walk in nextWalks %}
 
 					<div class="next-walks__card">
@@ -143,20 +136,16 @@
 						<a href="{{ path('app_walk_registration_new', { walkId: walk.id }) }}" class="next-walks__button btn">S'inscrire</a>
 					</div>
 				{% endfor %}
-			</div>
-		{% endif %}
-	</section>
-	<section class="trail__actions">
-		{% if app.user and app.user == trail.user and not nextWalks and nextWalks|length == 0 %}
-			<div class="trail__actions-wrapper">
-				<a class="trail__button btn" href="{{ path('app_trail_edit', {'id': trail.id}) }}">Modifier</a>
-				<form method="post" class="trail__form-delete" action="{{ path('app_trail_inactive', { 'id': trail.id }) }}">
-					<input type="hidden" name="_token" value="{{ csrf_token('inactive' ~ trail.id) }}">
-					<button class="js-delete profile__trail-icon" data-url="{{ path('app_trail_inactive', {'id': trail.id}) }}" data-token="{{ csrf_token('inactive' ~ trail.id) }}" data-name="l'itinéraire {{ trail.name }}" type="submit">{{ ux_icon('streamline-ultimate:bin-1-bold', {'class': 'trail__icon'}) }}</button>
-				</form>
-			</div>
-		{% endif %}
+
+			{% else %}
+				<p class="next-walks__content">Aucune balade n'est actuellement programmée sur cet itinéraire.</p>
+
+			{% endif %}
+
+		</div>
+		<a class="next-walks__ btn" href="{{ path('app_walk_new', { trailId: trail.id }) }}">Programmer une balade</a>
 		<a class="trail__back back" href="{{ path('app_trail_index') }}">Retour</a>
 	</section>
+
 
 {% endblock %}

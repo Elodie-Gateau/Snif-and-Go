@@ -16,12 +16,19 @@ body {
 main {
     flex: 1;
     padding: $size-10;
+    background-color: var(--background-secondary);
+    margin-top: $size-20;
 }
 
 section {
-    background-color: var(--background-secondary);
+    background-color: var(--background-tertiary);
     border-radius: $size-10;
     padding: $size-10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $size-20;
+    width: 100%;
 }
 
 h1,
@@ -51,6 +58,10 @@ a {
     color: inherit;
     cursor: pointer;
     font-weight: 600;
+
+    * {
+        pointer-events: none;
+    }
 }
 
 a:hover {
@@ -60,17 +71,24 @@ a:hover {
 button {
     border: 0;
     background-color: transparent;
+    cursor: pointer;
 }
 
 :where(a, button, input, select, textarea) {
     outline: none;
 }
 
-:where(a, button, input, select, textarea):focus-visible {
+:where(input, select, textarea):focus-visible {
     outline: var(--focus-ring);
     box-shadow: var(--focus-shadow);
     border-radius: 6px;
     padding: $size-10;
+}
+
+:where(a, button):focus-visible {
+    outline: var(--focus-ring);
+    box-shadow: var(--focus-shadow);
+    outline-offset: 4px;
 }
 
 a:focus-visible {
@@ -103,7 +121,8 @@ a:focus-visible {
 
 @media (min-width: $lg) {
     main {
-        max-width: 1064px;
+        min-width: 1200px;
+        max-width: 1200px;
     }
 
     section {

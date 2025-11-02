@@ -6,6 +6,7 @@ use App\Entity\Trail;
 use App\Entity\Photo;
 use App\Entity\User;
 use App\Form\TrailType;
+use App\Form\PhotoType;
 use Cloudinary\Cloudinary;
 use App\Repository\TrailRepository;
 use App\Repository\DogRepository;
@@ -24,14 +25,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Service\GeocodingService;
 use App\Service\DistanceService;
 use App\Service\GpxService;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Psr\Log\LoggerInterface;
-
-
-use Symfony\Component\Validator\Constraints\File as FileConstraint;
-use Symfony\Component\Validator\Constraints\All;
 
 
 
@@ -88,7 +84,7 @@ final class TrailController extends AbstractController
         ) {
             $foundTrails = $trailRepository->search($criteria);
         } else {
-            $foundTrails = $trailRepository->findAllLimit(8);
+            $foundTrails = $trailRepository->findAll();
         }
 
 
@@ -343,32 +339,27 @@ final class TrailController extends AbstractController
     ): Response {
         $nextWalks = $walkRepository->findNextByTrail($trail);
 
-
-
-        $form = $this->createFormBuilder()
-            ->add('photoFiles', FileType::class, [
-                'label' => 'Téléchargez vos photos',
-                'label_attr' => ['class' => 'trail__desc-title'],
-                'mapped' => false,
-                'multiple' => true,
-                'required' => false,
-                'attr' => ['accept' => 'image/*'],
-                'constraints' => [
-                    new All([
-                        new FileConstraint([
-                            'maxSize' => '5M',
-                            'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-                            'mimeTypesMessage' => 'Formats acceptés : jpg, png, webp, gif',
-                        ])
-                    ])
-                ],
-            ])
-            ->getForm();
+        $photo = new Photo();
+        $photo->setTrail($trail);
+        $photo->setUser($this->getUser());
+        $form = $this->createForm(PhotoType::class);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $images = $form->get('photoFiles')->getData();
+        if ($form->isSubmitted()) {
+            $this->addFlash('info', 'Formulaire soumis');
+
+            if (!$form->isValid()) {
+                $this->addFlash('error', 'Formulaire invalide : ' . (string) $form->getErrors(true));
+                return $this->redirectToRoute('app_trail_show', ['id' => $trail->getId()]);
+            }
+
+            $images = $form->get('name')->getData();
+
+            if (!$images) {
+                $this->addFlash('warning', 'Aucune image détectée');
+                return $this->redirectToRoute('app_trail_show', ['id' => $trail->getId()]);
+            }
 
             foreach ($images as $image) {
                 $original = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
@@ -389,6 +380,7 @@ final class TrailController extends AbstractController
 
                 $photo = new Photo();
                 $photo->setName($newFilename);
+
                 try {
                     // Récupère le nom du fichier sans extention
                     $basenameNoExt = pathinfo($newFilename, PATHINFO_FILENAME);
@@ -411,8 +403,7 @@ final class TrailController extends AbstractController
                         ]
                     );
                     // Enregistre dans l'entité Photo créé le nom de fichier nécessaire pour appeler l'image
-                    $transformed = $result['eager'][0]['secure_url'] ?? $publicId;
-                    $photo->setCdnLink($transformed);
+                    $photo->setCdnLink($publicId);
                 } catch (\Throwable $e) {
 
                     $this->addFlash('error', 'Échec Cloudinary : ' . $e->getMessage());

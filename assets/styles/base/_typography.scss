@@ -40,6 +40,10 @@ h3 {
     h2 {
         font-size: $size-32;
     }
+    button,
+    a {
+        font-size: $size-16;
+    }
 }
 @media (min-width: $lg) {
     h1 {

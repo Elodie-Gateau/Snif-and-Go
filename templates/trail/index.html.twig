@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block page_scripts %}
-  {{ importmap('global') }}
+  {{ importmap('home') }}
 {% endblock %}
 
 {% block title %}Itinéraires
@@ -9,108 +9,97 @@
 {% block body %}
 <section class="trails">
 	<h1 class="trails__title">Itinéraires</h1>
-	<a class="trails-button" href="{{ path('app_trail_new') }}">Ajouter un itinéraire</a>
-	<div class="trails-search">
+	<a class="trails-button btn" href="{{ path('app_trail_new') }}">Ajouter un itinéraire</a>
+		<div class="home-user__trail">
+			<div
+				class="home-user__trail-search">
 
-		{{ form_start(form, {method: 'get',action: path('app_home'),attr: { class: 'trails-form', 'data-turbo': 'false' }}) }}
-		<div class="trails-search-bar">
+				{# Formulaire de recherche de trail #}
+				{{ form_start(form, {method: 'post',action: path('app_trail_index'),attr: { class: 'home-user__trail-form', 'data-turbo': 'false' }}) }}
+				<div class="home-user__trail-search-bar">
 
-			{{ form_widget(form.search) }}
+					{{ form_widget(form.search, {'id': 'search-trails-home',attr: { 'data-url': path('app_trail_live_search'), 'autocomplete': 'off' }}) }}
 
-			<div class="trails-search-item">
-				<button class="trails-search--button">Rechercher</button>
+					<div class="home-user__trail-search-item">
+						<button class="home-user__trail-search--button btn">Rechercher</button>
 
-				<button class="trails-search--link " type="button" id="toggle-advanced" aria-expanded="false" aria-controls="trail-advanced">
-					Afficher plus de critères
-				</button>
-			</div>
-		</div>
-
-		<div id="trail-advanced" class="trails-search--advanced hidden">
-			<div class="trails-search--advanced-item">
-				{{ form_label(form.difficulty)}}
-				{{ form_widget(form.difficulty)}}
-				{% if form_errors(form.difficulty) %}
-					<div class="trails-search--advanced-error">
-						{{ form_errors(form.difficulty.difficulty)}}
+						<button class="home-user__trail-search--link" type="button" id="toggle-advanced" aria-expanded="false" aria-controls="trail-advanced">
+							Afficher plus de critères
+						</button>
+						<a class="home-user__trail-reset" aria-label="Réinitialiser la recherche" href="{{ path('app_trail_index') }}">{{ ux_icon('system-uicons:reset', {class:'home-user__trail-icon'}) }}</a>
 					</div>
-				{% endif %}
-			</div>
+				</div>
 
-			<div class="trails-search--advanced-item">
-				{{ form_label(form.minDistance)}}
-				{{ form_widget(form.minDistance)}}
-				{% if form_errors(form.minDistance) %}
-					<div class="trails-search--advanced-error">
-						{{ form_errors(form.minDistance)}}
+				{# Filtres de recherche avancés #}
+				<div id="trail-advanced" class="home-user__trail-search--advanced hidden">
+					<fieldset aria-describedby="filtres-help">
+						<legend> Filtres avancés </legend>
+						<p id="filtres-help" class="visually-hidden">Choisissez distance, durée et difficulté</p>
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.difficulty)}}
+							{{ form_widget(form.difficulty)}}
+							{% if form_errors(form.difficulty) %}
+								<div class="home-user__trail-search--advanced form__error">
+									{{ form_errors(form.difficulty)}}
+								</div>
+							{% endif %}
+						</div>
+
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.minDistance)}}
+							{{ form_widget(form.minDistance)}}
+							{% if form_errors(form.minDistance) %}
+								<div class="home-user__trail-search--advanced form__error">
+									{{ form_errors(form.minDistance)}}
+								</div>
+							{% endif %}
+						</div>
+
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.maxDistance)}}
+							{{ form_widget(form.maxDistance)}}
+							{% if form_errors(form.maxDistance) %}
+								<div class="home-user__trail-search--advanced form__error">
+									{{ form_errors(form.maxDistance)}}
+								</div>
+							{% endif %}
+						</div>
+
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.minDuration)}}
+							{{ form_widget(form.minDuration)}}
+							{% if form_errors(form.minDuration) %}
+								<div class="home-user__trail-search--advanced form__error">
+									{{ form_errors(form.minDuration)}}
+								</div>
+							{% endif %}
+						</div>
+
+						<div class="home-user__trail-search--advanced-item">
+							{{ form_label(form.maxDuration)}}
+							{{ form_widget(form.maxDuration)}}
+							{% if form_errors(form.maxDuration) %}
+								<div class="home-user__trail-search--advanced form__error">
+									{{ form_errors(form.maxDuration)}}
+								</div>
+							{% endif %}
+						</div>
+						<div class="home-user__trail-search--advanced-button">
+							<button class="home-user__button btn">Rechercher</button>
+						</div>
 					</div>
-				{% endif %}
+					{{ form_end(form) }}
+				</fieldset>
 			</div>
 
-			<div class="trails-search--advanced-item">
-				{{ form_label(form.maxDistance)}}
-				{{ form_widget(form.maxDistance)}}
-				{% if form_errors(form.maxDistance) %}
-					<div class="trails-search--advanced-error">
-						{{ form_errors(form.maxDistance)}}
-					</div>
-				{% endif %}
-			</div>
 
-			<div class="trails-search--advanced-item">
-				{{ form_label(form.minDuration)}}
-				{{ form_widget(form.minDuration)}}
-				{% if form_errors(form.minDuration) %}
-					<div class="trails-search--advanced-error">
-						{{ form_errors(form.minDuration)}}
-					</div>
-				{% endif %}
-			</div>
-
-			<div class="trails-search--advanced-item">
-				{{ form_label(form.maxDuration)}}
-				{{ form_widget(form.maxDuration)}}
-				{% if form_errors(form.maxDuration) %}
-					<div class="trails-search--advanced-error">
-						{{ form_errors(form.maxDuration)}}
-					</div>
-				{% endif %}
-			</div>
-{# 
-			<div class="trails-search--advanced-item">
-				{{ form_label(form.minScore)}}
-				{{ form_widget(form.minScore)}}
-				{% if form_errors(form.minScore) %}
-					<div class="trails-search--advanced-error">
-						{{ form_errors(form.minScore)}}
-					</div>
-				{% endif %}
-			</div>
-
-			<div class="trails-search--advanced-item">
-				{{ form_label(form.maxScore)}}
-				{{ form_widget(form.maxScore)}}
-				{% if form_errors(form.maxScore) %}
-					<div class="trails-search--advanced-error">
-						{{ form_errors(form.maxScore)}}
-					</div>
-				{% endif %}
-			</div> #}
-			<div class="trails-search--advanced-button">
-				<button class="trails-search--button">Rechercher</button>
-			</div>
-		</div>
-		{{ form_end(form) }}
-	</div>
-
-
-	{% if foundTrails is defined and foundTrails|length > 0 %}
-		<div class="trails-search--results">
-
-			{% for trail in foundTrails %}
-				<div class="trails-card">
-					{% if trail.photos|length > 0 %}
-						{% set id = trail.photos[0].cdnLink %}
+	{# Résultats #}
+				<ul class="home-user__trail-search--results" role="list" aria-label="Résultats de recherche" aria-relevant="additions removals"> {% if foundTrails is defined and foundTrails|length > 0 %}
+					{% for trail in foundTrails %}
+						{% if trail.status == "Active" %}
+							<li class="home-user__trail-card">
+								{% if trail.photos|length > 0 %}
+								{% set id = trail.photos[0].cdnLink %}
 									<img loading="lazy" 
 									decoding="async" 
 									width="275" 
@@ -130,65 +119,64 @@
 										sizes="(max-width: 640px) 275px, 327px"
 										alt="Photo d'une carte routière'">
 								{% endif %}
-					<p class="trails-name">
-						<strong>{{ trail.name }}</strong>
-					</p>
+								<p class="home-user__trail-name">
+									<strong>{{ trail.name }}</strong>
+								</p>
 
-					<div class="trails-description">
-						<div class="trails-item">
-							{{ux_icon('material-symbols:distance-rounded', {class: 'trails-icon'})}}
-							<p class="trails-content">{{ trail.startCity }}
-							</p>
-						</div>
-						<div class="trails-description">
-							<div class="trails-item">
-								{{ux_icon('game-icons:path-distance', {class: 'trails-icon'})}}
-								<p class="trails-content">{{ trail.distance|round }}
-									km{{ trail.distance > 1 ? "s" : "" }}</p>
-							</div>
-							<div class="trails-item">
-								{{ux_icon('mingcute:time-fill', {class: 'trails-icon'})}}
-								<p class="trails-content">{% import 'macros/duration.html.twig' as dur %}
-									{{ dur.minutes(trail.duration) }}</p>
-							</div>
-							<div class="trails-item">
-								{{ux_icon('game-icons:strong', {class: 'trails-icon'})}}
-
-								{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'
-} %}
-								<p class="trails-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
-							</div>
-							{% if trail.score %}
-								<div class="trails-item">
-									{{ux_icon('mdi:like', {class: 'trails-icon'})}}
-									<div class="trails-content">
-
-										{% for i in 1.. trail.score %}
-											{{ux_icon('material-symbols:star-rounded', {class: 'trails-score'})}}
-										{% endfor %}
-										{% for i in 1.. (5 - trail.score) %}
-											{{ux_icon('material-symbols:star-outline-rounded', {class: 'trails-score'})}}
-										{% endfor %}
+								<div class="home-user__trail-description">
+									<div class="home-user__trail-item">
+										{{ux_icon('material-symbols:distance-rounded', {class: 'home-user__trail-icon'})}}
+										<p class="home-user__trail-content">{{ trail.startCity }}
+										</p>
 									</div>
-								</div>
+									<div class="home-user__trail-description">
+										<div class="home-user__trail-item">
+											{{ux_icon('game-icons:path-distance', {class: 'home-user__trail-icon'})}}
+											<p class="home-user__trail-content">{{ trail.distance|round }}
+												km{{ trail.distance > 1 ? "s" : "" }}</p>
+										</div>
+										<div class="home-user__trail-item">
+											{{ux_icon('mingcute:time-fill', {class: 'home-user__trail-icon'})}}
+											<p class="home-user__trail-content">{% import 'macros/duration.html.twig' as dur %}
+												{{ dur.minutes(trail.duration) }}</p>
+										</div>
+										<div class="home-user__trail-item">
+											{{ux_icon('game-icons:strong', {class: 'home-user__trail-icon'})}}
+
+											{% set difficultyLabels = {'easy': 'Facile','medium': 'Moyen','hard': 'Difficile'} %}
+											<p class="home-user__trail-content">{{ difficultyLabels[trail.difficulty] ?? 'Non défini' }}</p>
+										</div>
+										{% if trail.score %}
+											<div class="home-user__trail-item">
+												{{ux_icon('mdi:like', {class: 'home-user__trail-icon'})}}
+												<div class="home-user__trail-content">
+
+													{% for i in 1.. trail.score %}
+														{{ux_icon('material-symbols:star-rounded', {class: 'home-user__trail-score'})}}
+													{% endfor %}
+													{% for i in 1.. (5 - trail.score) %}
+														{{ux_icon('material-symbols:star-outline-rounded', {class: 'home-user__trail-score'})}}
+													{% endfor %}
+												</div>
+											</div>
+										{% endif %}
+									</div>
+									<a class="home-user__button btn" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
+
+								</li>
+
+
 							{% endif %}
-						</div>
+						{% endfor %}
 
-					</div>
-					<a class="trails-button btn" href="{{ path('app_trail_show', {id: trail.id}) }}">Consulter l'itinéraire</a>
+					{% else %}
+						<li class="home-user__trail-result-info">
+							Aucun itinéraire trouvé, veuillez ajuster vos critères de recherche</li>
 
+					{% endif %}
+				</ul>
 
-				</div>
-			{% endfor %}
-
-		{% else %}
-			<p class="trails-result-info">
-				Aucun itinéraire trouvé, veuillez ajuster vos critères de recherche</p>
-			<a class="trails-link" href="{{ path('app_home') }}">Réinitialiser la recherche</a>
-		{% endif %}
-
-		{% if foundTrails|length > 8 %}
-			<a class="btn" href="{{ path('app_trail_index') }}">Voir plus</a>
-		{% endif %}
 	</div>
+	    <a class="trail__back back" href="{{ path('app_home') }}">Retour</a>
+
 </section>{% endblock %}

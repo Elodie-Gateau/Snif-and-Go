@@ -80,11 +80,11 @@ final class HomeController extends AbstractController
             ) {
 
                 $foundTrails = $trailRepository->search($criteria);
-                $limitTrail = 7;
+                $limitTrail = 5;
                 $hasMoreTrails = count($foundTrails) > $limitTrail;
             }
         } else {
-            $limitTrail = 7;
+            $limitTrail = 5;
             $foundTrails = $trailRepository->findAllLimit($limitTrail + 1);
             $hasMoreTrails = count($foundTrails) > $limitTrail;
         }

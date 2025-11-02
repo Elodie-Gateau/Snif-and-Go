@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block page_scripts %}
-  {{ importmap('global') }}
+  {{ importmap('walk_new') }}
 {% endblock %}
 
 
 {% block title %}Modifier la balade{% endblock %}
 
 {% block body %}
+<section class="walk-edit">
     <h1>Modifier la balade </h1>
 
     {{ include('walk/_form.html.twig', {'button_label': 'Enregistrer'}) }}
@@ -20,5 +21,5 @@
 	</button>
 </form>
     <a class="trail__back back" href="{{ path('app_walk_index') }}">Retour</a>
-
+</section>
 {% endblock %}

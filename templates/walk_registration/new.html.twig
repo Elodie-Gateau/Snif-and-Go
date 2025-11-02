@@ -73,10 +73,19 @@
 							<div class="walk-register__desc-container">
 								{% set dogPhotoClass = ['walk-register__dog-photo', register.dog.sex] | join(' ') %}
 								{% if register.dog.photo %}
-									<img class="{{ dogPhotoClass }}" src="{{ asset('uploads/images/' ~ register.dog.photo)}}">
-								{% else %}
-									{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
-								{% endif %}
+									<img loading="lazy"
+													class="{{ dogPhotoClass }}"
+													alt="Portrait de {{ register.dog.name }}"												
+													{% if register.dog.cdnLink %}
+													{% set id = register.dog.cdnLink ?? '' %}
+													src="{{'https://res.cloudinary.com/dimexwbcu/image/upload/f_auto,q_auto:good,c_fill,g_face,r_max,w_160,h_160,dpr_auto/' ~ id }}"
+													{% else %}
+													src="{{ asset('uploads/images/' ~ register.dog.photo)}}"
+													{% endif %}
+													>
+											{% else %}
+												{{ ux_icon('streamline-plump:dog-1-remix', { class: dogPhotoClass }) }}
+											{% endif %}
 								<p class="walk-register__desc-content">{{ register.dog.name }}</p>
 							</div>
 						{% endfor %}

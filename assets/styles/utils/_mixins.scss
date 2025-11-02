@@ -2,18 +2,12 @@
 @use "../utils/breakpoints" as *;
 
 // Mixin button
-@mixin button(
-    $bg-color,
-    $bg-color-hover,
-    $text-color,
-    $padding: $size-6 $size-10,
-    $radius: $size-8
-) {
+@mixin button($bg-color, $bg-color-hover, $text-color, $radius: $size-8) {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: $size-10;
-    padding: $padding;
+    padding: $size-6 $size-10;
     margin: 0;
     background-color: $bg-color;
     color: $text-color;
@@ -44,8 +38,6 @@
 // Mixin formulaires
 
 @mixin form-input($border-color, $bg-color, $padding: $size-10) {
-    display: block;
-    width: 100%;
     padding: $padding;
     border: 1px solid $border-color;
     border-radius: $size-6;
@@ -70,18 +62,18 @@
     background-color: $bg;
     outline: 1px solid $border-color;
     cursor: pointer;
+    margin: $size-10;
 }
 
-@mixin form-label($color, $width) {
+@mixin form-label($color) {
     display: block;
     margin-bottom: $size-6;
     margin-top: $size-10;
     color: $color;
-    width: $width;
 }
 
 @mixin form-error($color-error, $margin-top: $size-4) {
-    color: $color-error;
+    color: var(--error);
     margin-top: $margin-top;
 }
 
@@ -129,8 +121,9 @@
     padding: $size-10 $size-20;
     background: var(--background-tertiary);
     border-radius: $size-10;
-    box-shadow: var(--shadow);
+    box-shadow: 0 5px 8px var(--shadow);
     align-self: center;
+    cursor: pointer;
 }
 
 // Mixin Dog photos
@@ -156,7 +149,6 @@
 
 // Mixin infos
 @mixin infos-main($gap: $size-10) {
-    background: var(--background-secondary);
     border-radius: $size-10;
     padding: $size-20 $size-10;
     display: flex;
@@ -169,7 +161,7 @@
 }
 
 @mixin infos-desc {
-    background: var(--background-tertiary);
+    background: var(--background-secondary);
     padding: $size-20 $size-10;
     display: flex;
     flex-direction: column;

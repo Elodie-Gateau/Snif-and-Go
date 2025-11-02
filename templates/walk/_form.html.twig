@@ -5,7 +5,7 @@
 	</div>
 {% endif %}
 
-<div class="add-walk__form-wrapper">
+
 	<div class="add-walk form__item">
 		{{ form_label(form.date) }}
 		{{ form_widget(form.date) }}
@@ -25,10 +25,10 @@
 			{% endif %}
 		</div>
 	</div>
-</div>
+
 
 {{ form_rest(form) }}
 
-<button class="add-walk__form-submit">{{ button_label|default("Valider la balade") }}</button>
+<button class="add-walk__form-submit btn">{{ button_label|default("Valider la balade") }}</button>
 
 {{ form_end(form) }}

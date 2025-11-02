@@ -7,6 +7,10 @@
 .home-user__dog-photo,
 .walk-register__dog-photo {
     @include photo;
+
+    &-container {
+        width: 90%;
+    }
 }
 
 .female {

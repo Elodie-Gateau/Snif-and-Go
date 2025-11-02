@@ -15,19 +15,19 @@
     &__item {
         display: flex;
         width: 100%;
+        justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         padding: $size-20 0 $size-10 0;
-        gap: $size-10;
+        gap: $size-20;
     }
 
     &__label {
-        @include form-label(var(--text), 45%);
+        @include form-label(var(--text));
     }
 
     &__input {
         @include form-input(var(--border-color), var(--background-input));
-        width: auto;
     }
 
     &__checkbox {
@@ -59,12 +59,12 @@ input::placeholder {
     @include form-multiselect(var(--border-color), var(--background-input));
 }
 
-.add-trail__form-input-select {
+.add-trail .form-input-select {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: $size-4;
+    align-items: center;
+    gap: $size-10;
 }
 
 .add-walk__form-input-number {
@@ -138,7 +138,8 @@ input::placeholder {
         width: 60%;
     }
 
-    .form__label {
-        @include form-label(var(--text), 50%);
+    .form {
+        width: 50%;
+        gap: $size-20;
     }
 }

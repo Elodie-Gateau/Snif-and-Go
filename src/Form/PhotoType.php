@@ -12,46 +12,37 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\All;
 
 class PhotoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('date')
+
             ->add('name', FileType::class, [
-                'label' => 'Télécharger une photo',
+                'label' => 'Téléchargez vos photos',
+                'label_attr' => ['class' => 'trail__desc-title'],
                 'mapped' => false,
+                'multiple' => true,
                 'required' => false,
+                'attr' => ['accept' => 'image/*', 'class' => 'trail form__input'],
                 'constraints' => [
-                    new File([
-                        'maxSize' => '5000k',
-                        'mimeTypes' => [
-                            'image/*',
-                        ],
-                        'mimeTypesMessage' => 'Image trop lourde',
+                    new All([
+                        new File([
+                            'maxSize' => '5M',
+                            'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                            'mimeTypesMessage' => 'Formats acceptés : jpg, png, webp, gif',
+                        ])
                     ])
                 ],
-            ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('trail', EntityType::class, [
-                'class' => Trail::class,
-                'choice_label' => 'id',
-            ])
-            ->add('walk', EntityType::class, [
-                'class' => Walk::class,
-                'choice_label' => 'id',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Photo::class,
+            'csrf_protection' => false,
         ]);
     }
 }

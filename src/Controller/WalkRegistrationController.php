@@ -61,10 +61,10 @@ final class WalkRegistrationController extends AbstractController
             $form->handleRequest($request);
         } else {
             $this->addFlash('notice', "Cette balade n'a plus de places disponibles");
-            return $this->redirectToRoute('app_home');
+            $form = null;
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form && $form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($walkRegistration);
             $entityManager->flush();
             $this->addFlash('success', 'Votre inscription est validée');

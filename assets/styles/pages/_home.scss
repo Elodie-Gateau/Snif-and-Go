@@ -156,12 +156,8 @@
         gap: $size-20;
         background: var(--background-secondary);
         border-radius: $size-10;
-        padding: $size-30 $size-10;
+        padding: $size-30 0;
         width: 100%;
-
-        &--card {
-            padding: $size-10 $size-20;
-        }
     }
 
     &__walk-title {
@@ -283,7 +279,10 @@
     &__trail-search--advanced > fieldset {
         padding: $size-10;
         margin-top: $size-10;
+        border: 1px solid var(--border-color);
+        border-radius: $size-10;
     }
+
     &__trail-search--advanced-button {
         display: flex;
         justify-content: center;
@@ -515,7 +514,7 @@
                 width: 100%;
             }
             &--card {
-                gap: 0;
+                gap: $size-10;
                 font-size: $size-14;
             }
 
@@ -530,17 +529,12 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: $size-4;
-                text-align: center;
-            }
-            &-content {
-                text-align: center;
             }
         }
 
         &__trail {
             &-search {
                 width: 90%;
-                padding: $size-30 $size-10;
 
                 &--results {
                     display: grid;
