@@ -37,8 +37,11 @@ export function generateCsrfToken (formElement) {
     csrfField.dispatchEvent(new Event('change', { bubbles: true }));
 
     if (csrfCookie && tokenCheck.test(csrfToken)) {
-        const cookie = csrfCookie + '_' + csrfToken + '=' + csrfCookie + '; path=/; samesite=strict';
-        document.cookie = window.location.protocol === 'https:' ? '__Host-' + cookie + '; secure' : cookie;
+        // Utiliser samesite=none avec secure pour HTTPS, lax pour HTTP (dev)
+        const sameSite = window.location.protocol === 'https:' ? 'none' : 'lax';
+        const cookie = csrfCookie + '_' + csrfToken + '=' + csrfCookie + '; path=/; samesite=' + sameSite;
+        // Ne pas utiliser __Host- car il est incompatible avec les reverse proxies
+        document.cookie = window.location.protocol === 'https:' ? cookie + '; secure' : cookie;
     }
 }
 
@@ -69,9 +72,11 @@ export function removeCsrfToken (formElement) {
     const csrfCookie = csrfField.getAttribute('data-csrf-protection-cookie-value');
 
     if (tokenCheck.test(csrfField.value) && nameCheck.test(csrfCookie)) {
-        const cookie = csrfCookie + '_' + csrfField.value + '=0; path=/; samesite=strict; max-age=0';
-
-        document.cookie = window.location.protocol === 'https:' ? '__Host-' + cookie + '; secure' : cookie;
+        // Utiliser samesite=none avec secure pour HTTPS, lax pour HTTP (dev)
+        const sameSite = window.location.protocol === 'https:' ? 'none' : 'lax';
+        const cookie = csrfCookie + '_' + csrfField.value + '=0; path=/; samesite=' + sameSite + '; max-age=0';
+        // Ne pas utiliser __Host- car il est incompatible avec les reverse proxies
+        document.cookie = window.location.protocol === 'https:' ? cookie + '; secure' : cookie;
     }
 }
 
