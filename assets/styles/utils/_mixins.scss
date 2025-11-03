@@ -75,6 +75,7 @@
 @mixin form-error($color-error, $margin-top: $size-4) {
     color: var(--error);
     margin-top: $margin-top;
+    display: block;
 }
 
 // Mixin cards
