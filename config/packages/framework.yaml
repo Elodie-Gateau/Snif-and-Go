@@ -4,11 +4,24 @@ framework:
     asset_mapper:
         enabled: true
 
+    # Configuration pour les reverse proxies (alwaysdata, nginx, etc.)
+    # Permet à Symfony de détecter correctement HTTPS derrière un proxy
+    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
+
     # Note that the session will be started ONLY if you read or write from it.
     session:
+        # Nom de cookie unique pour éviter les conflits
+        name: SNIFANDGO_SESSID
         cookie_httponly: true
-        cookie_samesite: lax
+        # Utiliser 'none' avec HTTPS pour éviter les problèmes CSRF avec les formulaires multipart
+        cookie_samesite: none
+        # En prod (HTTPS), les cookies seront sécurisés, en dev ils ne le seront pas
         cookie_secure: auto
+        # Durée de vie du cookie : 0 = jusqu'à fermeture du navigateur
+        cookie_lifetime: 0
+        # Garbage collector : nettoyer les sessions de plus de 3 heures (10800s)
+        gc_maxlifetime: 10800
         # Ne pas envoyer les cookies sur les assets - limiter le cookie_path
         # Malheureusement, on ne peut pas exclure /assets/ du cookie_path directement
         # La seule solution serait un sous-domaine séparé pour les assets
