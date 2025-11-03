@@ -145,7 +145,10 @@ class RegistrationFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'required' => false,
-            'attr' => ['class' => 'form']
+            'attr' => [
+                'class' => 'form',
+                'novalidate' => 'novalidate'
+            ]
         ]);
     }
 }
