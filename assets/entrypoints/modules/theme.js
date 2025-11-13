@@ -24,10 +24,8 @@ function updateLogos(isEco) {
     }
 }
 
-// Récupération du thème stockée dans le local Storage
-const themeStorage = localStorage.getItem("theme");
-// Si le thème enregistré était "eco" application du thème eco
-if (themeStorage === "eco") {
+// Fonction pour appliquer le thème eco
+function applyEcoTheme() {
     html.classList.add("eco");
     themeToggleOn.classList.remove("hidden");
     themeToggleOff.classList.add("hidden");
@@ -41,6 +39,50 @@ if (themeStorage === "eco") {
         badgeEcoindex.setAttribute("data-theme", "dark");
     }
 }
+
+// Fonction pour retirer le thème eco
+function removeEcoTheme() {
+    html.classList.remove("eco");
+    themeToggleOn.classList.add("hidden");
+    themeToggleOff.classList.remove("hidden");
+    sun.classList.remove("hidden");
+    moon.classList.add("hidden");
+    updateLogos(false);
+    if (badgeWSCarbon) {
+        badgeWSCarbon.classList.remove("wcb-d");
+    }
+    if (badgeEcoindex) {
+        badgeEcoindex.removeAttribute("data-theme");
+    }
+}
+
+// Récupération du thème stockée dans le local Storage
+const themeStorage = localStorage.getItem("theme");
+
+// Si l'utilisateur a fait un choix manuel, on le respecte
+if (themeStorage === "eco") {
+    applyEcoTheme();
+} else if (themeStorage === null) {
+    // Pas de préférence enregistrée : on vérifie les préférences du navigateur
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersDark.matches) {
+        applyEcoTheme();
+    }
+}
+
+// Écouter les changements de préférences du navigateur en temps réel
+// Ne s'active que si l'utilisateur n'a pas fait de choix manuel
+const prefersDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+prefersDarkQuery.addEventListener('change', (e) => {
+    // Ne changer automatiquement que si aucune préférence manuelle n'est enregistrée
+    if (localStorage.getItem("theme") === null) {
+        if (e.matches) {
+            applyEcoTheme();
+        } else {
+            removeEcoTheme();
+        }
+    }
+});
 
 // Application du thème selon le click du toggle
 if (themeToggle) {
