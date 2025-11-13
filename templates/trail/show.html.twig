@@ -77,7 +77,7 @@
 				</a>
 
 			</div>
-			<div id="map" class="trail__map" data-gpx="{{ trail.gpxFile ? asset('uploads/gpx/' ~ trail.gpxFile) : '' }}" style="height: 400px"></div>
+			<div id="map" class="trail__map" data-gpx="{{ trail.gpxFile ? asset('uploads/gpx/' ~ trail.gpxFile) : '' }}" style="height: 400px; width: 100%; position: relative; z-index: 1;"></div>
 			<p class="trail__desc-content">Pour respecter votre vie privée, nous utilisons une carte sans cookies tiers</p>
 		{% endif %}
 		{% if trail.photos and trail.photos|length > 1 %}

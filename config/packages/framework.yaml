@@ -6,8 +6,14 @@ framework:
 
     # Configuration pour les reverse proxies (alwaysdata, nginx, etc.)
     # Permet à Symfony de détecter correctement HTTPS derrière un proxy
-    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
-    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
+    trusted_proxies: "127.0.0.1,REMOTE_ADDR"
+    trusted_headers:
+        [
+            "x-forwarded-for",
+            "x-forwarded-host",
+            "x-forwarded-proto",
+            "x-forwarded-port",
+        ]
 
     # Note that the session will be started ONLY if you read or write from it.
     session:
@@ -25,7 +31,7 @@ framework:
         # Ne pas envoyer les cookies sur les assets - limiter le cookie_path
         # Malheureusement, on ne peut pas exclure /assets/ du cookie_path directement
         # La seule solution serait un sous-domaine séparé pour les assets
-        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        save_path: "%kernel.project_dir%/var/sessions/%kernel.environment%"
 
     #esi: true
     #fragments: true
