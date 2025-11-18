@@ -26,6 +26,8 @@
 	</div>
 </div>
 
+
+
 <div data-section="gpx" class="add-trail form__item">
 
 	{{ form_label(form.gpxFile) }}
@@ -37,7 +39,19 @@
 	</div>
 </div>
 
+
+
 <div data-section="manual" class="add-trail form__item hidden">
+
+<div class="add-trail form__item">
+	{{ form_label(form.circuit_type) }}
+	{{ form_widget(form.circuit_type) }}
+	<div class="add-trail form__error">
+		{% if form_errors(form.circuit_type) %}
+			{{ form_errors(form.circuit_type) }}
+		{% endif %}
+	</div>
+</div>
 	<fieldset class="trail-form__group">
 		<legend>Point de départ</legend>
 		<div class="add-trail form__item">

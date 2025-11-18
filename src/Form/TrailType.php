@@ -79,6 +79,30 @@ class TrailType extends AbstractType
                 'row_attr' => ['data-section' => 'gpx'],
             ])
 
+            ->add('circuit_type', ChoiceType::class, [
+                'attr' => ['class' => 'add-trail form-input-select'],
+                'label_attr' => ['class' => 'add-trail form-label'],
+                'expanded' => true,
+                'multiple' => false,
+                'choices' => [
+                    'Point à point' => 'linear',
+                    'En boucle' => 'boucle',
+                ],
+                'choice_attr' => function ($choice, $key, $value) {
+                    if ($choice === "linear") {
+                        return [
+                            'title' => "Le circuit point à point est un chemin direct d'un point A à un point B"
+                        ];
+                    } elseif ($choice === "boucle") {
+                        return [
+                            'title' => "Le circuit en boucle commence et finit au même endroit. Pour ajouter un itinéraire en boucle, merci de télécharger un fichier GPX"
+                        ];
+                    }
+                    return [];
+                },
+                'label' => "Quel type de circuit souhaitez-vous ajouter ?",
+            ])
+
             ->add('startAddress', null, [
                 'attr' => ['class' => 'add-trail form__input'],
                 'label_attr' => ['class' => 'add-trail form-label'],

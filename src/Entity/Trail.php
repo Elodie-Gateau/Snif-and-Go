@@ -9,9 +9,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: TrailRepository::class)]
-#[UniqueEntity(fields: ['user', 'name','status'], message: "Vous avez déjà créé un itinéraire avec ce nom.")]
+#[UniqueEntity(fields: ['user', 'name', 'status'], message: "Vous avez déjà créé un itinéraire avec ce nom.")]
 class Trail
 {
     #[ORM\Id]
@@ -156,6 +157,20 @@ class Trail
     #[ORM\Column(length: 255)]
     #[Assert\Choice(choices: ['Active', 'Inactive'])]
     private ?string $status = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Choice(choices: ['linear', 'boucle'])]
+    private ?string $circuit_type = null;
+
+    #[Assert\Callback]
+    public function validateCircuitTypeAndInputMode(ExecutionContextInterface $context): void
+    {
+        if ($this->inputMode === 'manual' && $this->circuit_type === 'boucle') {
+            $context->buildViolation('Un circuit en boucle ne peut pas être créé en mode manuel. Veuillez utiliser un fichier GPX.')
+                ->atPath('circuit_type')
+                ->addViolation();
+        }
+    }
 
     public function __construct()
     {
@@ -511,6 +526,18 @@ class Trail
     public function setStatus(string $Status): static
     {
         $this->status = $Status;
+
+        return $this;
+    }
+
+    public function getCircuitType(): ?string
+    {
+        return $this->circuit_type;
+    }
+
+    public function setCircuitType(?string $circuit_type): static
+    {
+        $this->circuit_type = $circuit_type;
 
         return $this;
     }
