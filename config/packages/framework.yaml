@@ -20,8 +20,8 @@ framework:
         # Nom de cookie unique pour éviter les conflits
         name: SNIFANDGO_SESSID
         cookie_httponly: true
-        # Utiliser 'none' avec HTTPS pour éviter les problèmes CSRF avec les formulaires multipart
-        cookie_samesite: none
+        # Utiliser 'lax' en dev (HTTP), 'none' seulement en prod avec HTTPS
+        cookie_samesite: lax
         # En prod (HTTPS), les cookies seront sécurisés, en dev ils ne le seront pas
         cookie_secure: auto
         # Durée de vie du cookie : 0 = jusqu'à fermeture du navigateur
