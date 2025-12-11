@@ -172,6 +172,14 @@
 		
 			<div  id="trails-list" class="admin__trails hidden">
 				<h2 class="admin__trails-title">Itinéraires</h2>
+			<form method="post" action="{{ path('app_trail_import_overpass') }}">
+				<input type="text" name="city" placeholder="Ville (ex: La Roche-sur-Yon)" required>
+			<input type="hidden" name="max_distance" value="15">
+				<button type="submit" class="btn import-osm">
+					{{ ux_icon('mdi:map-marker-path',{ class: 'admin__trails-icon' }) }}
+					Importer depuis OSM (Vendée)
+				</button>
+			</form>
 				<table class="admin__trails-table">
 					<thead>
 						<tr>

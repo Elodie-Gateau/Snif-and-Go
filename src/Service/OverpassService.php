@@ -16,7 +16,25 @@ final class OverpassService
     ) {}
 
     /**
-     * Récupère les itinéraires de randonnée en France de moins de 30km
+     * Récupère les itinéraires de randonnée autour d'une position dans un rayon donné
+     */
+    public function fetchHikingTrailsAround(float $lat, float $lon, int $radiusMeters, float $maxDistanceKm = 20.0): array
+    {
+        $query = $this->buildOverpassQueryAround($lat, $lon, $radiusMeters);
+
+        try {
+            $response = $this->queryOverpass($query);
+            return $this->parseOverpassResponse($response, $maxDistanceKm);
+        } catch (\Exception $e) {
+            $this->logger->error('Erreur lors de la récupération des itinéraires', [
+                'error' => $e->getMessage()
+            ]);
+            return [];
+        }
+    }
+
+    /**
+     * Récupère les itinéraires de randonnée en France de moins de 30km (ancienne méthode)
      */
     public function fetchHikingTrails(float $maxDistanceKm = 30.0): array
     {
@@ -34,18 +52,34 @@ final class OverpassService
     }
 
     /**
-     * Construit la requête Overpass QL pour récupérer les routes de randonnée en France
+     * Construit la requête Overpass QL pour récupérer les routes autour d'une position
+     */
+    private function buildOverpassQueryAround(float $lat, float $lon, int $radiusMeters): string
+    {
+        return <<<OVERPASS
+[out:json][timeout:15];
+(
+  relation["route"="hiking"](around:$radiusMeters,$lat,$lon);
+);
+out body 10;
+>;
+out skel qt;
+OVERPASS;
+    }
+
+    /**
+     * Construit la requête Overpass QL pour récupérer les routes de randonnée en Vendée
+     * Limitée à 10 résultats pour éviter les timeouts
      */
     private function buildOverpassQuery(): string
     {
         return <<<OVERPASS
-[out:json][timeout:90];
-area["ISO3166-1"="FR"][admin_level=2]->.france;
+[out:json][timeout:15];
+area["name"="Vendée"]["admin_level"="6"]->.vendee;
 (
-  relation["route"="hiking"](area.france);
-  relation["route"="foot"](area.france);
+  relation["route"="hiking"](area.vendee);
 );
-out body;
+out body 10;
 >;
 out skel qt;
 OVERPASS;
@@ -58,7 +92,7 @@ OVERPASS;
     {
         $response = $this->http->request('POST', self::OVERPASS_API_URL, [
             'body' => ['data' => $query],
-            'timeout' => 120,
+            'timeout' => 30,
         ]);
 
         if ($response->getStatusCode() !== 200) {
@@ -88,9 +122,11 @@ OVERPASS;
 
         // Traiter les relations (itinéraires)
         foreach ($data['elements'] as $element) {
-            if ($element['type'] === 'relation' &&
+            if (
+                $element['type'] === 'relation' &&
                 isset($element['tags']['route']) &&
-                in_array($element['tags']['route'], ['hiking', 'foot'])) {
+                in_array($element['tags']['route'], ['hiking', 'foot'])
+            ) {
 
                 $trail = $this->parseTrailRelation($element, $nodes, $ways);
 
@@ -211,8 +247,8 @@ OVERPASS;
         $dLon = deg2rad($lon2 - $lon1);
 
         $a = sin($dLat / 2) * sin($dLat / 2) +
-             cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-             sin($dLon / 2) * sin($dLon / 2);
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLon / 2) * sin($dLon / 2);
 
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
@@ -247,7 +283,7 @@ OVERPASS;
         $difficulty = $tags['difficulty'] ?? null;
 
         if ($sacScale) {
-            return match($sacScale) {
+            return match ($sacScale) {
                 'hiking', 'T1' => 'easy',
                 'mountain_hiking', 'T2', 'T3' => 'medium',
                 'demanding_mountain_hiking', 'alpine_hiking', 'T4', 'T5', 'T6' => 'hard',
@@ -257,7 +293,7 @@ OVERPASS;
 
         if ($difficulty) {
             $diff = strtolower($difficulty);
-            return match(true) {
+            return match (true) {
                 str_contains($diff, 'easy') || str_contains($diff, 'facile') => 'easy',
                 str_contains($diff, 'medium') || str_contains($diff, 'moyen') => 'medium',
                 str_contains($diff, 'hard') || str_contains($diff, 'difficile') => 'hard',

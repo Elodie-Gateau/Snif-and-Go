@@ -21,7 +21,7 @@ framework:
         name: SNIFANDGO_SESSID
         cookie_httponly: true
         # Utiliser 'lax' en dev (HTTP), 'none' seulement en prod avec HTTPS
-        cookie_samesite: lax
+        cookie_samesite: none
         # En prod (HTTPS), les cookies seront sécurisés, en dev ils ne le seront pas
         cookie_secure: auto
         # Durée de vie du cookie : 0 = jusqu'à fermeture du navigateur

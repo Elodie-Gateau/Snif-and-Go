@@ -25,6 +25,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use App\Service\GeocodingService;
 use App\Service\DistanceService;
 use App\Service\GpxService;
+use App\Service\OverpassService;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Psr\Log\LoggerInterface;
@@ -486,6 +487,170 @@ final class TrailController extends AbstractController
 
         return $this->redirectToRoute('app_home');
     }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/admin/import-from-overpass', name: 'app_trail_import_overpass', methods: ['GET', 'POST'])]
+    public function importFromOverpass(
+        Request $request,
+        OverpassService $overpassService,
+        GeocodingService $geocodingService,
+        GpxService $gpxService,
+        EntityManagerInterface $em,
+        LoggerInterface $logger
+    ): Response {
+        $importedCount = 0;
+        $skippedCount = 0;
+        $errorCount = 0;
+        $errors = [];
+
+        // Si le formulaire est soumis (importation confirmée)
+        if ($request->isMethod('POST')) {
+            $maxDistance = (float) $request->request->get('max_distance', 15.0);
+            $city = $request->request->get('city');
+            $adminUser = $this->getUser();
+
+            if (!$adminUser instanceof User) {
+                $this->addFlash('error', 'Utilisateur non authentifié.');
+                return $this->redirectToRoute('app_home');
+            }
+
+            // Géocoder la ville pour obtenir les coordonnées
+            if (!$city) {
+                $this->addFlash('error', 'Veuillez renseigner une ville.');
+                return $this->redirectToRoute('admin_user_index');
+            }
+
+            $cityCoords = $geocodingService->geocode($city);
+            if (!$cityCoords) {
+                $this->addFlash('error', "Impossible de localiser la ville '{$city}'.");
+                return $this->redirectToRoute('admin_user_index');
+            }
+
+            $logger->info('Début de l\'importation depuis Overpass', [
+                'city' => $city,
+                'lat' => $cityCoords['lat'],
+                'lon' => $cityCoords['lon'],
+                'max_distance' => $maxDistance
+            ]);
+
+            // Récupérer les itinéraires dans un rayon de 15 km autour de la ville
+            $osmTrails = $overpassService->fetchHikingTrailsAround(
+                $cityCoords['lat'],
+                $cityCoords['lon'],
+                30000, // 30 km en mètres
+                $maxDistance
+            );
+            $logger->info('Itinéraires récupérés depuis Overpass', ['count' => count($osmTrails)]);
+
+            $gpxDirectory = $this->getParameter('gpx_directory');
+
+            // Vérifier que le dossier existe
+            if (!is_dir($gpxDirectory)) {
+                mkdir($gpxDirectory, 0777, true);
+            }
+
+            foreach ($osmTrails as $osmTrail) {
+                try {
+                    // Vérifier si l'itinéraire existe déjà (par nom)
+                    $existingTrail = $em->getRepository(Trail::class)->findOneBy([
+                        'name' => $osmTrail['name']
+                    ]);
+
+                    if ($existingTrail) {
+                        $skippedCount++;
+                        $logger->info('Itinéraire déjà existant, ignoré', ['name' => $osmTrail['name']]);
+                        continue;
+                    }
+
+                    // Générer le fichier GPX
+                    $gpxFilename = 'osm_' . $osmTrail['osm_id'] . '_' . uniqid() . '.gpx';
+                    $gpxPath = $gpxDirectory . '/' . $gpxFilename;
+
+                    if (!$overpassService->generateGpxFile($osmTrail, $gpxPath)) {
+                        $errorCount++;
+                        $errors[] = "Impossible de générer le GPX pour '{$osmTrail['name']}'";
+                        $logger->error('Échec génération GPX', ['trail' => $osmTrail['name']]);
+                        continue;
+                    }
+
+                    // Créer l'entité Trail
+                    $trail = new Trail();
+                    $trail->setName($osmTrail['name']);
+                    $trail->setGpxFile($gpxFilename);
+                    $trail->setInputMode('gpx');
+                    $trail->setCircuitType($osmTrail['circuit_type']);
+                    $trail->setUser($adminUser);
+
+                    // Mapper la difficulté si disponible
+                    if ($osmTrail['difficulty']) {
+                        $trail->setDifficulty($osmTrail['difficulty']);
+                    }
+
+                    // Utiliser le GpxService pour parser le fichier et remplir automatiquement
+                    // les coordonnées, distance, durée et adresses (via géocodage)
+                    $gpxInfos = $gpxService->parse($gpxPath);
+                    if ($gpxInfos) {
+                        $trail->setDistance(round($gpxInfos['distance_m'] / 1000, 2));
+                        $trail->setDuration(round($gpxInfos['duration_s'] / 60, 2));
+                        $trail->setStartLat($gpxInfos['start']['lat']);
+                        $trail->setStartLon($gpxInfos['start']['lon']);
+                        $trail->setEndLat($gpxInfos['end']['lat']);
+                        $trail->setEndLon($gpxInfos['end']['lon']);
+
+                        // Géocodage inversé pour les adresses
+                        if ($startAddress = $geocodingService->reverse($gpxInfos['start']['lat'], $gpxInfos['start']['lon'])) {
+                            $trail->setStartAddress($startAddress['street'] ?: ($startAddress['label'] ?? ''));
+                            $trail->setStartCity($startAddress['city'] ?? '');
+                            $trail->setStartCode($startAddress['postcode'] ?? '');
+                        }
+                        if ($endAddress = $geocodingService->reverse($gpxInfos['end']['lat'], $gpxInfos['end']['lon'])) {
+                            $trail->setEndAddress($endAddress['street'] ?: ($endAddress['label'] ?? ''));
+                            $trail->setEndCity($endAddress['city'] ?? '');
+                            $trail->setEndCode($endAddress['postcode'] ?? '');
+                        }
+                    }
+
+                    // Persister l'entité
+                    $em->persist($trail);
+                    $importedCount++;
+                    $logger->info('Itinéraire importé avec succès', ['name' => $osmTrail['name']]);
+                } catch (\Exception $e) {
+                    $errorCount++;
+                    $errors[] = "Erreur pour '{$osmTrail['name']}': " . $e->getMessage();
+                    $logger->error('Erreur lors de l\'importation', [
+                        'trail' => $osmTrail['name'],
+                        'error' => $e->getMessage()
+                    ]);
+                }
+            }
+
+            // Sauvegarder tous les itinéraires importés
+            try {
+                $em->flush();
+                $this->addFlash('success', "{$importedCount} itinéraire(s) importé(s) avec succès.");
+                if ($skippedCount > 0) {
+                    $this->addFlash('info', "{$skippedCount} itinéraire(s) déjà existant(s), ignoré(s).");
+                }
+                if ($errorCount > 0) {
+                    $this->addFlash('warning', "{$errorCount} erreur(s) rencontrée(s):{$errors}");
+                }
+            } catch (\Exception $e) {
+                $logger->error('Échec de la sauvegarde en base', ['error' => $e->getMessage()]);
+                $this->addFlash('error', 'Erreur lors de la sauvegarde en base de données.');
+            }
+
+            return $this->redirectToRoute('app_trail_index');
+        }
+
+        // Affichage du formulaire de configuration
+        return $this->render('trail/import_overpass.html.twig', [
+            'imported_count' => $importedCount,
+            'skipped_count' => $skippedCount,
+            'error_count' => $errorCount,
+            'errors' => $errors
+        ]);
+    }
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/delete', name: 'app_trail_delete', methods: ['POST'])]
     public function delete(Request $request, Trail $trail, EntityManagerInterface $entityManager, LoggerInterface $logger): Response
